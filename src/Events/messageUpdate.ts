@@ -19,7 +19,7 @@ export const event: eventType = {
 					name: oldMessage.author.username,
 					iconURL: oldMessage.author.displayAvatarURL({ extension: "jpg" }),
 				})
-				.setColor("Red")
+				.setColor("Yellow")
 				.setTitle(`The following message was edited in ${oldMessage.channel}`)
 				.setFields([
 					{ name: "OLD Message Content:", value: oldMessage.content },
