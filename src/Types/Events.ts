@@ -7,7 +7,7 @@ interface Run {
 
 type eventType = {
 	name: keyof ClientEvents;
-	function: Run;
+	execute: Run;
 };
 
 export type { eventType };

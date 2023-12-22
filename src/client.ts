@@ -60,9 +60,9 @@ class myClient extends Client {
 		const eventsPath = await getAllFiles(join(dir, "Events"));
 		for (const eventPath of eventsPath) {
 			const { event } = await require(eventPath);
-			if (event.name && event.function) {
+			if (event && event.name && event.execute) {
 				this.events.set(event.name, event);
-				this.on(event.name, event.function.bind(null, this));
+				this.on(event.name, event.execute.bind(null, this));
 				console.log(`[REGISTRY] Event Registed: ${event.name}`);
 			} else {
 				console.warn(`[WARNING] Event at path ${eventPath} is invalid!`);

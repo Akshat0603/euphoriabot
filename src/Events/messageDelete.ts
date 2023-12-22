@@ -4,7 +4,7 @@ import myClient from "../client";
 
 export const event: eventType = {
 	name: "messageDelete",
-	function: async (client: myClient, message: Message) => {
+	execute: async (client: myClient, message: Message) => {
 		if (message.partial || message.author?.bot) return;
 		const channel = await client.channels.cache.get(client.channelLogMessageDeleteID);
 		if (channel && channel.type === ChannelType.GuildText) {

@@ -4,7 +4,7 @@ import myClient from "../client";
 
 export const event: eventType = {
 	name: "messageUpdate",
-	function: async (client: myClient, oldMessage: Message, newMessage: Message) => {
+	execute: async (client: myClient, oldMessage: Message, newMessage: Message) => {
 		if (
 			oldMessage.partial ||
 			newMessage.partial ||

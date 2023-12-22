@@ -1,8 +1,8 @@
-import { SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import myClient from "../client";
 
 interface Run {
-	(client: myClient, ...args: any[]);
+	(client: myClient, interaction: ChatInputCommandInteraction);
 }
 
 type slashCommandType = {
