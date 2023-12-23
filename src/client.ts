@@ -4,12 +4,23 @@ import { eventType } from "./Types/Events";
 import getAllFiles from "./Utilities/getAllFiles";
 import { join } from "path";
 import "dotenv/config";
+import { RconOptions } from "rcon-client";
 
 class myClient extends Client {
 	public slashCommands: Collection<string, slashCommandType> = new Collection();
 	public events: Collection<string, eventType> = new Collection();
 	public slashCommandsJSONArray = new Array();
 	public rest = new REST().setToken(process.env.TOKEN!);
+	public rconSMP: RconOptions = {
+		port: 5734,
+		host: "localhost",
+		password: process.env.RCONPASS!,
+	};
+	public rconCMP: RconOptions = {
+		port: 5756,
+		host: "localhost",
+		password: process.env.RCONPASS!,
+	};
 
 	public clientId = "1185165875301584956";
 	public guildId = "1176560748642709595";

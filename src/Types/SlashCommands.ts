@@ -1,4 +1,8 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
+import {
+	ChatInputCommandInteraction,
+	SlashCommandBuilder,
+	SlashCommandSubcommandsOnlyBuilder,
+} from "discord.js";
 import myClient from "../client";
 
 interface Run {
@@ -6,7 +10,7 @@ interface Run {
 }
 
 type slashCommandType = {
-	data: SlashCommandBuilder;
+	data: SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder;
 	execute: Run;
 };
 

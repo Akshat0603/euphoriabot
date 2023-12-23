@@ -2,10 +2,12 @@ import { ChannelType, ChatInputCommandInteraction, SlashCommandBuilder } from "d
 import { slashCommandType } from "../Types/SlashCommands";
 import myClient from "../client";
 
+const commandData = new SlashCommandBuilder()
+	.setName("mods")
+	.setDescription("Responds with the mod list of the server.");
+
 export const slashCommand: slashCommandType = {
-	data: new SlashCommandBuilder()
-		.setName("mods")
-		.setDescription("Responds with the mod list of the server."),
+	data: commandData,
 	execute: async (client: myClient, interaction: ChatInputCommandInteraction) => {
 		const response = await interaction.deferReply({ ephemeral: true });
 		var channel = await client.channels.cache.get(client.channelEuphoriaID);
@@ -22,12 +24,12 @@ export const slashCommand: slashCommandType = {
 				});
 			} else {
 				response.edit({
-					content: "An Error Occured! Code #2",
+					content: "## <:no:1181140154623213569> An Error Occured! Code #2",
 				});
 			}
 		} else {
 			response.edit({
-				content: "An Error Occured! Code #1",
+				content: "## <:no:1181140154623213569> An Error Occured! Code #1",
 			});
 		}
 	},
