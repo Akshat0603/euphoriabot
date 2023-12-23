@@ -44,6 +44,8 @@ const commandData = new SlashCommandBuilder()
 
 const run = {
 	add: async (client: myClient, interaction: ChatInputCommandInteraction) => {
+		const response = await interaction.deferReply();
+
 		const optionsUser = interaction.options.data[0].options![0];
 		const optionsUsername = interaction.options.data[0].options![1];
 
@@ -66,23 +68,25 @@ const run = {
 		}
 
 		const rcon1 = await Rcon.connect(client.rconCMP);
-		const rcon2 = await Rcon.connect(client.rconSMP);
+		//const rcon2 = await Rcon.connect(client.rconSMP);
 
 		const response1 = await rcon1.send(`whitelist add ${optionsUsername.value}`);
-		const response2 = await rcon2.send(`whitelist add ${optionsUsername.value}`);
+		//const response2 = await rcon2.send(`whitelist add ${optionsUsername.value}`);
 
 		rcon1.end();
-		rcon2.end();
+		//rcon2.end();
 
-		interaction.reply({
+		response.edit({
 			content: `
 ### Response from CMP:
 ${response1}
 ### Response from SMP:
-${response2}`,
+disabled`,
 		});
 	},
 	remove: async (client: myClient, interaction: ChatInputCommandInteraction) => {
+		const response = await interaction.deferReply();
+
 		const optionsUser = interaction.options.data[0].options![0];
 		const optionsUsername = interaction.options.data[0].options![1];
 
@@ -98,20 +102,20 @@ ${response2}`,
 		}
 
 		const rcon1 = await Rcon.connect(client.rconCMP);
-		const rcon2 = await Rcon.connect(client.rconSMP);
+		//const rcon2 = await Rcon.connect(client.rconSMP);
 
 		const response1 = await rcon1.send(`whitelist remove ${optionsUsername.value}`);
-		const response2 = await rcon2.send(`whitelist remove ${optionsUsername.value}`);
+		//const response2 = await rcon2.send(`whitelist remove ${optionsUsername.value}`);
 
 		rcon1.end();
-		rcon2.end();
+		//rcon2.end();
 
-		interaction.reply({
+		response.edit({
 			content: `
 ### Response from CMP:
 ${response1}
 ### Response from SMP:
-${response2}`,
+disabled`,
 		});
 	},
 };

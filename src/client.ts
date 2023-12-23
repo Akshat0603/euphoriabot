@@ -12,12 +12,12 @@ class myClient extends Client {
 	public slashCommandsJSONArray = new Array();
 	public rest = new REST().setToken(process.env.TOKEN!);
 	public rconSMP: RconOptions = {
-		port: 5734,
+		port: 5756,
 		host: process.env.SERVERIP!,
 		password: process.env.RCONPASS!,
 	};
 	public rconCMP: RconOptions = {
-		port: 5756,
+		port: 5734,
 		host: process.env.SERVERIP!,
 		password: process.env.RCONPASS!,
 	};
