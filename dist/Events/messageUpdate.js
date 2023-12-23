@@ -23,7 +23,7 @@ exports.event = {
                 { name: "OLD Message Content:", value: oldMessage.content },
                 { name: "NEW Message Content:", value: newMessage.content },
             ])
-                .setFooter({ text: "Looking for the timestamp? GET LOST!" });
+                .setFooter(client.embedFooter);
             channel.send({ embeds: [messageEmbed] });
         }
         else {

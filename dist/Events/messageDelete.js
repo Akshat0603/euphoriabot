@@ -17,7 +17,7 @@ exports.event = {
                 .setColor("Red")
                 .setTitle(`The following message was deleted in ${message.channel}`)
                 .setDescription(message.content)
-                .setFooter({ text: "Looking for the timestamp? GET LOST!" });
+                .setFooter(client.embedFooter);
             channel.send({ embeds: [messageEmbed] });
         }
         else {

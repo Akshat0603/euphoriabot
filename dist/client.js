@@ -29,6 +29,9 @@ class myClient extends discord_js_1.Client {
     channelLogMessageUpdateID = "1187721577253584956";
     messageModsID = "1179369602652848160";
     messageModsContentStart = "# __Server Mods__";
+    embedFooter = {
+        text: "Looking for the timestamp? GET LOST!",
+    };
     async init(dir) {
         this.login(process.env.TOKEN);
         const slashCommandsPath = await (0, getAllFiles_1.default)((0, path_1.join)(dir, "SlashCommands"));

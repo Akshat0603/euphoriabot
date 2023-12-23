@@ -1,4 +1,4 @@
-import { Client, Collection, REST, Routes, TextChannel } from "discord.js";
+import { Client, Collection, EmbedFooterOptions, REST, Routes, TextChannel } from "discord.js";
 import { slashCommandType } from "./Types/SlashCommands";
 import { eventType } from "./Types/Events";
 import getAllFiles from "./Utilities/getAllFiles";
@@ -31,6 +31,10 @@ class myClient extends Client {
 
 	public messageModsID = "1179369602652848160";
 	public messageModsContentStart = "# __Server Mods__";
+
+	public embedFooter: EmbedFooterOptions = {
+		text: "Looking for the timestamp? GET LOST!",
+	};
 
 	public async init(dir: string) {
 		// LOGIN

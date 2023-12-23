@@ -10,7 +10,10 @@ interface Run {
 }
 
 type slashCommandType = {
-	data: SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder;
+	data:
+		| SlashCommandBuilder
+		| SlashCommandSubcommandsOnlyBuilder
+		| Omit<SlashCommandBuilder, "addSubcommandGroup" | "addSubcommand">;
 	execute: Run;
 };
 
