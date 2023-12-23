@@ -34,8 +34,10 @@ const commandData = new discord_js_1.SlashCommandBuilder()
 const run = {
     add: async (client, interaction) => {
         const response = await interaction.deferReply();
+        console.log(1);
         const optionsUser = interaction.options.data[0].options[0];
         const optionsUsername = interaction.options.data[0].options[1];
+        console.log(2);
         if (optionsUser.type !== discord_js_1.ApplicationCommandOptionType.User ||
             optionsUsername.type !== discord_js_1.ApplicationCommandOptionType.String) {
             interaction.reply({
@@ -51,7 +53,9 @@ const run = {
             });
             return;
         }
+        console.log(3);
         const rcon1 = await rcon_client_1.Rcon.connect(client.rconCMP);
+        console.log(4);
         const response1 = await rcon1.send(`whitelist add ${optionsUsername.value}`);
         rcon1.end();
         response.edit({

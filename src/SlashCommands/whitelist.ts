@@ -45,10 +45,10 @@ const commandData = new SlashCommandBuilder()
 const run = {
 	add: async (client: myClient, interaction: ChatInputCommandInteraction) => {
 		const response = await interaction.deferReply();
-
+		console.log(1);
 		const optionsUser = interaction.options.data[0].options![0];
 		const optionsUsername = interaction.options.data[0].options![1];
-
+		console.log(2);
 		if (
 			optionsUser.type !== ApplicationCommandOptionType.User ||
 			optionsUsername.type !== ApplicationCommandOptionType.String
@@ -66,10 +66,10 @@ const run = {
 			});
 			return;
 		}
-
+		console.log(3);
 		const rcon1 = await Rcon.connect(client.rconCMP);
 		//const rcon2 = await Rcon.connect(client.rconSMP);
-
+		console.log(4);
 		const response1 = await rcon1.send(`whitelist add ${optionsUsername.value}`);
 		//const response2 = await rcon2.send(`whitelist add ${optionsUsername.value}`);
 
