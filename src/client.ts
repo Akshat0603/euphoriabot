@@ -13,12 +13,12 @@ class myClient extends Client {
 	public rest = new REST().setToken(process.env.TOKEN!);
 	public rconSMP: RconOptions = {
 		port: 5734,
-		host: "localhost",
+		host: process.env.SERVERIP!,
 		password: process.env.RCONPASS!,
 	};
 	public rconCMP: RconOptions = {
 		port: 5756,
-		host: "localhost",
+		host: process.env.SERVERIP!,
 		password: process.env.RCONPASS!,
 	};
 

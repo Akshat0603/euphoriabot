@@ -14,12 +14,12 @@ class myClient extends discord_js_1.Client {
     rest = new discord_js_1.REST().setToken(process.env.TOKEN);
     rconSMP = {
         port: 5734,
-        host: "localhost",
+        host: process.env.SERVERIP,
         password: process.env.RCONPASS,
     };
     rconCMP = {
         port: 5756,
-        host: "localhost",
+        host: process.env.SERVERIP,
         password: process.env.RCONPASS,
     };
     clientId = "1185165875301584956";
