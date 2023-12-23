@@ -60,28 +60,27 @@ const run = {
 			return;
 		}
 		if (optionsUser.user!.bot) {
-			interaction.reply({
+			response.edit({
 				content: "You cannot add a bot to the whitelist!",
-				ephemeral: true,
 			});
 			return;
 		}
 
-		const rcon1 = await Rcon.connect(client.rconCMP).catch((err) => console.error(err));
-		//const rcon2 = await Rcon.connect(client.rconSMP);
+		const rcon1 = await Rcon.connect(client.rconCMP);
+		const rcon2 = await Rcon.connect(client.rconSMP);
 
-		const response1 = await rcon1!.send(`whitelist add ${optionsUsername.value}`);
-		//const response2 = await rcon2.send(`whitelist add ${optionsUsername.value}`);
+		const response1 = await rcon1.send(`whitelist add ${optionsUsername.value}`);
+		const response2 = await rcon2.send(`whitelist add ${optionsUsername.value}`);
 
-		rcon1!.end();
-		//rcon2.end();
+		rcon1.end();
+		rcon2.end();
 
 		response.edit({
 			content: `
 ### Response from CMP:
 ${response1}
 ### Response from SMP:
-disabled`,
+${response2}`,
 		});
 	},
 	remove: async (client: myClient, interaction: ChatInputCommandInteraction) => {
@@ -102,20 +101,20 @@ disabled`,
 		}
 
 		const rcon1 = await Rcon.connect(client.rconCMP);
-		//const rcon2 = await Rcon.connect(client.rconSMP);
+		const rcon2 = await Rcon.connect(client.rconSMP);
 
 		const response1 = await rcon1.send(`whitelist remove ${optionsUsername.value}`);
-		//const response2 = await rcon2.send(`whitelist remove ${optionsUsername.value}`);
+		const response2 = await rcon2.send(`whitelist remove ${optionsUsername.value}`);
 
 		rcon1.end();
-		//rcon2.end();
+		rcon2.end();
 
 		response.edit({
 			content: `
 ### Response from CMP:
 ${response1}
 ### Response from SMP:
-disabled`,
+${response2}`,
 		});
 	},
 };
