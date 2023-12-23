@@ -4,7 +4,7 @@ exports.event = void 0;
 const discord_js_1 = require("discord.js");
 exports.event = {
     name: "messageUpdate",
-    function: async (client, oldMessage, newMessage) => {
+    execute: async (client, oldMessage, newMessage) => {
         if (oldMessage.partial ||
             newMessage.partial ||
             oldMessage.author?.bot ||
@@ -17,7 +17,7 @@ exports.event = {
                 name: oldMessage.author.username,
                 iconURL: oldMessage.author.displayAvatarURL({ extension: "jpg" }),
             })
-                .setColor("Red")
+                .setColor("Yellow")
                 .setTitle(`The following message was edited in ${oldMessage.channel}`)
                 .setFields([
                 { name: "OLD Message Content:", value: oldMessage.content },

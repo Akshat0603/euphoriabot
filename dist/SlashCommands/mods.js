@@ -2,10 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.slashCommand = void 0;
 const discord_js_1 = require("discord.js");
+const commandData = new discord_js_1.SlashCommandBuilder()
+    .setName("mods")
+    .setDescription("Responds with the mod list of the server.");
 exports.slashCommand = {
-    data: new discord_js_1.SlashCommandBuilder()
-        .setName("mods")
-        .setDescription("Responds with the mod list of the server."),
+    data: commandData,
     execute: async (client, interaction) => {
         const response = await interaction.deferReply({ ephemeral: true });
         var channel = await client.channels.cache.get(client.channelEuphoriaID);
@@ -23,13 +24,13 @@ exports.slashCommand = {
             }
             else {
                 response.edit({
-                    content: "An Error Occured! Code #2",
+                    content: "## <:no:1181140154623213569> An Error Occured! Code #2",
                 });
             }
         }
         else {
             response.edit({
-                content: "An Error Occured! Code #1",
+                content: "## <:no:1181140154623213569> An Error Occured! Code #1",
             });
         }
     },

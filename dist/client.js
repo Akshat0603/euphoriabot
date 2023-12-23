@@ -12,6 +12,16 @@ class myClient extends discord_js_1.Client {
     events = new discord_js_1.Collection();
     slashCommandsJSONArray = new Array();
     rest = new discord_js_1.REST().setToken(process.env.TOKEN);
+    rconSMP = {
+        port: 5734,
+        host: "localhost",
+        password: process.env.RCONPASS,
+    };
+    rconCMP = {
+        port: 5756,
+        host: "localhost",
+        password: process.env.RCONPASS,
+    };
     clientId = "1185165875301584956";
     guildId = "1176560748642709595";
     channelEuphoriaID = "1176817932693688390";
@@ -46,9 +56,9 @@ class myClient extends discord_js_1.Client {
         const eventsPath = await (0, getAllFiles_1.default)((0, path_1.join)(dir, "Events"));
         for (const eventPath of eventsPath) {
             const { event } = await require(eventPath);
-            if (event.name && event.function) {
+            if (event && event.name && event.execute) {
                 this.events.set(event.name, event);
-                this.on(event.name, event.function.bind(null, this));
+                this.on(event.name, event.execute.bind(null, this));
                 console.log(`[REGISTRY] Event Registed: ${event.name}`);
             }
             else {

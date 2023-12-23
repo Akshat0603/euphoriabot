@@ -4,7 +4,7 @@ exports.event = void 0;
 const discord_js_1 = require("discord.js");
 exports.event = {
     name: "messageDelete",
-    function: async (client, message) => {
+    execute: async (client, message) => {
         if (message.partial || message.author?.bot)
             return;
         const channel = await client.channels.cache.get(client.channelLogMessageDeleteID);

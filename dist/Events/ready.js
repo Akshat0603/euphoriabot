@@ -4,7 +4,7 @@ exports.event = void 0;
 const discord_js_1 = require("discord.js");
 exports.event = {
     name: "ready",
-    function: (client) => {
+    execute: (client) => {
         console.log(`${client.user?.username} is online!`);
         client.user?.setActivity({
             name: "Preparing to replace Akshat.",
