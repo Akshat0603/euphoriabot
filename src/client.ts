@@ -15,11 +15,13 @@ class myClient extends Client {
 		port: Number(process.env.PORTSMP!),
 		host: process.env.SERVERIP!,
 		password: process.env.RCONPASS!,
+		maxPending: 5,
 	};
 	public rconCMP: RconOptions = {
 		port: Number(process.env.PORTCMP!),
 		host: process.env.SERVERIP!,
 		password: process.env.RCONPASS!,
+		maxPending: 5,
 	};
 
 	public clientId = "1185165875301584956";

@@ -16,11 +16,13 @@ class myClient extends discord_js_1.Client {
         port: Number(process.env.PORTSMP),
         host: process.env.SERVERIP,
         password: process.env.RCONPASS,
+        maxPending: 5,
     };
     rconCMP = {
         port: Number(process.env.PORTCMP),
         host: process.env.SERVERIP,
         password: process.env.RCONPASS,
+        maxPending: 5,
     };
     clientId = "1185165875301584956";
     guildId = "1176560748642709595";
