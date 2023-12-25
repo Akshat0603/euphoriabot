@@ -7,9 +7,12 @@ import "dotenv/config";
 import { RconOptions } from "rcon-client";
 
 class myClient extends Client {
+	// EMPTY IDENTIFICATION
 	public slashCommands: Collection<string, slashCommandType> = new Collection();
 	public events: Collection<string, eventType> = new Collection();
 	public slashCommandsJSONArray = new Array();
+
+	// COMPLEX DATA IDENTIFICATION
 	public rest = new REST().setToken(process.env.TOKEN!);
 	public rconSMP: RconOptions = {
 		port: Number(process.env.PORTSMP!),
@@ -24,6 +27,7 @@ class myClient extends Client {
 		maxPending: 5,
 	};
 
+	// SIMPLE DATA IDENTIFICATION
 	public clientId = "1185165875301584956";
 	public guildId = "1176560748642709595";
 
@@ -38,6 +42,7 @@ class myClient extends Client {
 		text: "Looking for the timestamp? GET LOST!",
 	};
 
+	// INITIALIZE THE BOT
 	public async init(dir: string) {
 		// LOGIN
 		this.login(process.env.TOKEN);
