@@ -6,7 +6,7 @@ import { join } from "path";
 import "dotenv/config";
 import { RconOptions } from "rcon-client";
 
-class myClient extends Client {
+export default class myClient extends Client {
 	// EMPTY IDENTIFICATION
 	public slashCommands: Collection<string, slashCommandType> = new Collection();
 	public events: Collection<string, eventType> = new Collection();
@@ -92,5 +92,3 @@ class myClient extends Client {
 		}
 	}
 }
-
-export default myClient;

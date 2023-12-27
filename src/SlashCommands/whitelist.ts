@@ -10,37 +10,56 @@ import {
 import { slashCommandType } from "../Types/SlashCommands";
 import myClient from "../client";
 import { Rcon } from "rcon-client";
+import { SlashCommandDescriptor } from "../builder/slash-command.descriptor";
+import { EuphoriaSlashCommandBuilder } from "../builder/euphoria-slash-command.builder";
+import { describe } from "node:test";
 
-const commandDataSubcommandOptions = {
-	userOption: new SlashCommandUserOption()
-		.setName("user-mention")
-		.setDescription("Who on discord is being whitelisted?")
-		.setRequired(true),
-	usernameOption: new SlashCommandStringOption()
-		.setName("minecraft-username")
-		.setDescription("What is the username of the person being whitelisted?")
-		.setRequired(true),
+export const WhitelistCommand: SlashCommandDescriptor = {
+  name: "whitelist",
+  description: "Officially control the whitelist of the server.",
+  permission: PermissionFlagsBits.Administrator,
+  subCommands: [
+    {
+      name: "add",
+      description: "Officially adds someone to the whitelist of the server.",
+      parameters: [
+        {
+          type: "user",
+          name: "user-mention",
+          description: "Who on discord is being whitelisted?",
+          required: true,
+        },
+        {
+          type: "string",
+          name: "minecraft-username",
+          description: "What is the username of the person being whitelisted?",
+          required: true,
+        },
+      ],
+    },
+    {
+      name: "remove",
+      description:
+        "Officially removes someone from the whitelist of the server.",
+      parameters: [
+        {
+          type: "user",
+          name: "user-mention",
+          description: "Who on discord is being whitelisted?",
+          required: true,
+        },
+        {
+          type: "string",
+          name: "minecraft-username",
+          description: "What is the username of the person being whitelisted?",
+          required: true,
+        },
+      ],
+    },
+  ],
 };
 
-const commandDataSubcommands = {
-	add: new SlashCommandSubcommandBuilder()
-		.setName("add")
-		.setDescription("Officially adds someone to the whitelist of the server.")
-		.addUserOption(commandDataSubcommandOptions.userOption)
-		.addStringOption(commandDataSubcommandOptions.usernameOption),
-	remove: new SlashCommandSubcommandBuilder()
-		.setName("remove")
-		.setDescription("Officially removes someone from the whitelist of the server.")
-		.addUserOption(commandDataSubcommandOptions.userOption)
-		.addStringOption(commandDataSubcommandOptions.usernameOption),
-};
-
-const commandData = new SlashCommandBuilder()
-	.setName("whitelist")
-	.setDescription("Officially control the whitelist of the server.")
-	.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-	.addSubcommand(commandDataSubcommands.add)
-	.addSubcommand(commandDataSubcommands.remove);
+const commandData = EuphoriaSlashCommandBuilder.build(WhitelistCommand);
 
 const run = {
 	add: async (client: myClient, interaction: ChatInputCommandInteraction) => {
