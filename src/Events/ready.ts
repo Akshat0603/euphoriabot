@@ -1,4 +1,4 @@
-import { ActivityType, Routes } from "discord.js";
+import { ActivityType } from "discord.js";
 import { eventType } from "../Types/Events";
 import myClient from "../client";
 
