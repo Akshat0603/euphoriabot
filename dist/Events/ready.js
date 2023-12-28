@@ -13,7 +13,7 @@ exports.event = {
         client.slashCommands.forEach(async (command) => {
             try {
                 await client.application.commands.create(command.data, client.guildId);
-                console.log(`[SLASH COMMANDS] Refreshed command: '${command.data.name}'`);
+                console.log(`[SLASH COMMANDS] Refreshed Command: '${command.data.name}'`);
             }
             catch (error) {
                 console.error(error);
