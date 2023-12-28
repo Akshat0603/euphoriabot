@@ -1,4 +1,4 @@
-import {
+/* import {
 	ApplicationCommandOptionType,
 	ChatInputCommandInteraction,
 	PermissionFlagsBits,
@@ -139,3 +139,4 @@ export const slashCommand: slashCommandType = {
 			});
 	},
 };
+ */

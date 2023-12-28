@@ -21,7 +21,7 @@ exports.event = {
             channel.send({ embeds: [messageEmbed] });
         }
         else {
-            console.error("AN ERROR OCCURED WHILE LOGGING A DELETED MESSAGE!");
+            console.error("[EVENTS] AN ERROR OCCURED WHILE LOGGING A DELETED MESSAGE!");
         }
     },
 };

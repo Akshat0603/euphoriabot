@@ -8,8 +8,9 @@ exports.event = {
         if (oldMessage.partial ||
             newMessage.partial ||
             oldMessage.author?.bot ||
-            oldMessage.content === newMessage.content)
+            oldMessage.content === newMessage.content) {
             return;
+        }
         const channel = await client.channels.cache.get(client.channelLogMessageUpdateID);
         if (channel && channel.type === discord_js_1.ChannelType.GuildText) {
             const messageEmbed = new discord_js_1.EmbedBuilder()
@@ -27,7 +28,7 @@ exports.event = {
             channel.send({ embeds: [messageEmbed] });
         }
         else {
-            console.error("AN ERROR OCCURED WHILE LOGGING A DELETED MESSAGE!");
+            console.error("[EVENTS] AN ERROR OCCURED WHILE LOGGING AN EDITED MESSAGE!");
         }
     },
 };

@@ -2,13 +2,15 @@ import { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandBuilder }
 import { slashCommandType } from "../Types/SlashCommands";
 import myClient from "../client";
 
-const commandData = new SlashCommandBuilder()
-	.setName("ping")
-	.setDescription("Replies with Pong! And the ping of the bot!")
-	.setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
-
 export const slashCommand: slashCommandType = {
-	data: commandData,
+	// COMMAND DATA
+	data: {
+		name: "ping",
+		description: "Replies with Pong! And the ping of the bot!",
+		defaultMemberPermissions: PermissionFlagsBits.Administrator,
+	},
+
+	// COMMAND EXECUTION
 	execute: async (client: myClient, interaction: ChatInputCommandInteraction) => {
 		await interaction.reply({
 			content: `

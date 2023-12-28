@@ -10,19 +10,15 @@ require("dotenv/config");
 class myClient extends discord_js_1.Client {
     slashCommands = new discord_js_1.Collection();
     events = new discord_js_1.Collection();
-    slashCommandsJSONArray = new Array();
-    rest = new discord_js_1.REST().setToken(process.env.TOKEN);
     rconSMP = {
         port: Number(process.env.PORTSMP),
         host: process.env.SERVERIP,
         password: process.env.RCONPASS,
-        maxPending: 5,
     };
     rconCMP = {
         port: Number(process.env.PORTCMP),
         host: process.env.SERVERIP,
         password: process.env.RCONPASS,
-        maxPending: 5,
     };
     clientId = "1185165875301584956";
     guildId = "1176560748642709595";
@@ -40,23 +36,14 @@ class myClient extends discord_js_1.Client {
         for (const slashCommandPath of slashCommandsPath) {
             let Command;
             var { slashCommand } = await require(slashCommandPath);
-            if (slashCommand.data && slashCommand.execute) {
+            if (slashCommand && slashCommand.data && slashCommand.execute) {
                 Command = slashCommand;
-                this.slashCommandsJSONArray.push(Command.data.toJSON());
                 this.slashCommands.set(Command.data.name, slashCommand);
-                console.log(`[REGISTRY] Slash Command Registered: ${Command.data.name}`);
+                console.log(`[REGISTRY] Slash Command Registered: '${Command.data.name}'`);
             }
             else {
-                console.warn(`[WARNING] Slash Command at path ${slashCommandPath} is invalid!`);
+                console.warn(`[WARNING] Slash Command at path '${slashCommandPath}' is invalid!`);
             }
-        }
-        try {
-            console.log(`[SLASH COMMANDS] Started refreshing ${this.slashCommandsJSONArray.length} application (/) commands.`);
-            const data = await this.rest.put(discord_js_1.Routes.applicationGuildCommands(this.clientId, this.guildId), { body: this.slashCommandsJSONArray });
-            console.log(`[SLASH COMMANDS] Refreshed ${this.slashCommandsJSONArray.length} application (/) commands.`);
-        }
-        catch (error) {
-            console.error(error);
         }
         const eventsPath = await (0, getAllFiles_1.default)((0, path_1.join)(dir, "Events"));
         for (const eventPath of eventsPath) {
@@ -64,10 +51,10 @@ class myClient extends discord_js_1.Client {
             if (event && event.name && event.execute) {
                 this.events.set(event.name, event);
                 this.on(event.name, event.execute.bind(null, this));
-                console.log(`[REGISTRY] Event Registed: ${event.name}`);
+                console.log(`[REGISTRY] Event Registed: '${event.name}'`);
             }
             else {
-                console.warn(`[WARNING] Event at path ${eventPath} is invalid!`);
+                console.warn(`[WARNING] Event at path '${eventPath}' is invalid!`);
             }
         }
     }

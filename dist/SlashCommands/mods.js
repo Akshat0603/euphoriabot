@@ -2,11 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.slashCommand = void 0;
 const discord_js_1 = require("discord.js");
-const commandData = new discord_js_1.SlashCommandBuilder()
-    .setName("mods")
-    .setDescription("Responds with the mod list of the server.");
 exports.slashCommand = {
-    data: commandData,
+    data: {
+        name: "mods",
+        description: "Responds with the mod list of the server.",
+    },
     execute: async (client, interaction) => {
         const response = await interaction.deferReply({ ephemeral: true });
         var channel = await client.channels.cache.get(client.channelEuphoriaID);

@@ -5,14 +5,21 @@ import myClient from "../client";
 export const event: eventType = {
 	name: "messageUpdate",
 	execute: async (client: myClient, oldMessage: Message, newMessage: Message) => {
+		// LOGGING MESSAGE CONTENT UPDATE
+
+		// Checking if possible / should do it
 		if (
 			oldMessage.partial ||
 			newMessage.partial ||
 			oldMessage.author?.bot ||
 			oldMessage.content === newMessage.content
-		)
+		) {
 			return;
+		}
+
+		// Finding the right channel and logging it
 		const channel = await client.channels.cache.get(client.channelLogMessageUpdateID);
+		// Impossible error check
 		if (channel && channel.type === ChannelType.GuildText) {
 			const messageEmbed = new EmbedBuilder()
 				.setAuthor({
@@ -28,7 +35,7 @@ export const event: eventType = {
 				.setFooter(client.embedFooter);
 			channel.send({ embeds: [messageEmbed] });
 		} else {
-			console.error("AN ERROR OCCURED WHILE LOGGING A DELETED MESSAGE!");
+			console.error("[EVENTS] AN ERROR OCCURED WHILE LOGGING AN EDITED MESSAGE!");
 		}
 	},
 };

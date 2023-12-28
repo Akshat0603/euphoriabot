@@ -1,4 +1,5 @@
 import {
+	ChatInputApplicationCommandData,
 	ChatInputCommandInteraction,
 	SlashCommandBuilder,
 	SlashCommandSubcommandsOnlyBuilder,
@@ -10,10 +11,7 @@ interface Run {
 }
 
 type slashCommandType = {
-	data:
-		| SlashCommandBuilder
-		| SlashCommandSubcommandsOnlyBuilder
-		| Omit<SlashCommandBuilder, "addSubcommandGroup" | "addSubcommand">;
+	data: ChatInputApplicationCommandData;
 	execute: Run;
 };
 

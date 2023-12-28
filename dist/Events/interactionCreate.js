@@ -8,6 +8,7 @@ async function ChatInputCommand(client, interaction) {
             content: "## <:no:1181140154623213569> An Error Occured! Couldn't find the command!",
             ephemeral: true,
         });
+        console.error(interaction);
     }
     else {
         console.log(`[SLASH COMMANDS] Executed Command "${command.data.name}" by ${interaction.user.username}`);

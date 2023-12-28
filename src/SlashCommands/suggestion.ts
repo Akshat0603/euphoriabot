@@ -1,54 +1,60 @@
 import {
+	ApplicationCommandOptionChoiceData,
 	ApplicationCommandOptionType,
 	ChannelType,
+	ChatInputApplicationCommandData,
 	ChatInputCommandInteraction,
 	EmbedBuilder,
 	PermissionFlagsBits,
-	SlashCommandBooleanOption,
-	SlashCommandBuilder,
-	SlashCommandStringOption,
 } from "discord.js";
 import { slashCommandType } from "../Types/SlashCommands";
 import myClient from "../client";
 
-const Options = {
-	status: new SlashCommandStringOption()
-		.setName("status")
-		.setDescription("What's the new status?")
-		.setRequired(true)
-		.setChoices(
-			{
-				name: "Denied",
-				value: "Denied",
-			},
-			{
-				name: "Planned",
-				value: "Planned",
-			},
-			{
-				name: "Implemented",
-				value: "Implemented",
-			},
-			{
-				name: "On Hold",
-				value: "On Hold",
-			}
-		),
-	close: new SlashCommandBooleanOption()
-		.setName("close-post")
-		.setDescription("Do you wanna close the post? Default: False"),
-};
-
-const commandData = new SlashCommandBuilder()
-	.setName("suggestion")
-	.setDescription("Set the status of a suggestion.")
-	.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-	.addStringOption(Options.status)
-	.addBooleanOption(Options.close);
+// STATUS CHOICES
+const choices: readonly ApplicationCommandOptionChoiceData<string>[] = [
+	{
+		name: "Denied",
+		value: "Denied",
+	},
+	{
+		name: "Planned",
+		value: "Planned",
+	},
+	{
+		name: "Implemented",
+		value: "Implemented",
+	},
+	{
+		name: "On Hold",
+		value: "On Hold",
+	},
+];
 
 export const slashCommand: slashCommandType = {
-	data: commandData,
+	// COMMAND DATA
+	data: {
+		name: "suggestion",
+		description: "Set the status of a suggestion.",
+		defaultMemberPermissions: PermissionFlagsBits.Administrator,
+		options: [
+			{
+				name: "status",
+				description: "What's the new status?",
+				type: ApplicationCommandOptionType.String,
+				required: true,
+				choices: choices,
+			},
+			{
+				name: "close-post",
+				description: "Do you wanna close the post? Default: False",
+				type: ApplicationCommandOptionType.Boolean,
+			},
+		],
+	},
+
+	// COMMAND EXECUTION
 	execute: async (client: myClient, interaction: ChatInputCommandInteraction) => {
+		// Checking for correct channel
 		if (
 			interaction.channel!.type !== ChannelType.PublicThread ||
 			interaction.channel?.parentId !== "1176818908909551646"
@@ -60,17 +66,22 @@ export const slashCommand: slashCommandType = {
 			return;
 		}
 
+		// Deferring reply for processing time
 		const response = await interaction.deferReply();
 
+		// Impossible error check: Code #6
 		if (interaction.options.data[0].type !== ApplicationCommandOptionType.String) {
 			response.edit({ content: "## <:no:1181140154623213569> An Error Occured! Code #6" });
 			return;
 		}
 
+		// Assigning values
 		var newStatus = interaction.options.data[0].value;
 		var closePost = false;
 
+		// Checking for close-post
 		if (interaction.options.data[1]) {
+			// Impossible error check: Code #7
 			if (
 				interaction.options.data[1].type !== ApplicationCommandOptionType.Boolean ||
 				typeof interaction.options.data[1].value !== "boolean"
@@ -80,16 +91,20 @@ export const slashCommand: slashCommandType = {
 				});
 				return;
 			}
+
 			closePost = interaction.options.data[1].value;
 		}
 
+		// Getting Parent Channel for ease of access
 		const channel = client.channels.cache.get(interaction.channel.parentId);
 
+		// Impossible error check: Code #8
 		if (channel!.type !== ChannelType.GuildForum) {
 			response.edit({ content: "## <:no:1181140154623213569> An Error Occured! Code #8" });
 			return;
 		}
 
+		// Tag check and modification from this point forth
 		const newStatusID = channel.availableTags.filter((t) => t.name === newStatus)[0].id;
 		var tags = interaction.channel.appliedTags;
 
@@ -104,7 +119,7 @@ export const slashCommand: slashCommandType = {
 
 		var allOptionsID: string[] = [];
 
-		Options.status.toJSON().choices?.forEach((c) => {
+		choices.forEach((c) => {
 			allOptionsID.push(channel.availableTags.filter((t) => t.name === c.value)[0].id);
 		});
 
@@ -117,6 +132,7 @@ export const slashCommand: slashCommandType = {
 
 		tags.push(newStatusID);
 
+		// Tag modification complete. Applying changes and responding to user
 		interaction.channel.edit({ appliedTags: tags });
 		response.edit({
 			embeds: [
@@ -131,6 +147,7 @@ export const slashCommand: slashCommandType = {
 			],
 		});
 
+		// Closing post if needed
 		if (closePost === true) {
 			interaction.channel.setArchived(true);
 		}

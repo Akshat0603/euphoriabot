@@ -1,4 +1,4 @@
-import { Client, Collection, EmbedFooterOptions, REST, Routes, TextChannel } from "discord.js";
+import { Client, Collection, EmbedFooterOptions } from "discord.js";
 import { slashCommandType } from "./Types/SlashCommands";
 import { eventType } from "./Types/Events";
 import getAllFiles from "./Utilities/getAllFiles";
@@ -10,21 +10,17 @@ class myClient extends Client {
 	// EMPTY IDENTIFICATION
 	public slashCommands: Collection<string, slashCommandType> = new Collection();
 	public events: Collection<string, eventType> = new Collection();
-	public slashCommandsJSONArray = new Array();
 
 	// COMPLEX DATA IDENTIFICATION
-	public rest = new REST().setToken(process.env.TOKEN!);
 	public rconSMP: RconOptions = {
 		port: Number(process.env.PORTSMP!),
 		host: process.env.SERVERIP!,
 		password: process.env.RCONPASS!,
-		maxPending: 5,
 	};
 	public rconCMP: RconOptions = {
 		port: Number(process.env.PORTCMP!),
 		host: process.env.SERVERIP!,
 		password: process.env.RCONPASS!,
-		maxPending: 5,
 	};
 
 	// SIMPLE DATA IDENTIFICATION
@@ -47,35 +43,18 @@ class myClient extends Client {
 		// LOGIN
 		this.login(process.env.TOKEN);
 
-		// GET SLASH COMMANDS
+		// REGISTER SLASH COMMANDS (Load to client in event: 'ready')
 		const slashCommandsPath = await getAllFiles(join(dir, "SlashCommands"));
 		for (const slashCommandPath of slashCommandsPath) {
 			let Command: slashCommandType;
 			var { slashCommand } = await require(slashCommandPath);
-			if (slashCommand.data && slashCommand.execute) {
+			if (slashCommand && slashCommand.data && slashCommand.execute) {
 				Command = slashCommand;
-				this.slashCommandsJSONArray.push(Command.data.toJSON());
 				this.slashCommands.set(Command.data.name, slashCommand);
-				console.log(`[REGISTRY] Slash Command Registered: ${Command.data.name}`);
+				console.log(`[REGISTRY] Slash Command Registered: '${Command.data.name}'`);
 			} else {
-				console.warn(`[WARNING] Slash Command at path ${slashCommandPath} is invalid!`);
+				console.warn(`[WARNING] Slash Command at path '${slashCommandPath}' is invalid!`);
 			}
-		}
-
-		// REGISTER SLASH COMMANDS
-		try {
-			console.log(
-				`[SLASH COMMANDS] Started refreshing ${this.slashCommandsJSONArray.length} application (/) commands.`
-			);
-			const data = await this.rest.put(
-				Routes.applicationGuildCommands(this.clientId, this.guildId),
-				{ body: this.slashCommandsJSONArray }
-			);
-			console.log(
-				`[SLASH COMMANDS] Refreshed ${this.slashCommandsJSONArray.length} application (/) commands.`
-			);
-		} catch (error) {
-			console.error(error);
 		}
 
 		// GET AND REGISTER EVENTS
@@ -85,9 +64,9 @@ class myClient extends Client {
 			if (event && event.name && event.execute) {
 				this.events.set(event.name, event);
 				this.on(event.name, event.execute.bind(null, this));
-				console.log(`[REGISTRY] Event Registed: ${event.name}`);
+				console.log(`[REGISTRY] Event Registed: '${event.name}'`);
 			} else {
-				console.warn(`[WARNING] Event at path ${eventPath} is invalid!`);
+				console.warn(`[WARNING] Event at path '${eventPath}' is invalid!`);
 			}
 		}
 	}

@@ -2,36 +2,44 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.slashCommand = void 0;
 const discord_js_1 = require("discord.js");
-const Options = {
-    status: new discord_js_1.SlashCommandStringOption()
-        .setName("status")
-        .setDescription("What's the new status?")
-        .setRequired(true)
-        .setChoices({
+const choices = [
+    {
         name: "Denied",
         value: "Denied",
-    }, {
+    },
+    {
         name: "Planned",
         value: "Planned",
-    }, {
+    },
+    {
         name: "Implemented",
         value: "Implemented",
-    }, {
+    },
+    {
         name: "On Hold",
         value: "On Hold",
-    }),
-    close: new discord_js_1.SlashCommandBooleanOption()
-        .setName("close-post")
-        .setDescription("Do you wanna close the post? Default: False"),
-};
-const commandData = new discord_js_1.SlashCommandBuilder()
-    .setName("suggestion")
-    .setDescription("Set the status of a suggestion.")
-    .setDefaultMemberPermissions(discord_js_1.PermissionFlagsBits.Administrator)
-    .addStringOption(Options.status)
-    .addBooleanOption(Options.close);
+    },
+];
 exports.slashCommand = {
-    data: commandData,
+    data: {
+        name: "suggestion",
+        description: "Set the status of a suggestion.",
+        defaultMemberPermissions: discord_js_1.PermissionFlagsBits.Administrator,
+        options: [
+            {
+                name: "status",
+                description: "What's the new status?",
+                type: discord_js_1.ApplicationCommandOptionType.String,
+                required: true,
+                choices: choices,
+            },
+            {
+                name: "close-post",
+                description: "Do you wanna close the post? Default: False",
+                type: discord_js_1.ApplicationCommandOptionType.Boolean,
+            },
+        ],
+    },
     execute: async (client, interaction) => {
         if (interaction.channel.type !== discord_js_1.ChannelType.PublicThread ||
             interaction.channel?.parentId !== "1176818908909551646") {
@@ -74,7 +82,7 @@ exports.slashCommand = {
             }
         });
         var allOptionsID = [];
-        Options.status.toJSON().choices?.forEach((c) => {
+        choices.forEach((c) => {
             allOptionsID.push(channel.availableTags.filter((t) => t.name === c.value)[0].id);
         });
         allOptionsID.forEach((id) => {

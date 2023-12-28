@@ -2,12 +2,14 @@ import { ChannelType, ChatInputCommandInteraction, SlashCommandBuilder } from "d
 import { slashCommandType } from "../Types/SlashCommands";
 import myClient from "../client";
 
-const commandData = new SlashCommandBuilder()
-	.setName("mods")
-	.setDescription("Responds with the mod list of the server.");
-
 export const slashCommand: slashCommandType = {
-	data: commandData,
+	// COMMAND DATA
+	data: {
+		name: "mods",
+		description: "Responds with the mod list of the server.",
+	},
+
+	// COMMAND EXECUTION
 	execute: async (client: myClient, interaction: ChatInputCommandInteraction) => {
 		const response = await interaction.deferReply({ ephemeral: true });
 		var channel = await client.channels.cache.get(client.channelEuphoriaID);
@@ -15,6 +17,7 @@ export const slashCommand: slashCommandType = {
 			channel = await channel.fetch();
 			console.log("channel fetched");
 		}
+		// Impossible error check: Code #1 and #2
 		if (channel?.type === ChannelType.GuildText) {
 			const messages = await channel.messages.fetch();
 			const message = messages.get(client.messageModsID);
