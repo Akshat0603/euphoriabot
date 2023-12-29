@@ -19,6 +19,8 @@ exports.event = {
                 console.error(error);
             }
         });
+        await client.SMP.connect();
+        await client.CMP.connect();
     },
 };
 //# sourceMappingURL=ready.js.map

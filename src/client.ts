@@ -1,38 +1,37 @@
 import { Client, Collection, EmbedFooterOptions } from "discord.js";
-import { slashCommandType } from "./Types/SlashCommands";
-import { eventType } from "./Types/Events";
-import getAllFiles from "./Utilities/getAllFiles";
+import { slashCommandType } from "./types/slash-commands";
+import { eventType } from "./types/events";
+import { getAllFiles } from "./utilities/get-all-files";
 import { join } from "path";
 import "dotenv/config";
-import { RconOptions } from "rcon-client";
+import { PteroClient, Shard } from "@devnote-dev/pterojs";
+import { serverEventsType } from "./types/server-events";
 
 class myClient extends Client {
 	// EMPTY IDENTIFICATION
 	public slashCommands: Collection<string, slashCommandType> = new Collection();
 	public events: Collection<string, eventType> = new Collection();
+	public SMPEvents: Collection<string, serverEventsType> = new Collection();
+	public CMPEvents: Collection<string, serverEventsType> = new Collection();
 
 	// COMPLEX DATA IDENTIFICATION
-	public rconSMP: RconOptions = {
-		port: Number(process.env.PORTSMP!),
-		host: process.env.SERVERIP!,
-		password: process.env.RCONPASS!,
-	};
-	public rconCMP: RconOptions = {
-		port: Number(process.env.PORTCMP!),
-		host: process.env.SERVERIP!,
-		password: process.env.RCONPASS!,
-	};
+	public panelClient: PteroClient = new PteroClient(
+		"https://panel.euphoriasmp.com/",
+		process.env.PTEROAPI!
+	);
+	public SMP: Shard = this.panelClient.addSocketServer("d07e9ba3");
+	public CMP: Shard = this.panelClient.addSocketServer("cf23cd0c");
 
 	// SIMPLE DATA IDENTIFICATION
-	public clientId = "1185165875301584956";
-	public guildId = "1176560748642709595";
+	public clientId: string = "1185165875301584956";
+	public guildId: string = "1176560748642709595";
 
-	public channelEuphoriaID = "1176817932693688390";
-	public channelLogMessageDeleteID = "1187721538779238471";
-	public channelLogMessageUpdateID = "1187721577253584956";
+	public channelEuphoriaID: string = "1176817932693688390";
+	public channelLogMessageDeleteID: string = "1187721538779238471";
+	public channelLogMessageUpdateID: string = "1187721577253584956";
 
-	public messageModsID = "1179369602652848160";
-	public messageModsContentStart = "# __Server Mods__";
+	public messageModsID: string = "1179369602652848160";
+	public messageModsContentStart: string = "# __Server Mods__";
 
 	public embedFooter: EmbedFooterOptions = {
 		text: "Looking for the timestamp? GET LOST!",
@@ -40,11 +39,8 @@ class myClient extends Client {
 
 	// INITIALIZE THE BOT
 	public async init(dir: string) {
-		// LOGIN
-		this.login(process.env.TOKEN);
-
-		// REGISTER SLASH COMMANDS (Load to client in event: 'ready')
-		const slashCommandsPath = await getAllFiles(join(dir, "SlashCommands"));
+		// Register Slash Commands (Load to client in event: 'ready')
+		const slashCommandsPath = await getAllFiles(join(dir, "slash-commands"));
 		for (const slashCommandPath of slashCommandsPath) {
 			let Command: slashCommandType;
 			var { slashCommand } = await require(slashCommandPath);
@@ -57,8 +53,8 @@ class myClient extends Client {
 			}
 		}
 
-		// GET AND REGISTER EVENTS
-		const eventsPath = await getAllFiles(join(dir, "Events"));
+		// Get and Register Events
+		const eventsPath = await getAllFiles(join(dir, "events"));
 		for (const eventPath of eventsPath) {
 			const { event } = await require(eventPath);
 			if (event && event.name && event.execute) {
@@ -69,6 +65,37 @@ class myClient extends Client {
 				console.warn(`[WARNING] Event at path '${eventPath}' is invalid!`);
 			}
 		}
+
+		// Get and Register SMP Server Events
+		const SMPEventsPath = await getAllFiles(join(dir, "server-events/smp"));
+		for (const eventPath of SMPEventsPath) {
+			const { event } = await require(eventPath);
+			if (event && event.name && event.execute) {
+				this.SMPEvents.set(event.name, event);
+				this.SMP.on(event.name, event.execute.bind(null, this));
+				console.log(`[REGISTRY] SMP Event Registed: '${event.name}'`);
+			} else {
+				console.warn(`[WARNING] SMP Event at path '${eventPath}' is invalid!`);
+			}
+		}
+
+		// Get and Register CMP Server Events
+		const CMPEventsPath = await getAllFiles(join(dir, "server-events/cmp"));
+		for (const eventPath of CMPEventsPath) {
+			const { event } = await require(eventPath);
+			if (event && event.name && event.execute) {
+				this.CMPEvents.set(event.name, event);
+				this.CMP.on(event.name, event.execute.bind(null, this));
+				console.log(`[REGISTRY] CMP Event Registed: '${event.name}'`);
+			} else {
+				console.warn(`[WARNING] CMP Event at path '${eventPath}' is invalid!`);
+			}
+		}
+
+		// Login (MC Server connect in client event: 'ready')
+		this.login(process.env.TOKEN);
+		this.SMP.origin = true;
+		this.CMP.origin = true;
 	}
 }
 

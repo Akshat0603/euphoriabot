@@ -1,11 +1,11 @@
 import { ActivityType } from "discord.js";
-import { eventType } from "../Types/Events";
+import { eventType } from "../types/events";
 import myClient from "../client";
 
 export const event: eventType = {
 	name: "ready",
 	execute: async (client: myClient) => {
-		// console log and change activityA
+		// console log and change activity
 		console.log(`${client.user?.username} is online!`);
 		client.user?.setActivity({
 			name: "Preparing to replace Akshat.",
@@ -21,5 +21,9 @@ export const event: eventType = {
 				console.error(error);
 			}
 		});
+
+		// Connect to both servers
+		await client.SMP.connect();
+		await client.CMP.connect();
 	},
 };
