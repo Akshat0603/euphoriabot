@@ -63,15 +63,6 @@ export const event: serverEventsType = {
 				return;
 			}
 
-			// Player join/leave
-			if (chatMessage.endsWith("joined the game") || chatMessage.endsWith("left the game")) {
-				chatMessage = chatMessage.replaceAll("_", "\\_");
-				await client.CMPchatWebhook.send({
-					content: "**" + chatMessage + "**",
-				});
-				return;
-			}
-
 			// Player Message
 			if (args[0].startsWith("<") && args[0].endsWith(">")) {
 				args[0] = args[0].replace("<", "");
@@ -87,6 +78,15 @@ export const event: serverEventsType = {
 					content: chatMessage,
 				});
 
+				return;
+			}
+
+			// Player join/leave
+			if (chatMessage.endsWith("joined the game") || chatMessage.endsWith("left the game")) {
+				chatMessage = chatMessage.replaceAll("_", "\\_");
+				await client.CMPchatWebhook.send({
+					content: "**" + chatMessage + "**",
+				});
 				return;
 			}
 

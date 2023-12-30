@@ -48,13 +48,6 @@ exports.event = {
                 restarting = true;
                 return;
             }
-            if (chatMessage.endsWith("joined the game") || chatMessage.endsWith("left the game")) {
-                chatMessage = chatMessage.replaceAll("_", "\\_");
-                await client.SMPchatWebhook.send({
-                    content: "**" + chatMessage + "**",
-                });
-                return;
-            }
             if (args[0].startsWith("<") && args[0].endsWith(">")) {
                 args[0] = args[0].replace("<", "");
                 const username = args[0].replace(">", "");
@@ -66,6 +59,13 @@ exports.event = {
                     username: username,
                     avatarURL: `https://minotar.net/avatar/${username}.png`,
                     content: chatMessage,
+                });
+                return;
+            }
+            if (chatMessage.endsWith("joined the game") || chatMessage.endsWith("left the game")) {
+                chatMessage = chatMessage.replaceAll("_", "\\_");
+                await client.SMPchatWebhook.send({
+                    content: "**" + chatMessage + "**",
                 });
                 return;
             }
