@@ -132,6 +132,24 @@ export const event: serverEventsType = {
 				return;
 			}
 
+			// Web Message
+			if (args[0] === "[WEB]") {
+				const username = args[1].slice(0, -1);
+				const name = args[0] + " " + args[1];
+				args = args.slice(2);
+				chatMessage = args.join();
+				chatMessage = checkUrlEmbedProof(chatMessage);
+				chatMessage = clearDiscordMarkdown(chatMessage);
+
+				await client.CMPchatWebhook.send({
+					username: name,
+					avatarURL: `https://minotar.net/avatar/${username}.png`,
+					content: chatMessage,
+				});
+
+				return;
+			}
+
 			// anything else
 			await client.CMPchatWebhook.send({
 				content: "*" + clearDiscordMarkdown(chatMessage) + "*",
