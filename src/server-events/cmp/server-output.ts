@@ -67,7 +67,7 @@ export const event: serverEventsType = {
 			if (chatMessage.endsWith("joined the game") || chatMessage.endsWith("left the game")) {
 				chatMessage = chatMessage.replaceAll("_", "\\_");
 				await client.CMPchatWebhook.send({
-					content: chatMessage,
+					content: "**" + chatMessage + "**",
 				});
 				return;
 			}
