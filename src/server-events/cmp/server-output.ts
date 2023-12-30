@@ -40,16 +40,6 @@ export const event: serverEventsType = {
 			args = args.slice(4);
 			let chatMessage = args.join(" ");
 
-			// Server stop
-			if (chatMessage === "Stopping the server") {
-				chatMessage = "Server has Stopped!";
-				await client.CMPchatWebhook.send({
-					embeds: [new EmbedBuilder().setTitle(chatMessage).setColor("#FF0000")],
-				});
-				restarting = true;
-				return;
-			}
-
 			// Server Start
 			if (chatMessage === "Preparing start region for dimension minecraft:overworld") {
 				chatMessage = "Server has Started!";
@@ -63,28 +53,21 @@ export const event: serverEventsType = {
 			// Return if server is restarting
 			if (restarting === true) return;
 
-			// Player join/leave
-			if (chatMessage.endsWith("joined the game")) {
-				chatMessage = chatMessage.replaceAll("_", "\\_");
+			// Server stop
+			if (chatMessage === "Stopping the server") {
+				chatMessage = "Server has Stopped!";
 				await client.CMPchatWebhook.send({
-					embeds: [
-						new EmbedBuilder()
-							.setTitle(chatMessage)
-							.setColor("#00FF00")
-							.setThumbnail(`https://minotar.net/avatar/${args[0]}.png`),
-					],
+					embeds: [new EmbedBuilder().setTitle(chatMessage).setColor("#FF0000")],
 				});
+				restarting = true;
 				return;
 			}
-			if (chatMessage.endsWith("left the game")) {
+
+			// Player join/leave
+			if (chatMessage.endsWith("joined the game") || chatMessage.endsWith("left the game")) {
 				chatMessage = chatMessage.replaceAll("_", "\\_");
 				await client.CMPchatWebhook.send({
-					embeds: [
-						new EmbedBuilder()
-							.setTitle(chatMessage)
-							.setColor("#FF0000")
-							.setThumbnail(`https://minotar.net/avatar/${args[0]}.png`),
-					],
+					content: chatMessage,
 				});
 				return;
 			}
@@ -127,13 +110,9 @@ export const event: serverEventsType = {
 				args[3] === "the" &&
 				args[4] === "advancement"
 			) {
+				chatMessage = chatMessage.replaceAll("_", "\\_");
 				await client.CMPchatWebhook.send({
-					embeds: [
-						new EmbedBuilder()
-							.setTitle(chatMessage)
-							.setColor("#b700FF")
-							.setThumbnail(`https://minotar.net/avatar/${args[0]}.png`),
-					],
+					content: "**" + chatMessage + "**",
 				});
 				return;
 			}
@@ -146,20 +125,16 @@ export const event: serverEventsType = {
 				args[3] === "the" &&
 				args[4] === "goal"
 			) {
+				chatMessage = chatMessage.replaceAll("_", "\\_");
 				await client.CMPchatWebhook.send({
-					embeds: [
-						new EmbedBuilder()
-							.setTitle(chatMessage)
-							.setColor("#b700FF")
-							.setThumbnail(`https://minotar.net/avatar/${args[0]}.png`),
-					],
+					content: "**" + chatMessage + "**",
 				});
 				return;
 			}
 
 			// anything else
 			await client.CMPchatWebhook.send({
-				embeds: [new EmbedBuilder().setTitle(chatMessage).setColor("#b700FF")],
+				content: "*" + clearDiscordMarkdown(chatMessage) + "*",
 			});
 		}
 	},

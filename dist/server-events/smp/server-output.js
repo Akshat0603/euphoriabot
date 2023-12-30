@@ -30,14 +30,6 @@ exports.event = {
             args[3] === "[minecraft/MinecraftServer]:") {
             args = args.slice(4);
             let chatMessage = args.join(" ");
-            if (chatMessage === "Stopping the server") {
-                chatMessage = "Server has Stopped!";
-                await client.SMPchatWebhook.send({
-                    embeds: [new discord_js_1.EmbedBuilder().setTitle(chatMessage).setColor("#FF0000")],
-                });
-                restarting = true;
-                return;
-            }
             if (chatMessage === "Preparing start region for dimension minecraft:overworld") {
                 chatMessage = "Server has Started!";
                 await client.SMPchatWebhook.send({
@@ -48,27 +40,18 @@ exports.event = {
             }
             if (restarting === true)
                 return;
-            if (chatMessage.endsWith("joined the game")) {
-                chatMessage = chatMessage.replaceAll("_", "\\_");
+            if (chatMessage === "Stopping the server") {
+                chatMessage = "Server has Stopped!";
                 await client.SMPchatWebhook.send({
-                    embeds: [
-                        new discord_js_1.EmbedBuilder()
-                            .setTitle(chatMessage)
-                            .setColor("#00FF00")
-                            .setThumbnail(`https://minotar.net/avatar/${args[0]}.png`),
-                    ],
+                    embeds: [new discord_js_1.EmbedBuilder().setTitle(chatMessage).setColor("#FF0000")],
                 });
+                restarting = true;
                 return;
             }
-            if (chatMessage.endsWith("left the game")) {
+            if (chatMessage.endsWith("joined the game") || chatMessage.endsWith("left the game")) {
                 chatMessage = chatMessage.replaceAll("_", "\\_");
                 await client.SMPchatWebhook.send({
-                    embeds: [
-                        new discord_js_1.EmbedBuilder()
-                            .setTitle(chatMessage)
-                            .setColor("#FF0000")
-                            .setThumbnail(`https://minotar.net/avatar/${args[0]}.png`),
-                    ],
+                    content: chatMessage,
                 });
                 return;
             }
@@ -99,13 +82,9 @@ exports.event = {
                 args[2] === "made" &&
                 args[3] === "the" &&
                 args[4] === "advancement") {
+                chatMessage = chatMessage.replaceAll("_", "\\_");
                 await client.SMPchatWebhook.send({
-                    embeds: [
-                        new discord_js_1.EmbedBuilder()
-                            .setTitle(chatMessage)
-                            .setColor("#b700FF")
-                            .setThumbnail(`https://minotar.net/avatar/${args[0]}.png`),
-                    ],
+                    content: "**" + chatMessage + "**",
                 });
                 return;
             }
@@ -114,18 +93,14 @@ exports.event = {
                 args[2] === "reached" &&
                 args[3] === "the" &&
                 args[4] === "goal") {
+                chatMessage = chatMessage.replaceAll("_", "\\_");
                 await client.SMPchatWebhook.send({
-                    embeds: [
-                        new discord_js_1.EmbedBuilder()
-                            .setTitle(chatMessage)
-                            .setColor("#b700FF")
-                            .setThumbnail(`https://minotar.net/avatar/${args[0]}.png`),
-                    ],
+                    content: "**" + chatMessage + "**",
                 });
                 return;
             }
             await client.SMPchatWebhook.send({
-                embeds: [new discord_js_1.EmbedBuilder().setTitle(chatMessage).setColor("#b700FF")],
+                content: "*" + (0, discord_markdown_1.clearDiscordMarkdown)(chatMessage) + "*",
             });
         }
     },
