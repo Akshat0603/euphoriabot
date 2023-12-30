@@ -65,6 +65,7 @@ export const event: serverEventsType = {
 
 			// Player join/leave
 			if (chatMessage.endsWith("joined the game")) {
+				chatMessage = chatMessage.replaceAll("_", "\\_");
 				await client.SMPchatWebhook.send({
 					embeds: [
 						new EmbedBuilder()
@@ -76,6 +77,7 @@ export const event: serverEventsType = {
 				return;
 			}
 			if (chatMessage.endsWith("left the game")) {
+				chatMessage = chatMessage.replaceAll("_", "\\_");
 				await client.SMPchatWebhook.send({
 					embeds: [
 						new EmbedBuilder()

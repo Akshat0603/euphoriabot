@@ -49,6 +49,7 @@ exports.event = {
             if (restarting === true)
                 return;
             if (chatMessage.endsWith("joined the game")) {
+                chatMessage = chatMessage.replaceAll("_", "\\_");
                 await client.CMPchatWebhook.send({
                     embeds: [
                         new discord_js_1.EmbedBuilder()
@@ -60,6 +61,7 @@ exports.event = {
                 return;
             }
             if (chatMessage.endsWith("left the game")) {
+                chatMessage = chatMessage.replaceAll("_", "\\_");
                 await client.CMPchatWebhook.send({
                     embeds: [
                         new discord_js_1.EmbedBuilder()
