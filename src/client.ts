@@ -1,4 +1,4 @@
-import { Client, Collection, EmbedFooterOptions } from "discord.js";
+import { Client, Collection, EmbedFooterOptions, TextChannel } from "discord.js";
 import { slashCommandType } from "./types/slash-commands";
 import { eventType } from "./types/events";
 import { getAllFiles } from "./utilities/get-all-files";
@@ -14,19 +14,13 @@ class myClient extends Client {
 	public SMPEvents: Collection<string, serverEventsType> = new Collection();
 	public CMPEvents: Collection<string, serverEventsType> = new Collection();
 
-	// COMPLEX DATA IDENTIFICATION
-	public panelClient: PteroClient = new PteroClient(
-		"https://panel.euphoriasmp.com/",
-		process.env.PTEROAPI!
-	);
-	public SMP: Shard = this.panelClient.addSocketServer("d07e9ba3");
-	public CMP: Shard = this.panelClient.addSocketServer("cf23cd0c");
-
 	// SIMPLE DATA IDENTIFICATION
 	public clientId: string = "1185165875301584956";
 	public guildId: string = "1176560748642709595";
 
 	public channelEuphoriaID: string = "1176817932693688390";
+	public channelSMPchatID: string = "1190355602908663981";
+	public channelCMPchatID: string = "1190355741631053834";
 	public channelLogMessageDeleteID: string = "1187721538779238471";
 	public channelLogMessageUpdateID: string = "1187721577253584956";
 
@@ -36,6 +30,14 @@ class myClient extends Client {
 	public embedFooter: EmbedFooterOptions = {
 		text: "Looking for the timestamp? GET LOST!",
 	};
+
+	// COMPLEX DATA IDENTIFICATION
+	public panelClient: PteroClient = new PteroClient(
+		"https://panel.euphoriasmp.com/",
+		process.env.PTEROAPI!
+	);
+	public SMP: Shard = this.panelClient.addSocketServer("d07e9ba3");
+	public CMP: Shard = this.panelClient.addSocketServer("cf23cd0c");
 
 	// INITIALIZE THE BOT
 	public async init(dir: string) {

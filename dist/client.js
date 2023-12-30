@@ -10,12 +10,11 @@ class myClient extends discord_js_1.Client {
     events = new discord_js_1.Collection();
     SMPEvents = new discord_js_1.Collection();
     CMPEvents = new discord_js_1.Collection();
-    panelClient = new pterojs_1.PteroClient("https://panel.euphoriasmp.com/", process.env.PTEROAPI);
-    SMP = this.panelClient.addSocketServer("d07e9ba3");
-    CMP = this.panelClient.addSocketServer("cf23cd0c");
     clientId = "1185165875301584956";
     guildId = "1176560748642709595";
     channelEuphoriaID = "1176817932693688390";
+    channelSMPchatID = "1190355602908663981";
+    channelCMPchatID = "1190355741631053834";
     channelLogMessageDeleteID = "1187721538779238471";
     channelLogMessageUpdateID = "1187721577253584956";
     messageModsID = "1179369602652848160";
@@ -23,6 +22,9 @@ class myClient extends discord_js_1.Client {
     embedFooter = {
         text: "Looking for the timestamp? GET LOST!",
     };
+    panelClient = new pterojs_1.PteroClient("https://panel.euphoriasmp.com/", process.env.PTEROAPI);
+    SMP = this.panelClient.addSocketServer("d07e9ba3");
+    CMP = this.panelClient.addSocketServer("cf23cd0c");
     async init(dir) {
         const slashCommandsPath = await (0, get_all_files_1.getAllFiles)((0, path_1.join)(dir, "slash-commands"));
         for (const slashCommandPath of slashCommandsPath) {
