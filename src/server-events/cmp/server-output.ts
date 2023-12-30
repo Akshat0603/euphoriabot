@@ -71,7 +71,7 @@ export const event: serverEventsType = {
 						new EmbedBuilder()
 							.setTitle(chatMessage)
 							.setColor("#00FF00")
-							.setThumbnail(`https://minotar.net/cube/${args[0]}.png`),
+							.setThumbnail(`https://minotar.net/avatar/${args[0]}.png`),
 					],
 				});
 				return;
@@ -83,7 +83,7 @@ export const event: serverEventsType = {
 						new EmbedBuilder()
 							.setTitle(chatMessage)
 							.setColor("#FF0000")
-							.setThumbnail(`https://minotar.net/cube/${args[0]}.png`),
+							.setThumbnail(`https://minotar.net/avatar/${args[0]}.png`),
 					],
 				});
 				return;
@@ -100,7 +100,7 @@ export const event: serverEventsType = {
 
 				await client.CMPchatWebhook.send({
 					username: username,
-					avatarURL: `https://minotar.net/cube/${username}.png`,
+					avatarURL: `https://minotar.net/avatar/${username}.png`,
 					content: chatMessage,
 				});
 
@@ -132,7 +132,7 @@ export const event: serverEventsType = {
 						new EmbedBuilder()
 							.setTitle(chatMessage)
 							.setColor("#b700FF")
-							.setThumbnail(`https://minotar.net/cube/${args[0]}.png`),
+							.setThumbnail(`https://minotar.net/avatar/${args[0]}.png`),
 					],
 				});
 				return;
@@ -151,7 +151,7 @@ export const event: serverEventsType = {
 						new EmbedBuilder()
 							.setTitle(chatMessage)
 							.setColor("#b700FF")
-							.setThumbnail(`https://minotar.net/cube/${args[0]}.png`),
+							.setThumbnail(`https://minotar.net/avatar/${args[0]}.png`),
 					],
 				});
 				return;

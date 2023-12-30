@@ -55,7 +55,7 @@ exports.event = {
                         new discord_js_1.EmbedBuilder()
                             .setTitle(chatMessage)
                             .setColor("#00FF00")
-                            .setThumbnail(`https://minotar.net/cube/${args[0]}.png`),
+                            .setThumbnail(`https://minotar.net/avatar/${args[0]}.png`),
                     ],
                 });
                 return;
@@ -67,7 +67,7 @@ exports.event = {
                         new discord_js_1.EmbedBuilder()
                             .setTitle(chatMessage)
                             .setColor("#FF0000")
-                            .setThumbnail(`https://minotar.net/cube/${args[0]}.png`),
+                            .setThumbnail(`https://minotar.net/avatar/${args[0]}.png`),
                     ],
                 });
                 return;
@@ -81,7 +81,7 @@ exports.event = {
                 chatMessage = (0, discord_markdown_1.clearDiscordMarkdown)(chatMessage);
                 await client.CMPchatWebhook.send({
                     username: username,
-                    avatarURL: `https://minotar.net/cube/${username}.png`,
+                    avatarURL: `https://minotar.net/avatar/${username}.png`,
                     content: chatMessage,
                 });
                 return;
@@ -104,7 +104,7 @@ exports.event = {
                         new discord_js_1.EmbedBuilder()
                             .setTitle(chatMessage)
                             .setColor("#b700FF")
-                            .setThumbnail(`https://minotar.net/cube/${args[0]}.png`),
+                            .setThumbnail(`https://minotar.net/avatar/${args[0]}.png`),
                     ],
                 });
                 return;
@@ -119,7 +119,7 @@ exports.event = {
                         new discord_js_1.EmbedBuilder()
                             .setTitle(chatMessage)
                             .setColor("#b700FF")
-                            .setThumbnail(`https://minotar.net/cube/${args[0]}.png`),
+                            .setThumbnail(`https://minotar.net/avatar/${args[0]}.png`),
                     ],
                 });
                 return;
