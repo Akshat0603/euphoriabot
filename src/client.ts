@@ -1,4 +1,4 @@
-import { Client, Collection, EmbedFooterOptions, TextChannel } from "discord.js";
+import { Client, Collection, EmbedFooterOptions, TextChannel, WebhookClient } from "discord.js";
 import { slashCommandType } from "./types/slash-commands";
 import { eventType } from "./types/events";
 import { getAllFiles } from "./utilities/get-all-files";
@@ -18,6 +18,11 @@ class myClient extends Client {
 	public clientId: string = "1185165875301584956";
 	public guildId: string = "1176560748642709595";
 
+	public SMPwebhookLink: string =
+		"https://discord.com/api/webhooks/1190670638248099850/sZYGnFFdXLf9h4e2dB8-dkgVWZe4SpB0bUpy1FEQ3QVVWgQa0p2Bl9QLloKOr__sDcui";
+	public CMPwebhookLink: string =
+		"https://discord.com/api/webhooks/1190670729327411201/tKg5nLhWLQ_FIGson-IKfgTFSxBe8UpJDDINbUi40AOk7n9yMkuz2rx58UoNBaFXBWUo";
+
 	public channelEuphoriaID: string = "1176817932693688390";
 	public channelSMPchatID: string = "1190355602908663981";
 	public channelCMPchatID: string = "1190355741631053834";
@@ -32,6 +37,9 @@ class myClient extends Client {
 	};
 
 	// COMPLEX DATA IDENTIFICATION
+	public SMPchatWebhook: WebhookClient = new WebhookClient({ url: this.SMPwebhookLink });
+	public CMPchatWebhook: WebhookClient = new WebhookClient({ url: this.CMPwebhookLink });
+
 	public panelClient: PteroClient = new PteroClient(
 		"https://panel.euphoriasmp.com/",
 		process.env.PTEROAPI!

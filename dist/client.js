@@ -12,6 +12,8 @@ class myClient extends discord_js_1.Client {
     CMPEvents = new discord_js_1.Collection();
     clientId = "1185165875301584956";
     guildId = "1176560748642709595";
+    SMPwebhookLink = "https://discord.com/api/webhooks/1190670638248099850/sZYGnFFdXLf9h4e2dB8-dkgVWZe4SpB0bUpy1FEQ3QVVWgQa0p2Bl9QLloKOr__sDcui";
+    CMPwebhookLink = "https://discord.com/api/webhooks/1190670729327411201/tKg5nLhWLQ_FIGson-IKfgTFSxBe8UpJDDINbUi40AOk7n9yMkuz2rx58UoNBaFXBWUo";
     channelEuphoriaID = "1176817932693688390";
     channelSMPchatID = "1190355602908663981";
     channelCMPchatID = "1190355741631053834";
@@ -22,6 +24,8 @@ class myClient extends discord_js_1.Client {
     embedFooter = {
         text: "Looking for the timestamp? GET LOST!",
     };
+    SMPchatWebhook = new discord_js_1.WebhookClient({ url: this.SMPwebhookLink });
+    CMPchatWebhook = new discord_js_1.WebhookClient({ url: this.CMPwebhookLink });
     panelClient = new pterojs_1.PteroClient("https://panel.euphoriasmp.com/", process.env.PTEROAPI);
     SMP = this.panelClient.addSocketServer("d07e9ba3");
     CMP = this.panelClient.addSocketServer("cf23cd0c");

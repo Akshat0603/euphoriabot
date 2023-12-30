@@ -3,21 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.event = void 0;
 const discord_js_1 = require("discord.js");
 const strip_ansi_1 = require("../../utilities/strip-ansi");
-const console_1 = require("console");
+const url_embed_proofer_1 = require("../../utilities/url-embed-proofer");
+const discord_markdown_1 = require("../../utilities/discord-markdown");
 var previousMessage = "[00:00:00]";
 var restarting = false;
-var channel = undefined;
-async function sendMessage(client, message) {
-    if (!channel) {
-        const c = await client.channels.cache.get(client.channelCMPchatID);
-        if (c && c.type === discord_js_1.ChannelType.GuildText) {
-            channel = c;
-        }
-        else
-            throw new console_1.error();
-    }
-    await channel.send(message);
-}
 exports.event = {
     name: "serverOutput",
     execute: async (client, consoleMessage) => {
@@ -40,30 +29,102 @@ exports.event = {
             args[2] === "thread/INFO]" &&
             args[3] === "[minecraft/MinecraftServer]:") {
             args = args.slice(4);
-            if ((args[0].startsWith("<") && args[0].endsWith(">")) ||
-                (args[0].startsWith("[") && args[0].endsWith("]"))) {
-                args[0] = "**" + args[0] + "**";
-            }
             let chatMessage = args.join(" ");
             if (chatMessage === "Stopping the server") {
-                chatMessage = "## Server has Stopped!";
-                sendMessage(client, chatMessage);
+                chatMessage = "Server has Stopped!";
+                await client.CMPchatWebhook.send({
+                    embeds: [new discord_js_1.EmbedBuilder().setTitle(chatMessage).setColor("#FF0000")],
+                });
                 restarting = true;
                 return;
             }
             if (chatMessage === "Preparing start region for dimension minecraft:overworld") {
-                chatMessage = "## Server has Started!";
-                sendMessage(client, chatMessage);
+                chatMessage = "Server has Started!";
+                await client.CMPchatWebhook.send({
+                    embeds: [new discord_js_1.EmbedBuilder().setTitle(chatMessage).setColor("#00FF00")],
+                });
                 restarting = false;
                 return;
             }
             if (restarting === true)
                 return;
-            if (chatMessage.endsWith("joined the game") || chatMessage.endsWith("left the game")) {
-                chatMessage = "**" + chatMessage + "**";
+            if (chatMessage.endsWith("joined the game")) {
+                await client.CMPchatWebhook.send({
+                    embeds: [
+                        new discord_js_1.EmbedBuilder()
+                            .setTitle(chatMessage)
+                            .setColor("#00FF00")
+                            .setThumbnail(`https://minotar.net/cube/${args[0]}.png`),
+                    ],
+                });
+                return;
             }
-            chatMessage = chatMessage.replaceAll("_", "\\_");
-            sendMessage(client, chatMessage);
+            if (chatMessage.endsWith("left the game")) {
+                await client.CMPchatWebhook.send({
+                    embeds: [
+                        new discord_js_1.EmbedBuilder()
+                            .setTitle(chatMessage)
+                            .setColor("#FF0000")
+                            .setThumbnail(`https://minotar.net/cube/${args[0]}.png`),
+                    ],
+                });
+                return;
+            }
+            if (args[0].startsWith("<") && args[0].endsWith(">")) {
+                args[0] = args[0].replace("<", "");
+                const username = args[0].replace(">", "");
+                args = args.slice(1);
+                chatMessage = args.join(" ");
+                chatMessage = (0, url_embed_proofer_1.checkUrlEmbedProof)(chatMessage);
+                chatMessage = (0, discord_markdown_1.clearDiscordMarkdown)(chatMessage);
+                await client.CMPchatWebhook.send({
+                    username: username,
+                    avatarURL: `https://minotar.net/cube/${username}.png`,
+                    content: chatMessage,
+                });
+                return;
+            }
+            if (args[0].startsWith("[") && args[0].endsWith("]")) {
+                args = args.slice(1);
+                chatMessage = args.join(" ");
+                chatMessage = (0, url_embed_proofer_1.checkUrlEmbedProof)(chatMessage);
+                chatMessage = (0, discord_markdown_1.clearDiscordMarkdown)(chatMessage);
+                await client.CMPchatWebhook.send({ content: chatMessage });
+                return;
+            }
+            if (args.length > 5 &&
+                args[1] === "has" &&
+                args[2] === "made" &&
+                args[3] === "the" &&
+                args[4] === "advancement") {
+                await client.CMPchatWebhook.send({
+                    embeds: [
+                        new discord_js_1.EmbedBuilder()
+                            .setTitle(chatMessage)
+                            .setColor("#b700FF")
+                            .setThumbnail(`https://minotar.net/cube/${args[0]}.png`),
+                    ],
+                });
+                return;
+            }
+            if (args.length > 5 &&
+                args[1] === "has" &&
+                args[2] === "reached" &&
+                args[3] === "the" &&
+                args[4] === "goal") {
+                await client.CMPchatWebhook.send({
+                    embeds: [
+                        new discord_js_1.EmbedBuilder()
+                            .setTitle(chatMessage)
+                            .setColor("#b700FF")
+                            .setThumbnail(`https://minotar.net/cube/${args[0]}.png`),
+                    ],
+                });
+                return;
+            }
+            await client.CMPchatWebhook.send({
+                embeds: [new discord_js_1.EmbedBuilder().setTitle(chatMessage).setColor("#b700FF")],
+            });
         }
     },
 };
