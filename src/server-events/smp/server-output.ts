@@ -18,7 +18,11 @@ export const event: serverEventsType = {
 
 		// checking if this is a command response
 		if (!time.test(previousMessage) && args.length > 0) {
-			if ((args[0] === "say" && args.length > 1) || args[0] === "stop") {
+			if (
+				(args[0] === "say" && args.length > 1) ||
+				args[0] === "stop" ||
+				args[0] === "tellraw"
+			) {
 			} else {
 				previousMessage = message;
 				return;
@@ -50,11 +54,8 @@ export const event: serverEventsType = {
 				return;
 			}
 
-			// Return if server is restarting
-			if (restarting === true) return;
-
 			// Server stop
-			if (chatMessage === "Stopping the server") {
+			else if (chatMessage === "Stopping the server") {
 				chatMessage = "Server has Stopped!";
 				await client.SMPchatWebhook.send({
 					embeds: [new EmbedBuilder().setTitle(chatMessage).setColor("#FF0000")],
@@ -62,6 +63,9 @@ export const event: serverEventsType = {
 				restarting = true;
 				return;
 			}
+
+			// Return if server is restarting
+			else if (restarting === true) return;
 
 			// Player Message
 			if (args[0].startsWith("<") && args[0].endsWith(">")) {
@@ -132,23 +136,8 @@ export const event: serverEventsType = {
 				return;
 			}
 
-			// Web Message
-			if (args[0] === "[WEB]") {
-				const username = args[1].slice(0, -1);
-				const name = args[0] + " " + args[1];
-				args = args.slice(2);
-				chatMessage = args.join();
-				chatMessage = checkUrlEmbedProof(chatMessage);
-				chatMessage = clearDiscordMarkdown(chatMessage);
-
-				await client.SMPchatWebhook.send({
-					username: name,
-					avatarURL: `https://minotar.net/avatar/${username}.png`,
-					content: chatMessage,
-				});
-
-				return;
-			}
+			// Don't display OP commands
+			if (args[0].startsWith("[") && !args[0].endsWith("]")) return;
 
 			// anything else
 			await client.SMPchatWebhook.send({

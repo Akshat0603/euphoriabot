@@ -6,7 +6,7 @@ const strip_ansi_1 = require("../../utilities/strip-ansi");
 const url_embed_proofer_1 = require("../../utilities/url-embed-proofer");
 const discord_markdown_1 = require("../../utilities/discord-markdown");
 var previousMessage = "[00:00:00]";
-var restarting = false;
+var restarting2 = false;
 exports.event = {
     name: "serverOutput",
     execute: async (client, consoleMessage) => {
@@ -14,7 +14,9 @@ exports.event = {
         let args = previousMessage.split(" ");
         const time = /\[\d{2}:\d{2}:\d{2}\]/;
         if (!time.test(previousMessage) && args.length > 0) {
-            if ((args[0] === "say" && args.length > 1) || args[0] === "stop") {
+            if ((args[0] === "say" && args.length > 1) ||
+                args[0] === "stop" ||
+                args[0] === "tellraw") {
             }
             else {
                 previousMessage = message;
@@ -35,19 +37,19 @@ exports.event = {
                 await client.CMPchatWebhook.send({
                     embeds: [new discord_js_1.EmbedBuilder().setTitle(chatMessage).setColor("#00FF00")],
                 });
-                restarting = false;
+                restarting2 = false;
                 return;
             }
-            if (restarting === true)
-                return;
-            if (chatMessage === "Stopping the server") {
+            else if (chatMessage === "Stopping the server") {
                 chatMessage = "Server has Stopped!";
                 await client.CMPchatWebhook.send({
                     embeds: [new discord_js_1.EmbedBuilder().setTitle(chatMessage).setColor("#FF0000")],
                 });
-                restarting = true;
+                restarting2 = true;
                 return;
             }
+            else if (restarting2 === true)
+                return;
             if (args[0].startsWith("<") && args[0].endsWith(">")) {
                 args[0] = args[0].replace("<", "");
                 const username = args[0].replace(">", "");
@@ -99,20 +101,8 @@ exports.event = {
                 });
                 return;
             }
-            if (args[0] === "[WEB]") {
-                const username = args[1].slice(0, -1);
-                const name = args[0] + " " + args[1];
-                args = args.slice(2);
-                chatMessage = args.join();
-                chatMessage = (0, url_embed_proofer_1.checkUrlEmbedProof)(chatMessage);
-                chatMessage = (0, discord_markdown_1.clearDiscordMarkdown)(chatMessage);
-                await client.CMPchatWebhook.send({
-                    username: name,
-                    avatarURL: `https://minotar.net/avatar/${username}.png`,
-                    content: chatMessage,
-                });
+            if (args[0].startsWith("[") && !args[0].endsWith("]"))
                 return;
-            }
             await client.CMPchatWebhook.send({
                 content: "*" + (0, discord_markdown_1.clearDiscordMarkdown)(chatMessage) + "*",
             });

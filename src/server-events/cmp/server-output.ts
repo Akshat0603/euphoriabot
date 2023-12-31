@@ -6,7 +6,7 @@ import { checkUrlEmbedProof } from "../../utilities/url-embed-proofer";
 import { clearDiscordMarkdown } from "../../utilities/discord-markdown";
 
 var previousMessage: string = "[00:00:00]";
-var restarting: boolean = false;
+var restarting2: boolean = false;
 
 export const event: serverEventsType = {
 	name: "serverOutput",
@@ -18,7 +18,11 @@ export const event: serverEventsType = {
 
 		// checking if this is a command response
 		if (!time.test(previousMessage) && args.length > 0) {
-			if ((args[0] === "say" && args.length > 1) || args[0] === "stop") {
+			if (
+				(args[0] === "say" && args.length > 1) ||
+				args[0] === "stop" ||
+				args[0] === "tellraw"
+			) {
 			} else {
 				previousMessage = message;
 				return;
@@ -46,22 +50,22 @@ export const event: serverEventsType = {
 				await client.CMPchatWebhook.send({
 					embeds: [new EmbedBuilder().setTitle(chatMessage).setColor("#00FF00")],
 				});
-				restarting = false;
+				restarting2 = false;
 				return;
 			}
 
-			// Return if server is restarting
-			if (restarting === true) return;
-
 			// Server stop
-			if (chatMessage === "Stopping the server") {
+			else if (chatMessage === "Stopping the server") {
 				chatMessage = "Server has Stopped!";
 				await client.CMPchatWebhook.send({
 					embeds: [new EmbedBuilder().setTitle(chatMessage).setColor("#FF0000")],
 				});
-				restarting = true;
+				restarting2 = true;
 				return;
 			}
+
+			// Return if server is restarting
+			else if (restarting2 === true) return;
 
 			// Player Message
 			if (args[0].startsWith("<") && args[0].endsWith(">")) {
@@ -132,23 +136,8 @@ export const event: serverEventsType = {
 				return;
 			}
 
-			// Web Message
-			if (args[0] === "[WEB]") {
-				const username = args[1].slice(0, -1);
-				const name = args[0] + " " + args[1];
-				args = args.slice(2);
-				chatMessage = args.join();
-				chatMessage = checkUrlEmbedProof(chatMessage);
-				chatMessage = clearDiscordMarkdown(chatMessage);
-
-				await client.CMPchatWebhook.send({
-					username: name,
-					avatarURL: `https://minotar.net/avatar/${username}.png`,
-					content: chatMessage,
-				});
-
-				return;
-			}
+			// Don't display OP commands
+			if (args[0].startsWith("[") && !args[0].endsWith("]")) return;
 
 			// anything else
 			await client.CMPchatWebhook.send({
