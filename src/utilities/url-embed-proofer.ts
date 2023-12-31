@@ -8,7 +8,7 @@ export function checkUrlEmbedProof(arg: string): string {
 		URLs.forEach((url) => {
 			if (!url.endsWith(">")) {
 				newArg = newArg.replaceAll(url, "`" + url + "`");
-			} else newArg = newArg.replaceAll(url, "`" + url);
+			} else newArg = newArg.replaceAll(url, "<" + url);
 		});
 	}
 	return newArg;
