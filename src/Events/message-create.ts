@@ -24,7 +24,10 @@ export const event: eventType = {
 			} else username = message.author.username;
 
 			messageContent = messageContent.replace(usernameRegex, username);
-			messageContent = messageContent.replace(messageRegex, message.content);
+			messageContent = messageContent.replace(
+				messageRegex,
+				message.content.replaceAll('"', '\\"')
+			);
 
 			await client.SMP.send("send command", [messageContent]);
 		} else if (message.channelId === client.channelCMPchatID) {
@@ -38,7 +41,10 @@ export const event: eventType = {
 			} else username = message.author.username;
 
 			messageContent = messageContent.replace(usernameRegex, username);
-			messageContent = messageContent.replace(messageRegex, message.content);
+			messageContent = messageContent.replace(
+				messageRegex,
+				message.content.replaceAll('"', '\\"')
+			);
 
 			await client.CMP.send("send command", [messageContent]);
 		}
