@@ -19,6 +19,7 @@ class myClient extends discord_js_1.Client {
     channelCMPchatID = "1190355741631053834";
     channelLogMessageDeleteID = "1187721538779238471";
     channelLogMessageUpdateID = "1187721577253584956";
+    memberRoleID = "1176812990574637086";
     messageModsID = "1179369602652848160";
     messageModsContentStart = "# __Server Mods__";
     embedFooter = {

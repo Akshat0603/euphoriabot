@@ -38,6 +38,10 @@ exports.event = {
                     embeds: [new discord_js_1.EmbedBuilder().setTitle(chatMessage).setColor("#00FF00")],
                 });
                 restarting2 = false;
+                const channel = client.channels.cache.get(client.channelCMPchatID);
+                if (channel?.type === discord_js_1.ChannelType.GuildText) {
+                    channel.permissionOverwrites.edit(client.memberRoleID, { SendMessages: true });
+                }
                 return;
             }
             else if (chatMessage === "Stopping the server") {
@@ -46,6 +50,10 @@ exports.event = {
                     embeds: [new discord_js_1.EmbedBuilder().setTitle(chatMessage).setColor("#FF0000")],
                 });
                 restarting2 = true;
+                const channel = client.channels.cache.get(client.channelCMPchatID);
+                if (channel?.type === discord_js_1.ChannelType.GuildText) {
+                    channel.permissionOverwrites.edit(client.memberRoleID, { SendMessages: false });
+                }
                 return;
             }
             else if (restarting2 === true)

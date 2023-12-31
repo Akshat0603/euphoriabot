@@ -1,4 +1,4 @@
-import { EmbedBuilder, TextChannel } from "discord.js";
+import { ChannelType, EmbedBuilder } from "discord.js";
 import myClient from "../../client";
 import { serverEventsType } from "../../types/server-events";
 import { stripANSIEscapeCodes } from "../../utilities/strip-ansi";
@@ -51,6 +51,10 @@ export const event: serverEventsType = {
 					embeds: [new EmbedBuilder().setTitle(chatMessage).setColor("#00FF00")],
 				});
 				restarting = false;
+				const channel = client.channels.cache.get(client.channelSMPchatID);
+				if (channel?.type === ChannelType.GuildText) {
+					channel.permissionOverwrites.edit(client.memberRoleID, { SendMessages: true });
+				}
 				return;
 			}
 
@@ -61,6 +65,10 @@ export const event: serverEventsType = {
 					embeds: [new EmbedBuilder().setTitle(chatMessage).setColor("#FF0000")],
 				});
 				restarting = true;
+				const channel = client.channels.cache.get(client.channelSMPchatID);
+				if (channel?.type === ChannelType.GuildText) {
+					channel.permissionOverwrites.edit(client.memberRoleID, { SendMessages: false });
+				}
 				return;
 			}
 

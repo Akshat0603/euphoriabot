@@ -29,6 +29,8 @@ class myClient extends Client {
 	public channelLogMessageDeleteID: string = "1187721538779238471";
 	public channelLogMessageUpdateID: string = "1187721577253584956";
 
+	public memberRoleID: string = "1176812990574637086";
+
 	public messageModsID: string = "1179369602652848160";
 	public messageModsContentStart: string = "# __Server Mods__";
 
