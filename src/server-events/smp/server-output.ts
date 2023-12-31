@@ -59,7 +59,7 @@ export const event: serverEventsType = {
 			}
 
 			// Server stop
-			else if (chatMessage === "Stopping the server") {
+			if (chatMessage === "Stopping the server") {
 				chatMessage = "Server has Stopped!";
 				await client.SMPchatWebhook.send({
 					embeds: [new EmbedBuilder().setTitle(chatMessage).setColor("#FF0000")],
@@ -73,7 +73,11 @@ export const event: serverEventsType = {
 			}
 
 			// Return if server is restarting
-			else if (restarting === true) return;
+			if (restarting === true) return;
+			if (chatMessage.toLowerCase() === "stopping server") {
+				restarting = true;
+				return;
+			}
 
 			// Player Message
 			if (args[0].startsWith("<") && args[0].endsWith(">")) {
@@ -147,9 +151,12 @@ export const event: serverEventsType = {
 			// Don't display OP commands
 			if (args[0].startsWith("[") && !args[0].endsWith("]")) return;
 
+			// No player was found
+			if (chatMessage === "No player was found") return;
+
 			// anything else
 			await client.SMPchatWebhook.send({
-				content: "*" + clearDiscordMarkdown(chatMessage) + "*",
+				content: "**" + clearDiscordMarkdown(chatMessage) + "**",
 			});
 		}
 	},

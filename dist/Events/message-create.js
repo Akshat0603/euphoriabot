@@ -7,15 +7,35 @@ const messageRegex = /{message}/;
 exports.event = {
     name: "messageCreate",
     execute: async (client, message) => {
+        if (message.author.bot || message.webhookId)
+            return;
         if (message.channelId === client.channelSMPchatID) {
             let messageContent = format;
-            messageContent = messageContent.replace(usernameRegex, message.member.nickname);
+            let username;
+            if (typeof message.member?.nickname === "string") {
+                username = message.member.nickname;
+            }
+            else if (message.author.displayName) {
+                username = message.author.displayName;
+            }
+            else
+                username = message.author.username;
+            messageContent = messageContent.replace(usernameRegex, username);
             messageContent = messageContent.replace(messageRegex, message.content);
             await client.SMP.send("send command", [messageContent]);
         }
         else if (message.channelId === client.channelCMPchatID) {
             let messageContent = format;
-            messageContent = messageContent.replace(usernameRegex, message.member.nickname);
+            let username;
+            if (typeof message.member?.nickname === "string") {
+                username = message.member.nickname;
+            }
+            else if (message.author.displayName) {
+                username = message.author.displayName;
+            }
+            else
+                username = message.author.username;
+            messageContent = messageContent.replace(usernameRegex, username);
             messageContent = messageContent.replace(messageRegex, message.content);
             await client.CMP.send("send command", [messageContent]);
         }

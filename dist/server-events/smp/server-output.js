@@ -44,7 +44,7 @@ exports.event = {
                 }
                 return;
             }
-            else if (chatMessage === "Stopping the server") {
+            if (chatMessage === "Stopping the server") {
                 chatMessage = "Server has Stopped!";
                 await client.SMPchatWebhook.send({
                     embeds: [new discord_js_1.EmbedBuilder().setTitle(chatMessage).setColor("#FF0000")],
@@ -56,8 +56,12 @@ exports.event = {
                 }
                 return;
             }
-            else if (restarting === true)
+            if (restarting === true)
                 return;
+            if (chatMessage.toLowerCase() === "stopping server") {
+                restarting = true;
+                return;
+            }
             if (args[0].startsWith("<") && args[0].endsWith(">")) {
                 args[0] = args[0].replace("<", "");
                 const username = args[0].replace(">", "");
@@ -111,8 +115,10 @@ exports.event = {
             }
             if (args[0].startsWith("[") && !args[0].endsWith("]"))
                 return;
+            if (chatMessage === "No player was found")
+                return;
             await client.SMPchatWebhook.send({
-                content: "*" + (0, discord_markdown_1.clearDiscordMarkdown)(chatMessage) + "*",
+                content: "**" + (0, discord_markdown_1.clearDiscordMarkdown)(chatMessage) + "**",
             });
         }
     },

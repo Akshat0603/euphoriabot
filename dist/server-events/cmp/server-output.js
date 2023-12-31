@@ -6,7 +6,7 @@ const strip_ansi_1 = require("../../utilities/strip-ansi");
 const url_embed_proofer_1 = require("../../utilities/url-embed-proofer");
 const discord_markdown_1 = require("../../utilities/discord-markdown");
 var previousMessage = "[00:00:00]";
-var restarting2 = false;
+var restarting = false;
 exports.event = {
     name: "serverOutput",
     execute: async (client, consoleMessage) => {
@@ -37,27 +37,31 @@ exports.event = {
                 await client.CMPchatWebhook.send({
                     embeds: [new discord_js_1.EmbedBuilder().setTitle(chatMessage).setColor("#00FF00")],
                 });
-                restarting2 = false;
+                restarting = false;
                 const channel = client.channels.cache.get(client.channelCMPchatID);
                 if (channel?.type === discord_js_1.ChannelType.GuildText) {
                     channel.permissionOverwrites.edit(client.memberRoleID, { SendMessages: true });
                 }
                 return;
             }
-            else if (chatMessage === "Stopping the server") {
+            if (chatMessage === "Stopping the server") {
                 chatMessage = "Server has Stopped!";
                 await client.CMPchatWebhook.send({
                     embeds: [new discord_js_1.EmbedBuilder().setTitle(chatMessage).setColor("#FF0000")],
                 });
-                restarting2 = true;
+                restarting = true;
                 const channel = client.channels.cache.get(client.channelCMPchatID);
                 if (channel?.type === discord_js_1.ChannelType.GuildText) {
                     channel.permissionOverwrites.edit(client.memberRoleID, { SendMessages: false });
                 }
                 return;
             }
-            else if (restarting2 === true)
+            if (restarting === true)
                 return;
+            if (chatMessage.toLowerCase() === "stopping server") {
+                restarting = true;
+                return;
+            }
             if (args[0].startsWith("<") && args[0].endsWith(">")) {
                 args[0] = args[0].replace("<", "");
                 const username = args[0].replace(">", "");
@@ -111,8 +115,10 @@ exports.event = {
             }
             if (args[0].startsWith("[") && !args[0].endsWith("]"))
                 return;
+            if (chatMessage === "No player was found")
+                return;
             await client.CMPchatWebhook.send({
-                content: "*" + (0, discord_markdown_1.clearDiscordMarkdown)(chatMessage) + "*",
+                content: "**" + (0, discord_markdown_1.clearDiscordMarkdown)(chatMessage) + "**",
             });
         }
     },

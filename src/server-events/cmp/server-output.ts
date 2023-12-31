@@ -6,7 +6,7 @@ import { checkUrlEmbedProof } from "../../utilities/url-embed-proofer";
 import { clearDiscordMarkdown } from "../../utilities/discord-markdown";
 
 var previousMessage: string = "[00:00:00]";
-var restarting2: boolean = false;
+var restarting: boolean = false;
 
 export const event: serverEventsType = {
 	name: "serverOutput",
@@ -50,7 +50,7 @@ export const event: serverEventsType = {
 				await client.CMPchatWebhook.send({
 					embeds: [new EmbedBuilder().setTitle(chatMessage).setColor("#00FF00")],
 				});
-				restarting2 = false;
+				restarting = false;
 				const channel = client.channels.cache.get(client.channelCMPchatID);
 				if (channel?.type === ChannelType.GuildText) {
 					channel.permissionOverwrites.edit(client.memberRoleID, { SendMessages: true });
@@ -59,12 +59,12 @@ export const event: serverEventsType = {
 			}
 
 			// Server stop
-			else if (chatMessage === "Stopping the server") {
+			if (chatMessage === "Stopping the server") {
 				chatMessage = "Server has Stopped!";
 				await client.CMPchatWebhook.send({
 					embeds: [new EmbedBuilder().setTitle(chatMessage).setColor("#FF0000")],
 				});
-				restarting2 = true;
+				restarting = true;
 				const channel = client.channels.cache.get(client.channelCMPchatID);
 				if (channel?.type === ChannelType.GuildText) {
 					channel.permissionOverwrites.edit(client.memberRoleID, { SendMessages: false });
@@ -73,7 +73,11 @@ export const event: serverEventsType = {
 			}
 
 			// Return if server is restarting
-			else if (restarting2 === true) return;
+			if (restarting === true) return;
+			if (chatMessage.toLowerCase() === "stopping server") {
+				restarting = true;
+				return;
+			}
 
 			// Player Message
 			if (args[0].startsWith("<") && args[0].endsWith(">")) {
@@ -147,9 +151,12 @@ export const event: serverEventsType = {
 			// Don't display OP commands
 			if (args[0].startsWith("[") && !args[0].endsWith("]")) return;
 
+			// No player was found
+			if (chatMessage === "No player was found") return;
+
 			// anything else
 			await client.CMPchatWebhook.send({
-				content: "*" + clearDiscordMarkdown(chatMessage) + "*",
+				content: "**" + clearDiscordMarkdown(chatMessage) + "**",
 			});
 		}
 	},
