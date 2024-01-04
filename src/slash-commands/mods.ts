@@ -15,7 +15,6 @@ export const slashCommand: slashCommandType = {
 		var channel = await client.channels.cache.get(client.channelEuphoriaID);
 		if (channel?.partial) {
 			channel = await channel.fetch();
-			console.log("channel fetched");
 		}
 		// Impossible error check: Code #1 and #2
 		if (channel?.type === ChannelType.GuildText) {

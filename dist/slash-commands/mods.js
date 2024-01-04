@@ -14,7 +14,6 @@ exports.slashCommand = {
         var channel = await client.channels.cache.get(client.channelEuphoriaID);
         if (channel?.partial) {
             channel = await channel.fetch();
-            console.log("channel fetched");
         }
         // Impossible error check: Code #1 and #2
         if (channel?.type === discord_js_1.ChannelType.GuildText) {
