@@ -5,7 +5,7 @@ const discord_js_1 = require("discord.js");
 const fs_1 = require("fs");
 async function statusSubcommand(client, interaction) {
     const reply = await interaction.deferReply({ ephemeral: true });
-    const newStatus = interaction.options.data[1].value === "open" ? true : false;
+    const newStatus = interaction.options.data[0].options[0].value === "open" ? true : false;
     var appSettings = JSON.parse((0, fs_1.readFileSync)("./storage/app-settings.json").toString());
     // Checking if status is same
     if (appSettings.open === newStatus) {
@@ -84,7 +84,6 @@ exports.slashCommand = {
     },
     execute: async (client, interaction) => {
         // redirect to correct subcommand
-        console.log(interaction.options.data[0]);
         if (interaction.options.data[0].name === "status")
             statusSubcommand(client, interaction);
         else if (interaction.options.data[0].name === "accept")

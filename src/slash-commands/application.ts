@@ -11,7 +11,7 @@ import { readFileSync, writeFileSync } from "fs";
 
 async function statusSubcommand(client: myClient, interaction: ChatInputCommandInteraction) {
 	const reply = await interaction.deferReply({ ephemeral: true });
-	const newStatus = interaction.options.data[1].value === "open" ? true : false;
+	const newStatus = interaction.options.data[0].options![0].value === "open" ? true : false;
 	var appSettings: appSettingsObject = JSON.parse(
 		readFileSync("./storage/app-settings.json").toString()
 	);
@@ -100,7 +100,6 @@ export const slashCommand: slashCommandType = {
 	},
 	execute: async (client: myClient, interaction: ChatInputCommandInteraction) => {
 		// redirect to correct subcommand
-		console.log(interaction.options.data[0]);
 		if (interaction.options.data[0].name === "status") statusSubcommand(client, interaction);
 		else if (interaction.options.data[0].name === "accept")
 			acceptSubcommand(client, interaction);
