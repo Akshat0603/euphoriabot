@@ -22,8 +22,8 @@ exports.event = {
             }
         });
         // Connect to both servers
-        //await client.SMP.connect();
-        //await client.CMP.connect();
+        await client.SMP.connect();
+        await client.CMP.connect();
     },
 };
 //# sourceMappingURL=ready.js.map
