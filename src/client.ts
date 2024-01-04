@@ -84,8 +84,9 @@ class myClient extends Client {
 
 		// Get and Register Components
 		const ComponentsPath = getAllFiles(join(dir, "components"), 1);
-		for (const componentPath of ComponentsPath) {
-			const pathDir = componentPath.split("\\");
+		for (var componentPath of ComponentsPath) {
+			componentPath = componentPath.replace("\\", "/");
+			const pathDir = componentPath.split("/");
 			const component = pathDir[pathDir.length - 2];
 
 			if (component === "buttons") {
