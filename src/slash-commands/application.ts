@@ -100,6 +100,7 @@ export const slashCommand: slashCommandType = {
 	},
 	execute: async (client: myClient, interaction: ChatInputCommandInteraction) => {
 		// redirect to correct subcommand
+		console.log(interaction.options.data);
 		if (interaction.options.data[0].name === "status") statusSubcommand(client, interaction);
 		else if (interaction.options.data[0].name === "accept")
 			acceptSubcommand(client, interaction);
