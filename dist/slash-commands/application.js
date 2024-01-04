@@ -84,7 +84,7 @@ exports.slashCommand = {
     },
     execute: async (client, interaction) => {
         // redirect to correct subcommand
-        console.log(interaction.options.data);
+        console.log(interaction.options.data[0]);
         if (interaction.options.data[0].name === "status")
             statusSubcommand(client, interaction);
         else if (interaction.options.data[0].name === "accept")
