@@ -8,14 +8,14 @@ export const event: eventType = {
 		// console log and change activity
 		console.log(`${client.user?.username} is online!`);
 		client.user?.setActivity({
-			name: "Preparing to replace Akshat.",
+			name: "Trying to replace Akshat.",
 			type: ActivityType.Custom,
 		});
 
 		// Loading slash commands
 		client.slashCommands.forEach(async (command) => {
 			try {
-				await client.application!.commands.create(command.data, client.guildId);
+				await client.application!.commands.create(command.data, client.guildID);
 				console.log(`[SLASH COMMANDS] Refreshed Command: '${command.data.name}'`);
 			} catch (error) {
 				console.error(error);
@@ -23,7 +23,7 @@ export const event: eventType = {
 		});
 
 		// Connect to both servers
-		await client.SMP.connect();
-		await client.CMP.connect();
+		//await client.SMP.connect();
+		//await client.CMP.connect();
 	},
 };

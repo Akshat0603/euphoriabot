@@ -13,11 +13,11 @@
 		"skipLibCheck": true,
 		"skipDefaultLibCheck": true,
 		"resolveJsonModule": true,
-		"removeComments": true,
+		"removeComments": false,
 		"emitDecoratorMetadata": false,
 		"experimentalDecorators": true,
 		"outDir": "dist"
 	},
-	"include": ["src"],
+	"include": ["src/**/*.ts"],
 	"exclude": ["node_modules"]
 }

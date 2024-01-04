@@ -5,9 +5,7 @@ interface Run {
 	(client: myClient, ...args: any[]);
 }
 
-type eventType = {
+export type eventType = {
 	name: keyof ClientEvents;
 	execute: Run;
 };
-
-export type { eventType };

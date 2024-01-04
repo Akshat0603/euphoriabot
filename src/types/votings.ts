@@ -4,12 +4,10 @@ type voteOptions = {
 	emoji: string;
 	winMessage?: string;
 };
-type voteType = {
+export type voteType = {
 	number: number;
 	messageID: string;
 	options: voteOptions[];
 	winMessage: string;
 	concluded?: boolean;
 };
-
-export type { voteType };

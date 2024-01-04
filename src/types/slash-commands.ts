@@ -10,9 +10,7 @@ interface Run {
 	(client: myClient, interaction: ChatInputCommandInteraction);
 }
 
-type slashCommandType = {
+export type slashCommandType = {
 	data: ChatInputApplicationCommandData;
 	execute: Run;
 };
-
-export type { slashCommandType };

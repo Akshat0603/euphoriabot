@@ -26,7 +26,7 @@ export const event: eventType = {
 			messageContent = messageContent.replace(usernameRegex, username);
 			messageContent = messageContent.replace(
 				messageRegex,
-				message.content.replaceAll('"', '\\"')
+				message.content.replaceAll('"', "")
 			);
 
 			await client.SMP.send("send command", [messageContent]);

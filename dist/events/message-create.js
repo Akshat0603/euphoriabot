@@ -7,8 +7,10 @@ const messageRegex = /{message}/;
 exports.event = {
     name: "messageCreate",
     execute: async (client, message) => {
+        // check for bot
         if (message.author.bot || message.webhookId)
             return;
+        // checking if it's a SMP/CMP chat message
         if (message.channelId === client.channelSMPchatID) {
             let messageContent = format;
             let username;
@@ -21,7 +23,7 @@ exports.event = {
             else
                 username = message.author.username;
             messageContent = messageContent.replace(usernameRegex, username);
-            messageContent = messageContent.replace(messageRegex, message.content.replaceAll('"', '\\"'));
+            messageContent = messageContent.replace(messageRegex, message.content.replaceAll('"', ""));
             await client.SMP.send("send command", [messageContent]);
         }
         else if (message.channelId === client.channelCMPchatID) {

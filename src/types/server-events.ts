@@ -5,9 +5,7 @@ interface Run {
 	(client: myClient, ...args: any[]);
 }
 
-type serverEventsType = {
+export type serverEventsType = {
 	name: keyof WebSocketEvents;
 	execute: Run;
 };
-
-export type { serverEventsType };

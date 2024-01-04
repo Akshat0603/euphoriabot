@@ -3,10 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.slashCommand = void 0;
 const discord_js_1 = require("discord.js");
 exports.slashCommand = {
+    // COMMAND DATA
     data: {
         name: "mods",
         description: "Responds with the mod list of the server.",
     },
+    // COMMAND EXECUTION
     execute: async (client, interaction) => {
         const response = await interaction.deferReply({ ephemeral: true });
         var channel = await client.channels.cache.get(client.channelEuphoriaID);
@@ -14,6 +16,7 @@ exports.slashCommand = {
             channel = await channel.fetch();
             console.log("channel fetched");
         }
+        // Impossible error check: Code #1 and #2
         if (channel?.type === discord_js_1.ChannelType.GuildText) {
             const messages = await channel.messages.fetch();
             const message = messages.get(client.messageModsID);

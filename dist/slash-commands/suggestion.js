@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.slashCommand = void 0;
 const discord_js_1 = require("discord.js");
+// STATUS CHOICES
 const choices = [
     {
         name: "Denied",
@@ -21,6 +22,7 @@ const choices = [
     },
 ];
 exports.slashCommand = {
+    // COMMAND DATA
     data: {
         name: "suggestion",
         description: "Set the status of a suggestion.",
@@ -40,7 +42,9 @@ exports.slashCommand = {
             },
         ],
     },
+    // COMMAND EXECUTION
     execute: async (client, interaction) => {
+        // Checking for correct channel
         if (interaction.channel.type !== discord_js_1.ChannelType.PublicThread ||
             interaction.channel?.parentId !== "1176818908909551646") {
             await interaction.reply({
@@ -49,14 +53,19 @@ exports.slashCommand = {
             });
             return;
         }
+        // Deferring reply for processing time
         const response = await interaction.deferReply();
+        // Impossible error check: Code #6
         if (interaction.options.data[0].type !== discord_js_1.ApplicationCommandOptionType.String) {
             response.edit({ content: "## <:no:1181140154623213569> An Error Occured! Code #6" });
             return;
         }
+        // Assigning values
         var newStatus = interaction.options.data[0].value;
         var closePost = false;
+        // Checking for close-post
         if (interaction.options.data[1]) {
+            // Impossible error check: Code #7
             if (interaction.options.data[1].type !== discord_js_1.ApplicationCommandOptionType.Boolean ||
                 typeof interaction.options.data[1].value !== "boolean") {
                 response.edit({
@@ -66,11 +75,14 @@ exports.slashCommand = {
             }
             closePost = interaction.options.data[1].value;
         }
+        // Getting Parent Channel for ease of access
         const channel = client.channels.cache.get(interaction.channel.parentId);
+        // Impossible error check: Code #8
         if (channel.type !== discord_js_1.ChannelType.GuildForum) {
             response.edit({ content: "## <:no:1181140154623213569> An Error Occured! Code #8" });
             return;
         }
+        // Tag check and modification from this point forth
         const newStatusID = channel.availableTags.filter((t) => t.name === newStatus)[0].id;
         var tags = interaction.channel.appliedTags;
         tags.forEach((t) => {
@@ -92,6 +104,7 @@ exports.slashCommand = {
             }
         });
         tags.push(newStatusID);
+        // Tag modification complete. Applying changes and responding to user
         interaction.channel.edit({ appliedTags: tags });
         response.edit({
             embeds: [
@@ -105,6 +118,7 @@ exports.slashCommand = {
                     .setFooter(client.embedFooter),
             ],
         });
+        // Closing post if needed
         if (closePost === true) {
             interaction.channel.setArchived(true);
         }

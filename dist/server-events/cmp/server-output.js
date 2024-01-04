@@ -10,9 +10,11 @@ var restarting = false;
 exports.event = {
     name: "serverOutput",
     execute: async (client, consoleMessage) => {
+        // doing prechecks and assigning
         let message = (0, strip_ansi_1.stripANSIEscapeCodes)(consoleMessage);
         let args = previousMessage.split(" ");
         const time = /\[\d{2}:\d{2}:\d{2}\]/;
+        // checking if this is a command response
         if (!time.test(previousMessage) && args.length > 0) {
             if ((args[0] === "say" && args.length > 1) ||
                 args[0] === "stop" ||
@@ -24,14 +26,17 @@ exports.event = {
             }
         }
         previousMessage = message;
+        // Proper Execution
         args = message.split(" ");
         if (args.length > 4 &&
             time.test(args[0]) &&
             args[1] === "[Server" &&
             args[2] === "thread/INFO]" &&
             args[3] === "[minecraft/MinecraftServer]:") {
+            // EDITING CHAT MESSAGE
             args = args.slice(4);
             let chatMessage = args.join(" ");
+            // Server Start
             if (chatMessage === "Preparing start region for dimension minecraft:overworld") {
                 chatMessage = "Server has Started!";
                 await client.CMPchatWebhook.send({
@@ -44,6 +49,7 @@ exports.event = {
                 }
                 return;
             }
+            // Server stop
             if (chatMessage === "Stopping the server") {
                 chatMessage = "Server has Stopped!";
                 await client.CMPchatWebhook.send({
@@ -56,12 +62,14 @@ exports.event = {
                 }
                 return;
             }
+            // Return if server is restarting
             if (restarting === true)
                 return;
             if (chatMessage.toLowerCase() === "stopping server") {
                 restarting = true;
                 return;
             }
+            // Player Message
             if (args[0].startsWith("<") && args[0].endsWith(">")) {
                 args[0] = args[0].replace("<", "");
                 const username = args[0].replace(">", "");
@@ -76,6 +84,7 @@ exports.event = {
                 });
                 return;
             }
+            // Player join/leave
             if (chatMessage.endsWith("joined the game") || chatMessage.endsWith("left the game")) {
                 chatMessage = chatMessage.replaceAll("_", "\\_");
                 await client.CMPchatWebhook.send({
@@ -83,6 +92,7 @@ exports.event = {
                 });
                 return;
             }
+            // Server Message
             if (args[0].startsWith("[") && args[0].endsWith("]")) {
                 args = args.slice(1);
                 chatMessage = args.join(" ");
@@ -91,6 +101,7 @@ exports.event = {
                 await client.CMPchatWebhook.send({ content: chatMessage });
                 return;
             }
+            // Advancement Message
             if (args.length > 5 &&
                 args[1] === "has" &&
                 args[2] === "made" &&
@@ -102,6 +113,7 @@ exports.event = {
                 });
                 return;
             }
+            // Goal Message
             if (args.length > 5 &&
                 args[1] === "has" &&
                 args[2] === "reached" &&
@@ -113,10 +125,13 @@ exports.event = {
                 });
                 return;
             }
+            // Don't display OP commands
             if (args[0].startsWith("[") && !args[0].endsWith("]"))
                 return;
+            // No player was found
             if (chatMessage === "No player was found")
                 return;
+            // anything else
             await client.CMPchatWebhook.send({
                 content: "**" + (0, discord_markdown_1.clearDiscordMarkdown)(chatMessage) + "**",
             });
