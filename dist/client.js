@@ -83,7 +83,7 @@ class myClient extends discord_js_1.Client {
                     console.warn(`[WARNING] Button at path '${componentPath}' is invalid!`);
             }
             else
-                console.warn(`[WARNING] ${component.toUpperCase() || "Unknown"} at path '${componentPath} is invalid!`);
+                console.warn(`[WARNING] ${component?.toUpperCase() || "Unknown"} at path '${componentPath} is invalid!`);
         }
         // Get and Register Minecraft Server Events
         const ServerEventsPath = (0, get_all_files_1.getAllFiles)((0, path_1.join)(dir, "server-events"), 1);

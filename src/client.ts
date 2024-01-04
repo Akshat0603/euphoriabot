@@ -97,7 +97,7 @@ class myClient extends Client {
 			} else
 				console.warn(
 					`[WARNING] ${
-						component.toUpperCase() || "Unknown"
+						component?.toUpperCase() || "Unknown"
 					} at path '${componentPath} is invalid!`
 				);
 		}
