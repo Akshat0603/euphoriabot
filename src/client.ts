@@ -85,7 +85,6 @@ class myClient extends Client {
 		// Get and Register Components
 		const ComponentsPath = getAllFiles(join(dir, "components"), 1);
 		for (var componentPath of ComponentsPath) {
-			console.log(componentPath);
 			componentPath = componentPath.replace("\\", "/");
 			const pathDir = componentPath.split("/");
 			const component = pathDir[pathDir.length - 2];
@@ -106,8 +105,9 @@ class myClient extends Client {
 
 		// Get and Register Minecraft Server Events
 		const ServerEventsPath = getAllFiles(join(dir, "server-events"), 1);
-		for (const eventPath of ServerEventsPath) {
-			const pathDir = eventPath.split("\\");
+		for (var eventPath of ServerEventsPath) {
+			eventPath = eventPath.replaceAll("\\", "/");
+			const pathDir = eventPath.split("/");
 			const server = pathDir[pathDir.length - 2];
 
 			const { event } = await require(eventPath);
@@ -129,7 +129,7 @@ class myClient extends Client {
 			} else {
 				console.warn(
 					`[WARNING] ${
-						server.toUpperCase() || "Unknown"
+						server?.toUpperCase() || "Unknown"
 					} event at path '${eventPath}' is invalid!`
 				);
 			}
