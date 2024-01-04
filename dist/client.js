@@ -71,6 +71,7 @@ class myClient extends discord_js_1.Client {
         // Get and Register Components
         const ComponentsPath = (0, get_all_files_1.getAllFiles)((0, path_1.join)(dir, "components"), 1);
         for (var componentPath of ComponentsPath) {
+            console.log(componentPath);
             componentPath = componentPath.replace("\\", "/");
             const pathDir = componentPath.split("/");
             const component = pathDir[pathDir.length - 2];
