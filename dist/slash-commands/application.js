@@ -36,8 +36,163 @@ async function statusSubcommand(client, interaction) {
     (0, fs_1.writeFileSync)("./storage/app-settings.json", JSON.stringify(appSettings));
     await reply.edit({ content: "Done" });
 }
-async function acceptSubcommand(client, interaction) { }
-async function denySubcommand(client, interaction) { }
+async function acceptSubcommand(client, interaction) {
+    // getting current applications
+    var doingApp = JSON.parse((0, fs_1.readFileSync)("./storage/doing-app.json").toString());
+    // checking for currect channel
+    if (!doingApp.some((app) => app.ticketID === interaction.channel.id)) {
+        await interaction.reply({
+            content: "## You cannot use this command in this channel!",
+            ephemeral: true,
+        });
+        return;
+    }
+    // buying more time
+    const reply = await interaction.deferReply();
+    // data assigning
+    const doingAppData = doingApp.find((app) => app.ticketID === interaction.channel.id);
+    // Impossible error check: code #2
+    if (!doingAppData) {
+        reply.edit({
+            content: "An Error Occured! Code #2",
+        });
+        console.log(`[SLASH COMMANDS] An error occured while executing command "application"! Code #2`);
+        return;
+    }
+    const username = interaction.options.data[0].options[0].value;
+    const member = interaction.guild?.members.cache.get(doingAppData.userID);
+    // Impossible error check: code #3
+    if (!member || typeof username !== "string") {
+        reply.edit({
+            content: "An Error Occured! Code #3",
+        });
+        console.log(`[SLASH COMMANDS] An error occured while executing command "application"! Code #3`);
+        return;
+    }
+    // Adding member to the server
+    await member.roles.add(client.memberRoleID);
+    await member.roles.remove(client.waitingRoleID);
+    await member.setNickname(username);
+    client.SMP.send("send command", [`whitelist add ${username}`]);
+    client.CMP.send("send command", [`whitelist add ${username}`]);
+    doingApp.splice(doingApp.indexOf(doingAppData));
+    (0, fs_1.writeFileSync)("./storage/doing-app.json", JSON.stringify(doingApp));
+    var memberList = JSON.parse((0, fs_1.readFileSync)("./storage/member-list.json").toString());
+    memberList.push(member.id);
+    (0, fs_1.writeFileSync)("./storage/member-list.json", JSON.stringify(memberList));
+    const appChannel = client.channels.cache.get(doingAppData.ticketID);
+    const channel = client.channels.cache.get(client.channelApplicationResultID);
+    // Impossible error check
+    if (appChannel.type !== discord_js_1.ChannelType.GuildText || channel.type !== discord_js_1.ChannelType.GuildText) {
+        reply.edit({
+            content: "An Error Occured! Code #4",
+        });
+        console.log(`[SLASH COMMANDS] An error occured while executing command "application"! Code #4`);
+        return;
+    }
+    // finalizing with channels and messages
+    const mainEmbed = new discord_js_1.EmbedBuilder()
+        .setColor("#00FF00")
+        .setTitle("Application Accepted!")
+        .setDescription(`Application No. \`${appChannel.name.replace("🎫╏app-", "")}\` of user \`${username}\` has been accepted! \nPlease go through <#${client.channelEuphoriaID}> before joining. Your <#${client.forumSuggestionID}> is valuable to us, just check if your suggestion has been posted before or not.`)
+        .setFooter({ text: "Have fun!" });
+    await appChannel.permissionOverwrites.delete(member.id);
+    await appChannel.setParent(client.categoryPastApplications);
+    await appChannel.setName(appChannel.name.replace("🎫", "✅"));
+    await channel.send({ content: `<@${member.id}>`, embeds: [mainEmbed] });
+    await reply.edit({ embeds: [mainEmbed] });
+}
+async function rejectSubcommand(client, interaction) {
+    // getting current applications
+    var doingApp = JSON.parse((0, fs_1.readFileSync)("./storage/doing-app.json").toString());
+    // checking for currect channel
+    if (!doingApp.some((app) => app.ticketID === interaction.channel.id)) {
+        await interaction.reply({
+            content: "## You cannot use this command in this channel!",
+            ephemeral: true,
+        });
+        return;
+    }
+    // buying more time
+    const reply = await interaction.deferReply();
+    // data assigning
+    const doingAppData = doingApp.find((app) => app.ticketID === interaction.channel.id);
+    // Impossible error check: code #2
+    if (!doingAppData) {
+        reply.edit({
+            content: "An Error Occured! Code #2",
+        });
+        console.log(`[SLASH COMMANDS] An error occured while executing command "application"! Code #2`);
+        return;
+    }
+    const member = interaction.guild?.members.cache.get(doingAppData.userID);
+    // Impossible error check: code #3
+    if (!member) {
+        reply.edit({
+            content: "An Error Occured! Code #3",
+        });
+        console.log(`[SLASH COMMANDS] An error occured while executing command "application"! Code #3`);
+        return;
+    }
+    // Changing member roles
+    await member.roles.remove(client.waitingRoleID);
+    doingApp.splice(doingApp.indexOf(doingAppData));
+    (0, fs_1.writeFileSync)("./storage/app-settings.json", JSON.stringify(doingApp));
+    var rMemberList = JSON.parse((0, fs_1.readFileSync)("./storage/removed-members.json").toString());
+    rMemberList.push(member.id);
+    (0, fs_1.writeFileSync)("./storage/removed-members.json", JSON.stringify(rMemberList));
+    const appChannel = client.channels.cache.get(doingAppData.ticketID);
+    const channel = client.channels.cache.get(client.channelApplicationResultID);
+    // Impossible error check
+    if (appChannel.type !== discord_js_1.ChannelType.GuildText || channel.type !== discord_js_1.ChannelType.GuildText) {
+        reply.edit({
+            content: "An Error Occured! Code #4",
+        });
+        console.log(`[SLASH COMMANDS] An error occured while executing command "application"! Code #4`);
+        return;
+    }
+    // finalizing with channels and messages
+    const mainEmbed = new discord_js_1.EmbedBuilder()
+        .setColor("#FF0000")
+        .setTitle("Application Rejected!")
+        .setDescription(`Application No. \`${appChannel.name.replace("🎫╏app-", "")}\` has been rejected! \nIf you wish to try again, please make a special request with the owner.`);
+    await appChannel.permissionOverwrites.delete(member.id);
+    await appChannel.setParent(client.categoryPastApplications);
+    await appChannel.setName(appChannel.name.replace("🎫", "❌"));
+    await channel.send({ content: `<@${member.id}>`, embeds: [mainEmbed] });
+    await reply.edit({ embeds: [mainEmbed] });
+}
+async function allowSubcommand(interaction) {
+    const reply = await interaction.deferReply({ ephemeral: true });
+    // Impossible Error check: code #5
+    if (interaction.options.data[0].options[0].type !== discord_js_1.ApplicationCommandOptionType.User) {
+        reply.edit({
+            content: "An Error Occured! Code #5",
+        });
+        console.log(`[SLASH COMMANDS] An error occured while executing command "application"! Code #5`);
+        return;
+    }
+    const user = interaction.options.data[0].options[0].value;
+    // Impossible Error check: code #6
+    if (typeof user !== "string") {
+        reply.edit({
+            content: "An Error Occured! Code #6",
+        });
+        console.log(`[SLASH COMMANDS] An error occured while executing command "application"! Code #6`);
+        return;
+    }
+    // Getting removed member list
+    var rMemberList = JSON.parse((0, fs_1.readFileSync)("./storage/removed-members.json").toString());
+    if (!rMemberList.includes(user)) {
+        reply.edit({
+            content: "That user is not removed/denied!",
+        });
+        return;
+    }
+    rMemberList.splice(rMemberList.indexOf(user));
+    (0, fs_1.writeFileSync)("./storage/removed-members.json", JSON.stringify(rMemberList));
+    reply.edit({ content: `<@${user}> is now allowed to redo their application!` });
+}
 exports.slashCommand = {
     // COMMAND DATA
     data: {
@@ -76,9 +231,22 @@ exports.slashCommand = {
                 ],
             },
             {
-                name: "deny",
-                description: "Deny someone's application",
+                name: "reject",
+                description: "Reject someone's application",
                 type: discord_js_1.ApplicationCommandOptionType.Subcommand,
+            },
+            {
+                name: "allow",
+                description: "Allow a rejected person to redo their application",
+                type: discord_js_1.ApplicationCommandOptionType.Subcommand,
+                options: [
+                    {
+                        name: "user",
+                        description: "Who is being allowed to redo their application?",
+                        type: discord_js_1.ApplicationCommandOptionType.User,
+                        required: true,
+                    },
+                ],
             },
         ],
     },
@@ -88,8 +256,10 @@ exports.slashCommand = {
             statusSubcommand(client, interaction);
         else if (interaction.options.data[0].name === "accept")
             acceptSubcommand(client, interaction);
-        else if (interaction.options.data[0].name === "deny")
-            denySubcommand(client, interaction);
+        else if (interaction.options.data[0].name === "reject")
+            rejectSubcommand(client, interaction);
+        else if (interaction.options.data[0].name === "allow")
+            allowSubcommand(interaction);
     },
 };
 //# sourceMappingURL=application.js.map

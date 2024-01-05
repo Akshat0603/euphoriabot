@@ -19,6 +19,10 @@ class myClient extends Client {
 	// SIMPLE DATA IDENTIFICATION
 	public guildID: string = "1176560748642709595";
 
+	public categoryPastApplications: string = "1192462543214620833";
+
+	public forumSuggestionID: string = "1176818908909551646";
+
 	public channelEuphoriaID: string = "1176817932693688390";
 	public channelSMPchatID: string = "1190355602908663981";
 	public channelCMPchatID: string = "1190355741631053834";
@@ -29,6 +33,7 @@ class myClient extends Client {
 	public channelApplicationResultID: string = "1176839407391752222";
 
 	public memberRoleID: string = "1176812990574637086";
+	public waitingRoleID: string = "1176838751192887386";
 	public removedRoleID: string = "1179056413964771369";
 
 	public messageMemberListID: string = "1192011933914759198";
@@ -85,7 +90,7 @@ class myClient extends Client {
 		// Get and Register Components
 		const ComponentsPath = getAllFiles(join(dir, "components"), 1);
 		for (var componentPath of ComponentsPath) {
-			componentPath = componentPath.replace("\\", "/");
+			componentPath = componentPath.replaceAll("\\", "/");
 			const pathDir = componentPath.split("/");
 			const component = pathDir[pathDir.length - 2];
 

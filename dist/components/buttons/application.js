@@ -10,7 +10,7 @@ exports.button = {
         // Buying more time
         const reply = await interaction.deferReply({ ephemeral: true });
         // Getting member
-        const guild = client.guilds.cache.get(client.guildID);
+        const guild = interaction.guild;
         const member = guild?.members.cache.get(interaction.user.id);
         // Impossible Error Check
         if (!guild || !member) {
@@ -99,7 +99,8 @@ You are required to answer all questions appropriately unless stated otherwise. 
         alrApplying.push(doingAppData);
         (0, fs_1.writeFileSync)("./storage/doing-app.json", JSON.stringify(alrApplying));
         (0, fs_1.writeFileSync)("./storage/app-settings.json", JSON.stringify(settings));
-        reply.edit({ content: `Please do your application in <#${ticket.id}>.` });
+        member.roles.add(client.waitingRoleID);
+        await reply.edit({ content: `Please do your application in <#${ticket.id}>.` });
     },
 };
 //# sourceMappingURL=application.js.map

@@ -57,7 +57,7 @@ export const slashCommand: slashCommandType = {
 		// Checking for correct channel
 		if (
 			interaction.channel!.type !== ChannelType.PublicThread ||
-			interaction.channel?.parentId !== "1176818908909551646"
+			interaction.channel?.parentId !== client.forumSuggestionID
 		) {
 			await interaction.reply({
 				content: "This command is not to be used in this channel!",
@@ -107,15 +107,17 @@ export const slashCommand: slashCommandType = {
 		// Tag check and modification from this point forth
 		const newStatusID = channel.availableTags.filter((t) => t.name === newStatus)[0].id;
 		var tags = interaction.channel.appliedTags;
+		var shallReturn: number = 0;
 
 		tags.forEach((t) => {
 			if (t === newStatusID) {
 				response.edit({
 					content: "You cannot change the status of this post to an already set status!",
 				});
-				return;
+				shallReturn = 1;
 			}
 		});
+		if (shallReturn === 1) return;
 
 		var allOptionsID: string[] = [];
 

@@ -14,6 +14,8 @@ class myClient extends discord_js_1.Client {
     Buttons = new discord_js_1.Collection();
     // SIMPLE DATA IDENTIFICATION
     guildID = "1176560748642709595";
+    categoryPastApplications = "1192462543214620833";
+    forumSuggestionID = "1176818908909551646";
     channelEuphoriaID = "1176817932693688390";
     channelSMPchatID = "1190355602908663981";
     channelCMPchatID = "1190355741631053834";
@@ -23,6 +25,7 @@ class myClient extends discord_js_1.Client {
     channelApplyID = "1176815969025396807";
     channelApplicationResultID = "1176839407391752222";
     memberRoleID = "1176812990574637086";
+    waitingRoleID = "1176838751192887386";
     removedRoleID = "1179056413964771369";
     messageMemberListID = "1192011933914759198";
     messageModsID = "1179369602652848160";
@@ -71,7 +74,7 @@ class myClient extends discord_js_1.Client {
         // Get and Register Components
         const ComponentsPath = (0, get_all_files_1.getAllFiles)((0, path_1.join)(dir, "components"), 1);
         for (var componentPath of ComponentsPath) {
-            componentPath = componentPath.replace("\\", "/");
+            componentPath = componentPath.replaceAll("\\", "/");
             const pathDir = componentPath.split("/");
             const component = pathDir[pathDir.length - 2];
             if (component === "buttons") {
