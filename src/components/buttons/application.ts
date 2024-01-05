@@ -70,7 +70,6 @@ export const button: buttonType = {
 		var settings: appSettingsObject = JSON.parse(
 			readFileSync("./storage/app-settings.json").toString()
 		);
-		console.log(settings);
 		if (settings.open === false) {
 			await reply.edit({
 				embeds: [denyEmbed.setDescription("Applications are closed at the moment.")],

@@ -50,7 +50,6 @@ exports.button = {
         }
         // Checking if applications closed
         var settings = JSON.parse((0, fs_1.readFileSync)("./storage/app-settings.json").toString());
-        console.log(settings);
         if (settings.open === false) {
             await reply.edit({
                 embeds: [denyEmbed.setDescription("Applications are closed at the moment.")],
