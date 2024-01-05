@@ -101,6 +101,21 @@ async function acceptSubcommand(client, interaction) {
     await appChannel.setName(appChannel.name.replace("🎫", "✅"));
     await channel.send({ content: `<@${member.id}>`, embeds: [mainEmbed] });
     await reply.edit({ embeds: [mainEmbed] });
+    // adding them to member list channel
+    const mChannel = client.channels.cache.get(client.channelMemberListID);
+    // impossible error check
+    if (!mChannel || mChannel.type !== discord_js_1.ChannelType.GuildText) {
+        reply.edit({
+            content: "An Error Occured! Code #4",
+        });
+        console.log(`[SLASH COMMANDS] An error occured while executing command "application"! Code #4`);
+        return;
+    }
+    const messages = await mChannel.messages.fetch();
+    const message = messages.get(client.messageMemberListID);
+    await message?.edit({
+        content: message.content + `\n- <@${member.id}>`,
+    });
 }
 async function rejectSubcommand(client, interaction) {
     // getting current applications
