@@ -18,7 +18,8 @@ exports.event = {
         if (!time.test(previousMessage) && args.length > 0) {
             if ((args[0] === "say" && args.length > 1) ||
                 args[0] === "stop" ||
-                args[0] === "tellraw") {
+                args[0] === "tellraw" ||
+                (args[0] === "whitelist" && args[1] && (args[1] === "add" || args[1] === "remove"))) {
             }
             else {
                 previousMessage = message;
