@@ -16,6 +16,7 @@ export const event: eventType = {
 		) {
 			return;
 		}
+		if (oldMessage.content.length + newMessage.content.length > 4000) return;
 
 		// Finding the right channel and logging it
 		const channel = await client.channels.cache.get(client.channelLogMessageUpdateID);

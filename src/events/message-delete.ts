@@ -9,6 +9,7 @@ export const event: eventType = {
 
 		// Checking if possible / bot message
 		if (message.partial || message.author?.bot) return;
+		if (message.content.length > 4000) return;
 
 		// Finding the channel and logging it
 		const channel = await client.channels.cache.get(client.channelLogMessageDeleteID);
