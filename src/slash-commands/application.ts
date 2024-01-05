@@ -4,12 +4,40 @@ import {
 	ChatInputCommandInteraction,
 	EmbedBuilder,
 	PermissionFlagsBits,
+	TextChannel,
 } from "discord.js";
 import myClient from "../client";
 import { slashCommandType } from "../types/slash-commands";
 import { appSettingsObject } from "../types/application-settings";
 import { readFileSync, writeFileSync } from "fs";
 import { doingAppObject } from "../types/doing-app";
+
+// ordering the channels
+function getPosition(client: myClient, channel: TextChannel): number {
+	const regex = /\d{4}$/;
+	const appname = Number(regex.exec(channel.name)![0]);
+	const category = client.channels.cache.get(client.categoryPastApplications);
+	if (!category || category.type !== ChannelType.GuildCategory) {
+		console.log(
+			`[SLASH COMMANDS] An error occured while executing command "application"! Code #6`
+		);
+		return 1;
+	}
+	var temp = { id: "", name: 0 };
+	category.children.cache.forEach((c) => {
+		const name = Number(regex.exec(c.name)![0]);
+		if (name > temp.name && name < appname) temp.name = name;
+		temp.id = c.id;
+	});
+	const prevchannel = category.children.cache.get(temp.id);
+	if (prevchannel) return prevchannel.position + 1;
+	else {
+		console.log(
+			`[SLASH COMMANDS] An error occured while executing command "application"! Code #7`
+		);
+		return 1;
+	}
+}
 
 async function statusSubcommand(client: myClient, interaction: ChatInputCommandInteraction) {
 	const reply = await interaction.deferReply({ ephemeral: true });
@@ -99,9 +127,9 @@ async function acceptSubcommand(client: myClient, interaction: ChatInputCommandI
 	}
 
 	// Adding member to the server
-	await member.roles.add(client.memberRoleID);
-	await member.roles.remove(client.waitingRoleID);
-	await member.setNickname(username);
+	member.roles.add(client.memberRoleID);
+	member.roles.remove(client.waitingRoleID);
+	member.setNickname(username);
 
 	client.SMP.send("send command", [`whitelist add ${username}`]);
 	client.CMP.send("send command", [`whitelist add ${username}`]);
@@ -142,12 +170,16 @@ async function acceptSubcommand(client: myClient, interaction: ChatInputCommandI
 		)
 		.setFooter({ text: "Have fun!" });
 
-	await appChannel.permissionOverwrites.delete(member.id);
-	await appChannel.setParent(client.categoryPastApplications);
-	await appChannel.setName(appChannel.name.replace("🎫", "✅"));
+	const position = getPosition(client, appChannel);
+	appChannel.permissionOverwrites.delete(member.id);
+	appChannel.edit({
+		parent: client.categoryPastApplications,
+		name: appChannel.name.replace("🎫", "✅"),
+		position,
+	});
 
-	await channel.send({ content: `<@${member.id}>`, embeds: [mainEmbed] });
-	await reply.edit({ embeds: [mainEmbed] });
+	channel.send({ content: `<@${member.id}>`, embeds: [mainEmbed] });
+	reply.edit({ embeds: [mainEmbed] });
 
 	// adding them to member list channel
 	const mChannel = client.channels.cache.get(client.channelMemberListID);
@@ -164,7 +196,7 @@ async function acceptSubcommand(client: myClient, interaction: ChatInputCommandI
 
 	const messages = await mChannel.messages.fetch();
 	const message = messages.get(client.messageMemberListID);
-	await message?.edit({
+	message?.edit({
 		content: message.content + `\n- <@${member.id}>`,
 	});
 }
@@ -215,10 +247,10 @@ async function rejectSubcommand(client: myClient, interaction: ChatInputCommandI
 	}
 
 	// Changing member roles
-	await member.roles.remove(client.waitingRoleID);
+	member.roles.remove(client.waitingRoleID);
 
 	doingApp.splice(doingApp.indexOf(doingAppData));
-	writeFileSync("./storage/app-settings.json", JSON.stringify(doingApp));
+	writeFileSync("./storage/doing-app.json", JSON.stringify(doingApp));
 	var rMemberList: string[] = JSON.parse(
 		readFileSync("./storage/removed-members.json").toString()
 	);
@@ -250,9 +282,13 @@ async function rejectSubcommand(client: myClient, interaction: ChatInputCommandI
 			)}\` has been rejected! \nIf you wish to try again, please make a special request with the owner.`
 		);
 
-	await appChannel.permissionOverwrites.delete(member.id);
-	await appChannel.setParent(client.categoryPastApplications);
-	await appChannel.setName(appChannel.name.replace("🎫", "❌"));
+	const position = getPosition(client, appChannel);
+	appChannel.permissionOverwrites.delete(member.id);
+	appChannel.edit({
+		parent: client.categoryPastApplications,
+		name: appChannel.name.replace("🎫", "❌"),
+		position,
+	});
 
 	await channel.send({ content: `<@${member.id}>`, embeds: [mainEmbed] });
 	await reply.edit({ embeds: [mainEmbed] });
