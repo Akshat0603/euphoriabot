@@ -134,7 +134,7 @@ async function acceptSubcommand(client: myClient, interaction: ChatInputCommandI
 	client.SMP.send("send command", [`whitelist add ${username}`]);
 	client.CMP.send("send command", [`whitelist add ${username}`]);
 
-	doingApp.splice(doingApp.indexOf(doingAppData));
+	doingApp.splice(doingApp.indexOf(doingAppData), 1);
 	writeFileSync("./storage/doing-app.json", JSON.stringify(doingApp));
 	var memberList: string[] = JSON.parse(readFileSync("./storage/member-list.json").toString());
 	memberList.push(member.id);
@@ -249,7 +249,7 @@ async function rejectSubcommand(client: myClient, interaction: ChatInputCommandI
 	// Changing member roles
 	member.roles.remove(client.waitingRoleID);
 
-	doingApp.splice(doingApp.indexOf(doingAppData));
+	doingApp.splice(doingApp.indexOf(doingAppData), 1);
 	writeFileSync("./storage/doing-app.json", JSON.stringify(doingApp));
 	var rMemberList: string[] = JSON.parse(
 		readFileSync("./storage/removed-members.json").toString()
