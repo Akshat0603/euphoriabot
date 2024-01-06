@@ -320,6 +320,7 @@ async function allowSubcommand(interaction: ChatInputCommandInteraction) {
 		reply.edit({
 			content: "That user is not removed/denied!",
 		});
+		console.log(`[SLASH COMMANDS] User ${user} is not removed!`);
 		return;
 	}
 

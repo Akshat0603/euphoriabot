@@ -224,6 +224,7 @@ async function allowSubcommand(interaction) {
         reply.edit({
             content: "That user is not removed/denied!",
         });
+        console.log(`[SLASH COMMANDS] User ${user} is not removed!`);
         return;
     }
     rMemberList.splice(rMemberList.indexOf(user));
