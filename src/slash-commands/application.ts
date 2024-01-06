@@ -170,8 +170,9 @@ async function acceptSubcommand(client: myClient, interaction: ChatInputCommandI
 	});
 	setPosition(client, appChannel);
 
-	channel.send({ content: `<@${member.id}>`, embeds: [mainEmbed] });
 	reply.edit({ embeds: [mainEmbed] });
+	const msg = await channel.send({ content: `<@${member.id}>`, embeds: [mainEmbed] });
+	msg.react("❤");
 
 	// adding them to member list channel
 	const mChannel = client.channels.cache.get(client.channelMemberListID);
