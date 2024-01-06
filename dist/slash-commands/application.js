@@ -14,8 +14,10 @@ function setPosition(client, channel) {
         return;
     }
     const channelsCategory = category.children.cache.sort((a, b) => a.position - b.position);
-    channelsCategory.forEach((categoryChannel) => {
-        channel.setPosition(categoryChannel.position);
+    Object.values(channelsCategory).forEach((categoryChannel, index) => {
+        if (Number(regex.exec(categoryChannel.name)[0]) < appnum) {
+            channel.setPosition(index + 1);
+        }
     });
 }
 async function statusSubcommand(client, interaction) {
