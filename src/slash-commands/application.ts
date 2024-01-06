@@ -13,30 +13,23 @@ import { readFileSync, writeFileSync } from "fs";
 import { doingAppObject } from "../types/doing-app";
 
 // ordering the channels
-function getPosition(client: myClient, channel: TextChannel): number {
+function setPosition(client: myClient, channel: TextChannel) {
 	const regex = /\d{4}$/;
-	const appname = Number(regex.exec(channel.name)![0]);
+	const appnum = Number(regex.exec(channel.name)![0]);
+	console.log(`[SLASH COMMANDS] Application #${appnum} was responded to.`);
 	const category = client.channels.cache.get(client.categoryPastApplications);
 	if (!category || category.type !== ChannelType.GuildCategory) {
 		console.log(
 			`[SLASH COMMANDS] An error occured while executing command "application"! Code #6`
 		);
-		return 1;
+		return;
 	}
-	var temp = { id: "", name: 0 };
-	category.children.cache.forEach((c) => {
-		const name = Number(regex.exec(c.name)![0]);
-		if (name > temp.name && name < appname) temp.name = name;
-		temp.id = c.id;
+	const channelsCategory = category.children.cache.sort((a, b) => a.position - b.position);
+	channelsCategory.forEach((categoryChannel) => {
+		if (Number(regex.exec(categoryChannel.name) ? [0] : "0") < appnum) {
+			channel.setPosition(categoryChannel.position);
+		}
 	});
-	const prevchannel = category.children.cache.get(temp.id);
-	if (prevchannel) return prevchannel.position + 1;
-	else {
-		console.log(
-			`[SLASH COMMANDS] An error occured while executing command "application"! Code #7`
-		);
-		return 1;
-	}
 }
 
 async function statusSubcommand(client: myClient, interaction: ChatInputCommandInteraction) {
@@ -170,13 +163,12 @@ async function acceptSubcommand(client: myClient, interaction: ChatInputCommandI
 		)
 		.setFooter({ text: "Have fun!" });
 
-	const position = getPosition(client, appChannel);
 	appChannel.permissionOverwrites.delete(member.id);
 	appChannel.edit({
 		parent: client.categoryPastApplications,
 		name: appChannel.name.replace("🎫", "✅"),
-		position,
 	});
+	setPosition(client, appChannel);
 
 	channel.send({ content: `<@${member.id}>`, embeds: [mainEmbed] });
 	reply.edit({ embeds: [mainEmbed] });
@@ -282,13 +274,12 @@ async function rejectSubcommand(client: myClient, interaction: ChatInputCommandI
 			)}\` has been rejected! \nIf you wish to try again, please make a special request with the owner.`
 		);
 
-	const position = getPosition(client, appChannel);
 	appChannel.permissionOverwrites.delete(member.id);
 	appChannel.edit({
 		parent: client.categoryPastApplications,
 		name: appChannel.name.replace("🎫", "❌"),
-		position,
 	});
+	setPosition(client, appChannel);
 
 	await channel.send({ content: `<@${member.id}>`, embeds: [mainEmbed] });
 	await reply.edit({ embeds: [mainEmbed] });
