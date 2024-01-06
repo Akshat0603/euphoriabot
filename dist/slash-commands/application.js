@@ -15,9 +15,7 @@ function setPosition(client, channel) {
     }
     const channelsCategory = category.children.cache.sort((a, b) => a.position - b.position);
     channelsCategory.forEach((categoryChannel) => {
-        if (Number(regex.exec(categoryChannel.name) ? [0] : "0") < appnum) {
-            channel.setPosition(categoryChannel.position);
-        }
+        channel.setPosition(categoryChannel.position);
     });
 }
 async function statusSubcommand(client, interaction) {
