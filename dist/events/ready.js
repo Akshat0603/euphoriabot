@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.event = void 0;
 const discord_js_1 = require("discord.js");
+const fs_1 = require("fs");
 exports.event = {
     name: "ready",
     execute: async (client) => {
@@ -21,6 +22,25 @@ exports.event = {
                 console.error(error);
             }
         });
+        // refresh doing-app
+        const doingappdatas = [];
+        client.channels.cache.forEach((channel) => {
+            if (channel.type === discord_js_1.ChannelType.GuildText) {
+                if (channel.name.startsWith("🎫╏app-")) {
+                    channel.permissionOverwrites.cache.forEach((perm) => {
+                        if (perm.type === 1) {
+                            const doingAppData = {
+                                userID: perm.id,
+                                ticketID: channel.id,
+                            };
+                            doingappdatas.push(doingAppData);
+                        }
+                    });
+                }
+            }
+        });
+        (0, fs_1.writeFileSync)("./storage/doing-app.json", JSON.stringify(doingappdatas));
+        console.log(`[REGISTRY] Refreshed doing-app.json with\n` + doingappdatas);
         // Connect to both servers
         await client.SMP.connect();
         await client.CMP.connect();
