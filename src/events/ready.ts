@@ -25,7 +25,7 @@ export const event: eventType = {
 		});
 
 		// refresh doing-app
-		const doingappdatas: doingAppObject[] = [];
+		var doingappdatas: doingAppObject[] = [];
 		client.channels.cache.forEach((channel) => {
 			if (channel.type === ChannelType.GuildText) {
 				if (channel.name.startsWith("🎫╏app-")) {
@@ -41,8 +41,27 @@ export const event: eventType = {
 				}
 			}
 		});
+
+		// refresh member-list
+		var memberList: string[] = [];
+		client.guilds.cache.forEach((guild) => {
+			if (guild.id === client.guildID) {
+				guild.roles.cache.forEach((role) => {
+					if (role.id === client.memberRoleID) {
+						role.members.forEach((member) => {
+							memberList.push(member.id);
+						});
+					}
+				});
+			}
+		});
+
 		writeFileSync("./storage/doing-app.json", JSON.stringify(doingappdatas));
-		console.log(`[REGISTRY] Refreshed doing-app.json with\n` + doingappdatas);
+		console.log(
+			`[REGISTRY] Refreshed doing-app.json with ${doingappdatas.length} members doing the application.`
+		);
+		writeFileSync("./storage/member-list.json", JSON.stringify(memberList));
+		console.log(`[REGISTRY] Refreshed member-list.json with ${memberList.length} members.`);
 
 		// Connect to both servers
 		await client.SMP.connect();

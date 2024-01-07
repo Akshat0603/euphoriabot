@@ -31,6 +31,7 @@ class myClient extends Client {
 	public channelMemberListID: string = "1177882289116561510";
 	public channelApplyID: string = "1176815969025396807";
 	public channelApplicationResultID: string = "1176839407391752222";
+	public channelPostApplicationID: string = "1179371851680596048";
 
 	public memberRoleID: string = "1176812990574637086";
 	public waitingRoleID: string = "1176838751192887386";

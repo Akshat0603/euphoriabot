@@ -24,6 +24,7 @@ class myClient extends discord_js_1.Client {
     channelMemberListID = "1177882289116561510";
     channelApplyID = "1176815969025396807";
     channelApplicationResultID = "1176839407391752222";
+    channelPostApplicationID = "1179371851680596048";
     memberRoleID = "1176812990574637086";
     waitingRoleID = "1176838751192887386";
     removedRoleID = "1179056413964771369";

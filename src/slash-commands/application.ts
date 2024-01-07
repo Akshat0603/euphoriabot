@@ -13,7 +13,7 @@ import { readFileSync, writeFileSync } from "fs";
 import { doingAppObject } from "../types/doing-app";
 
 // ordering the channels
-function setPosition(client: myClient, channel: TextChannel) {
+async function setPosition(client: myClient, channel: TextChannel) {
 	const regex = /\d{4}$/;
 	const appnum = Number(regex.exec(channel.name)![0]);
 	console.log(`[SLASH COMMANDS] Application #${appnum} was responded to.`);
@@ -25,9 +25,9 @@ function setPosition(client: myClient, channel: TextChannel) {
 		return;
 	}
 	const channelsCategory = category.children.cache.sort((a, b) => a.position - b.position);
-	Object.values(channelsCategory).forEach((categoryChannel, index) => {
+	Object.values(channelsCategory).forEach(async (categoryChannel, index) => {
 		if (Number(regex.exec(categoryChannel.name)![0]) < appnum) {
-			channel.setPosition(index + 1);
+			await channel.setPosition(index + 1);
 		}
 	});
 }
@@ -120,9 +120,9 @@ async function acceptSubcommand(client: myClient, interaction: ChatInputCommandI
 	}
 
 	// Adding member to the server
-	member.roles.add(client.memberRoleID);
-	member.roles.remove(client.waitingRoleID);
-	member.setNickname(username);
+	await member.roles.add(client.memberRoleID);
+	await member.roles.remove(client.waitingRoleID);
+	await member.setNickname(username);
 
 	client.SMP.send("send command", [`whitelist add ${username}`]);
 	client.CMP.send("send command", [`whitelist add ${username}`]);
@@ -163,12 +163,12 @@ async function acceptSubcommand(client: myClient, interaction: ChatInputCommandI
 		)
 		.setFooter({ text: "Have fun!" });
 
-	appChannel.permissionOverwrites.delete(member.id);
-	appChannel.edit({
+	await appChannel.permissionOverwrites.delete(member.id);
+	await appChannel.edit({
 		parent: client.categoryPastApplications,
 		name: appChannel.name.replace("🎫", "✅"),
 	});
-	setPosition(client, appChannel);
+	await setPosition(client, appChannel);
 
 	reply.edit({ embeds: [mainEmbed] });
 	const msg = await channel.send({ content: `<@${member.id}>`, embeds: [mainEmbed] });
@@ -240,7 +240,7 @@ async function rejectSubcommand(client: myClient, interaction: ChatInputCommandI
 	}
 
 	// Changing member roles
-	member.roles.remove(client.waitingRoleID);
+	await member.roles.remove(client.waitingRoleID);
 
 	doingApp.splice(doingApp.indexOf(doingAppData), 1);
 	writeFileSync("./storage/doing-app.json", JSON.stringify(doingApp));
@@ -275,12 +275,12 @@ async function rejectSubcommand(client: myClient, interaction: ChatInputCommandI
 			)}\` has been rejected! \nIf you wish to try again, please make a special request with the owner.`
 		);
 
-	appChannel.permissionOverwrites.delete(member.id);
-	appChannel.edit({
+	await appChannel.permissionOverwrites.delete(member.id);
+	await appChannel.edit({
 		parent: client.categoryPastApplications,
 		name: appChannel.name.replace("🎫", "❌"),
 	});
-	setPosition(client, appChannel);
+	await setPosition(client, appChannel);
 
 	await channel.send({ content: `<@${member.id}>`, embeds: [mainEmbed] });
 	await reply.edit({ embeds: [mainEmbed] });

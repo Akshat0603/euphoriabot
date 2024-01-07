@@ -23,7 +23,7 @@ exports.event = {
             }
         });
         // refresh doing-app
-        const doingappdatas = [];
+        var doingappdatas = [];
         client.channels.cache.forEach((channel) => {
             if (channel.type === discord_js_1.ChannelType.GuildText) {
                 if (channel.name.startsWith("🎫╏app-")) {
@@ -39,8 +39,23 @@ exports.event = {
                 }
             }
         });
+        // refresh member-list
+        var memberList = [];
+        client.guilds.cache.forEach((guild) => {
+            if (guild.id === client.guildID) {
+                guild.roles.cache.forEach((role) => {
+                    if (role.id === client.memberRoleID) {
+                        role.members.forEach((member) => {
+                            memberList.push(member.id);
+                        });
+                    }
+                });
+            }
+        });
         (0, fs_1.writeFileSync)("./storage/doing-app.json", JSON.stringify(doingappdatas));
-        console.log(`[REGISTRY] Refreshed doing-app.json with\n` + doingappdatas);
+        console.log(`[REGISTRY] Refreshed doing-app.json with ${doingappdatas.length} members doing the application.`);
+        (0, fs_1.writeFileSync)("./storage/member-list.json", JSON.stringify(memberList));
+        console.log(`[REGISTRY] Refreshed member-list.json with ${memberList.length} members.`);
         // Connect to both servers
         await client.SMP.connect();
         await client.CMP.connect();

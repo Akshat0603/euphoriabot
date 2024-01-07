@@ -4,7 +4,7 @@ exports.slashCommand = void 0;
 const discord_js_1 = require("discord.js");
 const fs_1 = require("fs");
 // ordering the channels
-function setPosition(client, channel) {
+async function setPosition(client, channel) {
     const regex = /\d{4}$/;
     const appnum = Number(regex.exec(channel.name)[0]);
     console.log(`[SLASH COMMANDS] Application #${appnum} was responded to.`);
@@ -14,9 +14,9 @@ function setPosition(client, channel) {
         return;
     }
     const channelsCategory = category.children.cache.sort((a, b) => a.position - b.position);
-    Object.values(channelsCategory).forEach((categoryChannel, index) => {
+    Object.values(channelsCategory).forEach(async (categoryChannel, index) => {
         if (Number(regex.exec(categoryChannel.name)[0]) < appnum) {
-            channel.setPosition(index + 1);
+            await channel.setPosition(index + 1);
         }
     });
 }
@@ -87,9 +87,9 @@ async function acceptSubcommand(client, interaction) {
         return;
     }
     // Adding member to the server
-    member.roles.add(client.memberRoleID);
-    member.roles.remove(client.waitingRoleID);
-    member.setNickname(username);
+    await member.roles.add(client.memberRoleID);
+    await member.roles.remove(client.waitingRoleID);
+    await member.setNickname(username);
     client.SMP.send("send command", [`whitelist add ${username}`]);
     client.CMP.send("send command", [`whitelist add ${username}`]);
     doingApp.splice(doingApp.indexOf(doingAppData), 1);
@@ -113,12 +113,12 @@ async function acceptSubcommand(client, interaction) {
         .setTitle("Application Accepted!")
         .setDescription(`Application No. \`${appChannel.name.replace("🎫╏app-", "")}\` of user \`${username}\` has been accepted! \nPlease go through <#${client.channelEuphoriaID}> before joining. Your <#${client.forumSuggestionID}> is valuable to us, just check if your suggestion has been posted before or not.`)
         .setFooter({ text: "Have fun!" });
-    appChannel.permissionOverwrites.delete(member.id);
-    appChannel.edit({
+    await appChannel.permissionOverwrites.delete(member.id);
+    await appChannel.edit({
         parent: client.categoryPastApplications,
         name: appChannel.name.replace("🎫", "✅"),
     });
-    setPosition(client, appChannel);
+    await setPosition(client, appChannel);
     reply.edit({ embeds: [mainEmbed] });
     const msg = await channel.send({ content: `<@${member.id}>`, embeds: [mainEmbed] });
     msg.react("❤");
@@ -171,7 +171,7 @@ async function rejectSubcommand(client, interaction) {
         return;
     }
     // Changing member roles
-    member.roles.remove(client.waitingRoleID);
+    await member.roles.remove(client.waitingRoleID);
     doingApp.splice(doingApp.indexOf(doingAppData), 1);
     (0, fs_1.writeFileSync)("./storage/doing-app.json", JSON.stringify(doingApp));
     var rMemberList = JSON.parse((0, fs_1.readFileSync)("./storage/removed-members.json").toString());
@@ -192,12 +192,12 @@ async function rejectSubcommand(client, interaction) {
         .setColor("#FF0000")
         .setTitle("Application Rejected!")
         .setDescription(`Application No. \`${appChannel.name.replace("🎫╏app-", "")}\` has been rejected! \nIf you wish to try again, please make a special request with the owner.`);
-    appChannel.permissionOverwrites.delete(member.id);
-    appChannel.edit({
+    await appChannel.permissionOverwrites.delete(member.id);
+    await appChannel.edit({
         parent: client.categoryPastApplications,
         name: appChannel.name.replace("🎫", "❌"),
     });
-    setPosition(client, appChannel);
+    await setPosition(client, appChannel);
     await channel.send({ content: `<@${member.id}>`, embeds: [mainEmbed] });
     await reply.edit({ embeds: [mainEmbed] });
 }
