@@ -6,6 +6,10 @@ import { readFileSync, writeFileSync } from "fs";
 export const event: eventType = {
 	name: "guildMemberRemove",
 	execute: async (client: myClient, member: GuildMember) => {
+		// checking if person was member
+		if (!member.roles.cache.has(client.memberRoleID)) return;
+
+		// get member channel
 		const channel = client.channels.cache.get(client.channelMemberListID);
 
 		// Impossible error check: Code #1
@@ -45,7 +49,7 @@ export const event: eventType = {
 					);
 				} else {
 					await pChannel.send({
-						content: `<@${member.id} was removed from the server. \n- Left the discord server.`,
+						content: `<@${member.id}> was removed from the server. \n- Left the discord server.`,
 					});
 				}
 

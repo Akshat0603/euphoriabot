@@ -6,6 +6,10 @@ const fs_1 = require("fs");
 exports.event = {
     name: "guildMemberRemove",
     execute: async (client, member) => {
+        // checking if person was member
+        if (!member.roles.cache.has(client.memberRoleID))
+            return;
+        // get member channel
         const channel = client.channels.cache.get(client.channelMemberListID);
         // Impossible error check: Code #1
         if (!channel || channel.type !== discord_js_1.ChannelType.GuildText) {
@@ -34,7 +38,7 @@ exports.event = {
                 }
                 else {
                     await pChannel.send({
-                        content: `<@${member.id} was removed from the server. \n- Left the discord server.`,
+                        content: `<@${member.id}> was removed from the server. \n- Left the discord server.`,
                     });
                 }
                 const removedMembers = JSON.parse((0, fs_1.readFileSync)("./storage/removed-members.json").toString());

@@ -228,26 +228,16 @@ async function rejectSubcommand(client: myClient, interaction: ChatInputCommandI
 
 	const member = interaction.guild?.members.cache.get(doingAppData.userID);
 
-	// Impossible error check: code #3
-	if (!member) {
-		reply.edit({
-			content: "An Error Occured! Code #3",
-		});
-		console.log(
-			`[SLASH COMMANDS] An error occured while executing command "application"! Code #3`
-		);
-		return;
+	if (member) {
+		await member.roles.remove(client.waitingRoleID);
 	}
-
-	// Changing member roles
-	await member.roles.remove(client.waitingRoleID);
 
 	doingApp.splice(doingApp.indexOf(doingAppData), 1);
 	writeFileSync("./storage/doing-app.json", JSON.stringify(doingApp));
 	var rMemberList: string[] = JSON.parse(
 		readFileSync("./storage/removed-members.json").toString()
 	);
-	rMemberList.push(member.id);
+	rMemberList.push(doingAppData.userID);
 	writeFileSync("./storage/removed-members.json", JSON.stringify(rMemberList));
 
 	const appChannel = client.channels.cache.get(doingAppData.ticketID);
@@ -275,14 +265,14 @@ async function rejectSubcommand(client: myClient, interaction: ChatInputCommandI
 			)}\` has been rejected! \nIf you wish to try again, please make a special request with the owner.`
 		);
 
-	await appChannel.permissionOverwrites.delete(member.id);
+	if (member) await appChannel.permissionOverwrites.delete(member.id);
 	await appChannel.edit({
 		parent: client.categoryPastApplications,
 		name: appChannel.name.replace("🎫", "❌"),
 	});
 	await setPosition(client, appChannel);
 
-	await channel.send({ content: `<@${member.id}>`, embeds: [mainEmbed] });
+	await channel.send({ content: `<@${doingAppData.userID}>`, embeds: [mainEmbed] });
 	await reply.edit({ embeds: [mainEmbed] });
 }
 
