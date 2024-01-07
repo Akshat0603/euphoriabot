@@ -1,6 +1,7 @@
 import { ChannelType, GuildMember } from "discord.js";
 import myClient from "../client";
 import { eventType } from "../types/events";
+import { readFileSync, writeFileSync } from "fs";
 
 export const event: eventType = {
 	name: "guildMemberRemove",
@@ -47,6 +48,12 @@ export const event: eventType = {
 						content: `<@${member.id} was removed from the server. \n- Left the discord server.`,
 					});
 				}
+
+				const removedMembers: string[] = JSON.parse(
+					readFileSync("./storage/removed-members.json").toString()
+				);
+				removedMembers.push(member.id);
+				writeFileSync("./storage/removed-members.json", JSON.stringify(removedMembers));
 			}
 		}
 	},

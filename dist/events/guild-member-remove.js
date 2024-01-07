@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.event = void 0;
 const discord_js_1 = require("discord.js");
+const fs_1 = require("fs");
 exports.event = {
     name: "guildMemberRemove",
     execute: async (client, member) => {
@@ -36,6 +37,9 @@ exports.event = {
                         content: `<@${member.id} was removed from the server. \n- Left the discord server.`,
                     });
                 }
+                const removedMembers = JSON.parse((0, fs_1.readFileSync)("./storage/removed-members.json").toString());
+                removedMembers.push(member.id);
+                (0, fs_1.writeFileSync)("./storage/removed-members.json", JSON.stringify(removedMembers));
             }
         }
     },
