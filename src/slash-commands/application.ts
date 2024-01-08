@@ -346,6 +346,121 @@ async function allowSubcommand(interaction: ChatInputCommandInteraction) {
 	reply.edit({ content: `<@${user}> is now allowed to redo their application!` });
 }
 
+async function removeSubcommand(client: myClient, interaction: ChatInputCommandInteraction) {
+	// buy more time
+	const reply = await interaction.deferReply({ ephemeral: true });
+
+	// member
+	const memberid = interaction.options.data[0].options![0].value;
+
+	// impossible error check: code #4
+	if (typeof memberid !== "string") {
+		reply.edit({
+			content: "An error occured! Code #4",
+		});
+		console.error(
+			`[EVENTS] An error occured while executing event 'guildMemberRemove'! Code #4`
+		);
+		return;
+	}
+
+	const member = interaction.guild?.members.cache.get(memberid);
+
+	// impossible error check: code #5
+	if (!member) {
+		reply.edit({
+			content: "An error occured! Code #5",
+		});
+		console.error(
+			`[EVENTS] An error occured while executing event 'guildMemberRemove'! Code #5`
+		);
+		return;
+	}
+
+	// checking if person was member
+	if (!member.roles.cache.has(client.memberRoleID)) {
+		reply.edit({
+			content: "That user is not a member!",
+		});
+		return;
+	} else if (member.id === interaction.guild!.ownerId) {
+		reply.edit({
+			content: "# YOU CANNOT REMOVE THE LORD!",
+		});
+	}
+
+	// get member channel
+	const channel = client.channels.cache.get(client.channelMemberListID);
+
+	// Impossible error check: Code #1
+	if (!channel || channel.type !== ChannelType.GuildText) {
+		console.error(
+			`[EVENTS] An error occured while executing event 'guildMemberRemove'! Code #1`
+		);
+		return;
+	}
+	// Get message
+	const message = (await channel.messages.fetch()).get(client.messageMemberListID);
+
+	// Impossible error check: Code #2
+	if (!message) {
+		console.error(
+			`[EVENTS] An error occured while executing event 'guildMemberRemove'! Code #2`
+		);
+		return;
+	}
+	// Remove from message and remove role
+	await member.roles.remove(client.memberRoleID);
+	await message.edit({ content: message.content.replace(`\n- <@${member.id}>`, "") });
+	console.log(`[EVENTS] Removed member ${member.user.username} from member-list message.`);
+
+	// Remove from whitelist
+	const username = member.nickname ? member.nickname : member.displayName;
+
+	await client.SMP.send("send command", [`whitelist remove ${username}`]);
+	await client.CMP.send("send command", [`whitelist remove ${username}`]);
+
+	// send message to #post-application
+	const pChannel = client.channels.cache.get(client.channelPostApplicationID);
+
+	// Impossible error check: Code #3
+	if (!pChannel || pChannel.type !== ChannelType.GuildText) {
+		console.error(
+			`[EVENTS] An error occured while executing event 'guildMemberRemove'! Code #3`
+		);
+		return;
+	}
+
+	// message
+	var content: string = `<@${member.id}> was removed from the server.`;
+
+	const reason1 = interaction.options.data[0].options![1].value;
+	if (typeof reason1 === "string") {
+		content = content + `\n- ${reason1}`;
+	}
+	const reason2 = interaction.options.data[0].options![2].value;
+	if (typeof reason2 === "string") {
+		content = content + `\n- ${reason2}`;
+	}
+	const reason3 = interaction.options.data[0].options![3].value;
+	if (typeof reason3 === "string") {
+		content = content + `\n- ${reason3}`;
+	}
+
+	await pChannel.send({ content });
+
+	// Update member-lists
+	var removedMembers: string[] = JSON.parse(
+		readFileSync("./storage/removed-members.json").toString()
+	);
+	removedMembers.push(member.id);
+	writeFileSync("./storage/removed-members.json", JSON.stringify(removedMembers));
+
+	var members: string[] = JSON.parse(readFileSync("./storage/member-list.json").toString());
+	members.splice(members.indexOf(member.id), 1);
+	writeFileSync("./storage/member-list.json", JSON.stringify(members));
+}
+
 export const slashCommand: slashCommandType = {
 	// COMMAND DATA
 	data: {
@@ -401,6 +516,34 @@ export const slashCommand: slashCommandType = {
 					},
 				],
 			},
+			{
+				name: "remove",
+				description: "Remove a member from the server",
+				type: ApplicationCommandOptionType.Subcommand,
+				options: [
+					{
+						name: "user",
+						description: "Who is being removed from the server?",
+						type: ApplicationCommandOptionType.User,
+						required: true,
+					},
+					{
+						name: "reason-1",
+						description: "Why is this person being removed?",
+						type: ApplicationCommandOptionType.String,
+					},
+					{
+						name: "reason-2",
+						description: "Why is this person being removed?",
+						type: ApplicationCommandOptionType.String,
+					},
+					{
+						name: "reason-3",
+						description: "Why is this person being removed?",
+						type: ApplicationCommandOptionType.String,
+					},
+				],
+			},
 		],
 	},
 	execute: async (client: myClient, interaction: ChatInputCommandInteraction) => {
@@ -411,5 +554,7 @@ export const slashCommand: slashCommandType = {
 		else if (interaction.options.data[0].name === "reject")
 			rejectSubcommand(client, interaction);
 		else if (interaction.options.data[0].name === "allow") allowSubcommand(interaction);
+		else if (interaction.options.data[0].name === "remove")
+			removeSubcommand(client, interaction);
 	},
 };
