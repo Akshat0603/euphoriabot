@@ -41,9 +41,13 @@ exports.event = {
                         content: `<@${member.id}> was removed from the server. \n- Left the discord server.`,
                     });
                 }
-                const removedMembers = JSON.parse((0, fs_1.readFileSync)("./storage/removed-members.json").toString());
+                // Update member-lists
+                var removedMembers = JSON.parse((0, fs_1.readFileSync)("./storage/removed-members.json").toString());
                 removedMembers.push(member.id);
                 (0, fs_1.writeFileSync)("./storage/removed-members.json", JSON.stringify(removedMembers));
+                var members = JSON.parse((0, fs_1.readFileSync)("./storage/member-list.json").toString());
+                members.splice(members.indexOf(member.id), 1);
+                (0, fs_1.writeFileSync)("./storage/member-list.json", JSON.stringify(members));
             }
         }
     },

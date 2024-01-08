@@ -12,26 +12,6 @@ import { appSettingsObject } from "../types/application-settings";
 import { readFileSync, writeFileSync } from "fs";
 import { doingAppObject } from "../types/doing-app";
 
-// ordering the channels
-async function setPosition(client: myClient, channel: TextChannel) {
-	const regex = /\d{4}$/;
-	const appnum = Number(regex.exec(channel.name)![0]);
-	console.log(`[SLASH COMMANDS] Application #${appnum} was responded to.`);
-	const category = client.channels.cache.get(client.categoryPastApplications);
-	if (!category || category.type !== ChannelType.GuildCategory) {
-		console.log(
-			`[SLASH COMMANDS] An error occured while executing command "application"! Code #6`
-		);
-		return;
-	}
-	const channelsCategory = category.children.cache.sort((a, b) => a.position - b.position);
-	Object.values(channelsCategory).forEach(async (categoryChannel, index) => {
-		if (Number(regex.exec(categoryChannel.name)![0]) < appnum) {
-			await channel.setPosition(index + 1);
-		}
-	});
-}
-
 async function statusSubcommand(client: myClient, interaction: ChatInputCommandInteraction) {
 	const reply = await interaction.deferReply({ ephemeral: true });
 	const newStatus = interaction.options.data[0].options![0].value === "open" ? true : false;
@@ -79,12 +59,35 @@ async function acceptSubcommand(client: myClient, interaction: ChatInputCommandI
 		readFileSync("./storage/doing-app.json").toString()
 	);
 
+	const appChannel = interaction.channel;
+	// impossible error check: code #1
+	if (!appChannel) {
+		interaction.reply({
+			content: "An Error Occured! Code #1",
+		});
+		console.log(
+			`[SLASH COMMANDS] An error occured while executing command "application"! Code #1`
+		);
+		return;
+	}
+
 	// checking for currect channel
-	if (!doingApp.some((app) => app.ticketID === interaction.channel!.id)) {
+	if (!doingApp.some((app) => app.ticketID === appChannel.id)) {
 		await interaction.reply({
 			content: "## You cannot use this command in this channel!",
 			ephemeral: true,
 		});
+		return;
+	}
+
+	// impossible error check: code #1
+	if (appChannel.type !== ChannelType.PrivateThread) {
+		interaction.reply({
+			content: "An Error Occured! Code #1",
+		});
+		console.log(
+			`[SLASH COMMANDS] An error occured while executing command "application"! Code #1`
+		);
 		return;
 	}
 
@@ -133,11 +136,10 @@ async function acceptSubcommand(client: myClient, interaction: ChatInputCommandI
 	memberList.push(member.id);
 	writeFileSync("./storage/member-list.json", JSON.stringify(memberList));
 
-	const appChannel = client.channels.cache.get(doingAppData.ticketID);
 	const channel = client.channels.cache.get(client.channelApplicationResultID);
 
 	// Impossible error check
-	if (appChannel!.type !== ChannelType.GuildText || channel!.type !== ChannelType.GuildText) {
+	if (channel!.type !== ChannelType.GuildText) {
 		reply.edit({
 			content: "An Error Occured! Code #4",
 		});
@@ -163,12 +165,12 @@ async function acceptSubcommand(client: myClient, interaction: ChatInputCommandI
 		)
 		.setFooter({ text: "Have fun!" });
 
-	await appChannel.permissionOverwrites.delete(member.id);
+	await appChannel.members.remove(member.id);
 	await appChannel.edit({
-		parent: client.categoryPastApplications,
 		name: appChannel.name.replace("🎫", "✅"),
+		locked: true,
+		archived: true,
 	});
-	await setPosition(client, appChannel);
 
 	reply.edit({ embeds: [mainEmbed] });
 	const msg = await channel.send({ content: `<@${member.id}>`, embeds: [mainEmbed] });
@@ -200,12 +202,35 @@ async function rejectSubcommand(client: myClient, interaction: ChatInputCommandI
 		readFileSync("./storage/doing-app.json").toString()
 	);
 
+	const appChannel = interaction.channel;
+	// impossible error check: code #1
+	if (!appChannel) {
+		interaction.reply({
+			content: "An Error Occured! Code #1",
+		});
+		console.log(
+			`[SLASH COMMANDS] An error occured while executing command "application"! Code #1`
+		);
+		return;
+	}
+
 	// checking for currect channel
-	if (!doingApp.some((app) => app.ticketID === interaction.channel!.id)) {
+	if (!doingApp.some((app) => app.ticketID === appChannel.id)) {
 		await interaction.reply({
 			content: "## You cannot use this command in this channel!",
 			ephemeral: true,
 		});
+		return;
+	}
+
+	// impossible error check: code #1
+	if (appChannel.type !== ChannelType.PrivateThread) {
+		interaction.reply({
+			content: "An Error Occured! Code #1",
+		});
+		console.log(
+			`[SLASH COMMANDS] An error occured while executing command "application"! Code #1`
+		);
 		return;
 	}
 
@@ -240,11 +265,10 @@ async function rejectSubcommand(client: myClient, interaction: ChatInputCommandI
 	rMemberList.push(doingAppData.userID);
 	writeFileSync("./storage/removed-members.json", JSON.stringify(rMemberList));
 
-	const appChannel = client.channels.cache.get(doingAppData.ticketID);
 	const channel = client.channels.cache.get(client.channelApplicationResultID);
 
-	// Impossible error check
-	if (appChannel!.type !== ChannelType.GuildText || channel!.type !== ChannelType.GuildText) {
+	// Impossible error check: code #4
+	if (channel!.type !== ChannelType.GuildText) {
 		reply.edit({
 			content: "An Error Occured! Code #4",
 		});
@@ -265,12 +289,12 @@ async function rejectSubcommand(client: myClient, interaction: ChatInputCommandI
 			)}\` has been rejected! \nIf you wish to try again, please make a special request with the owner.`
 		);
 
-	if (member) await appChannel.permissionOverwrites.delete(member.id);
+	if (member) await appChannel.members.remove(member.id);
 	await appChannel.edit({
-		parent: client.categoryPastApplications,
 		name: appChannel.name.replace("🎫", "❌"),
+		locked: true,
+		archived: true,
 	});
-	await setPosition(client, appChannel);
 
 	await channel.send({ content: `<@${doingAppData.userID}>`, embeds: [mainEmbed] });
 	await reply.edit({ embeds: [mainEmbed] });

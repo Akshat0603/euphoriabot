@@ -53,11 +53,18 @@ export const event: eventType = {
 					});
 				}
 
-				const removedMembers: string[] = JSON.parse(
+				// Update member-lists
+				var removedMembers: string[] = JSON.parse(
 					readFileSync("./storage/removed-members.json").toString()
 				);
 				removedMembers.push(member.id);
 				writeFileSync("./storage/removed-members.json", JSON.stringify(removedMembers));
+
+				var members: string[] = JSON.parse(
+					readFileSync("./storage/member-list.json").toString()
+				);
+				members.splice(members.indexOf(member.id), 1);
+				writeFileSync("./storage/member-list.json", JSON.stringify(members));
 			}
 		}
 	},
