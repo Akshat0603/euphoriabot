@@ -82,7 +82,6 @@ exports.button = {
         });
         // add applier to thread
         await ticket.members.add(member);
-        await ticket.members.add(interaction.guild.ownerId);
         // Sending Message
         await ticket.send({ content: mainMessage });
         const doingAppData = {

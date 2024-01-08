@@ -108,7 +108,6 @@ export const button: buttonType = {
 
 		// add applier to thread
 		await ticket.members.add(member);
-		await ticket.members.add(interaction.guild.ownerId);
 
 		// Sending Message
 		await ticket.send({ content: mainMessage });
