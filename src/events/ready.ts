@@ -27,12 +27,12 @@ export const event: eventType = {
 		// refresh doing-app
 		var doingappdatas: doingAppObject[] = [];
 		client.channels.cache.forEach((channel) => {
-			if (channel.type === ChannelType.GuildText) {
+			if (channel.type === ChannelType.PrivateThread) {
 				if (channel.name.startsWith("🎫╏app-")) {
-					channel.permissionOverwrites.cache.forEach((perm) => {
-						if (perm.type === 1) {
+					channel.members.cache.forEach((member) => {
+						if (member.guildMember?.roles.cache.has(client.waitingRoleID)) {
 							const doingAppData: doingAppObject = {
-								userID: perm.id,
+								userID: member.id,
 								ticketID: channel.id,
 							};
 							doingappdatas.push(doingAppData);

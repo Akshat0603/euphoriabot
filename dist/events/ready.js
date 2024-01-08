@@ -25,12 +25,12 @@ exports.event = {
         // refresh doing-app
         var doingappdatas = [];
         client.channels.cache.forEach((channel) => {
-            if (channel.type === discord_js_1.ChannelType.GuildText) {
+            if (channel.type === discord_js_1.ChannelType.PrivateThread) {
                 if (channel.name.startsWith("🎫╏app-")) {
-                    channel.permissionOverwrites.cache.forEach((perm) => {
-                        if (perm.type === 1) {
+                    channel.members.cache.forEach((member) => {
+                        if (member.guildMember?.roles.cache.has(client.waitingRoleID)) {
                             const doingAppData = {
-                                userID: perm.id,
+                                userID: member.id,
                                 ticketID: channel.id,
                             };
                             doingappdatas.push(doingAppData);
