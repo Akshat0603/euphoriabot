@@ -252,7 +252,7 @@ async function removeSubcommand(client, interaction) {
         reply.edit({
             content: "An error occured! Code #4",
         });
-        console.error(`[EVENTS] An error occured while executing event 'guildMemberRemove'! Code #4`);
+        console.error(`[EVENTS] An error occured while executing command 'application'! Code #4`);
         return;
     }
     const member = interaction.guild?.members.cache.get(memberid);
@@ -261,7 +261,7 @@ async function removeSubcommand(client, interaction) {
         reply.edit({
             content: "An error occured! Code #5",
         });
-        console.error(`[EVENTS] An error occured while executing event 'guildMemberRemove'! Code #5`);
+        console.error(`[EVENTS] An error occured while executing command 'application'! Code #5`);
         return;
     }
     // checking if person was member
@@ -280,14 +280,14 @@ async function removeSubcommand(client, interaction) {
     const channel = client.channels.cache.get(client.channelMemberListID);
     // Impossible error check: Code #1
     if (!channel || channel.type !== discord_js_1.ChannelType.GuildText) {
-        console.error(`[EVENTS] An error occured while executing event 'guildMemberRemove'! Code #1`);
+        console.error(`[EVENTS] An error occured while executing command 'application'! Code #1`);
         return;
     }
     // Get message
     const message = (await channel.messages.fetch()).get(client.messageMemberListID);
     // Impossible error check: Code #2
     if (!message) {
-        console.error(`[EVENTS] An error occured while executing event 'guildMemberRemove'! Code #2`);
+        console.error(`[EVENTS] An error occured while executing command 'application'! Code #2`);
         return;
     }
     // Remove from message and remove role
@@ -302,7 +302,7 @@ async function removeSubcommand(client, interaction) {
     const pChannel = client.channels.cache.get(client.channelPostApplicationID);
     // Impossible error check: Code #3
     if (!pChannel || pChannel.type !== discord_js_1.ChannelType.GuildText) {
-        console.error(`[EVENTS] An error occured while executing event 'guildMemberRemove'! Code #3`);
+        console.error(`[EVENTS] An error occured while executing command 'application'! Code #3`);
         return;
     }
     // message

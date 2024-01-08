@@ -358,9 +358,7 @@ async function removeSubcommand(client: myClient, interaction: ChatInputCommandI
 		reply.edit({
 			content: "An error occured! Code #4",
 		});
-		console.error(
-			`[EVENTS] An error occured while executing event 'guildMemberRemove'! Code #4`
-		);
+		console.error(`[EVENTS] An error occured while executing command 'application'! Code #4`);
 		return;
 	}
 
@@ -371,9 +369,7 @@ async function removeSubcommand(client: myClient, interaction: ChatInputCommandI
 		reply.edit({
 			content: "An error occured! Code #5",
 		});
-		console.error(
-			`[EVENTS] An error occured while executing event 'guildMemberRemove'! Code #5`
-		);
+		console.error(`[EVENTS] An error occured while executing command 'application'! Code #5`);
 		return;
 	}
 
@@ -394,9 +390,7 @@ async function removeSubcommand(client: myClient, interaction: ChatInputCommandI
 
 	// Impossible error check: Code #1
 	if (!channel || channel.type !== ChannelType.GuildText) {
-		console.error(
-			`[EVENTS] An error occured while executing event 'guildMemberRemove'! Code #1`
-		);
+		console.error(`[EVENTS] An error occured while executing command 'application'! Code #1`);
 		return;
 	}
 	// Get message
@@ -404,9 +398,7 @@ async function removeSubcommand(client: myClient, interaction: ChatInputCommandI
 
 	// Impossible error check: Code #2
 	if (!message) {
-		console.error(
-			`[EVENTS] An error occured while executing event 'guildMemberRemove'! Code #2`
-		);
+		console.error(`[EVENTS] An error occured while executing command 'application'! Code #2`);
 		return;
 	}
 	// Remove from message and remove role
@@ -425,9 +417,7 @@ async function removeSubcommand(client: myClient, interaction: ChatInputCommandI
 
 	// Impossible error check: Code #3
 	if (!pChannel || pChannel.type !== ChannelType.GuildText) {
-		console.error(
-			`[EVENTS] An error occured while executing event 'guildMemberRemove'! Code #3`
-		);
+		console.error(`[EVENTS] An error occured while executing command 'application'! Code #3`);
 		return;
 	}
 

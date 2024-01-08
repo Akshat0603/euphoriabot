@@ -24,21 +24,24 @@ exports.event = {
         });
         // refresh doing-app
         var doingappdatas = [];
-        client.channels.cache.forEach((channel) => {
-            if (channel.type === discord_js_1.ChannelType.PrivateThread) {
-                if (channel.name.startsWith("🎫╏app-")) {
-                    channel.members.cache.forEach((member) => {
-                        if (member.guildMember?.roles.cache.has(client.waitingRoleID)) {
-                            const doingAppData = {
-                                userID: member.id,
-                                ticketID: channel.id,
-                            };
-                            doingappdatas.push(doingAppData);
-                        }
-                    });
-                }
-            }
-        });
+        const applyChannel = client.channels.cache.get(client.channelApplyID);
+        //impossible error check: code #1
+        if (!applyChannel || applyChannel.type !== discord_js_1.ChannelType.GuildText) {
+            console.error(`[EVENTS] An error occured while executing event 'ready'! Code #1`);
+        }
+        else {
+            applyChannel.threads.cache.forEach((channel) => {
+                channel.members.cache.forEach((member) => {
+                    if (member.guildMember?.roles.cache.has(client.waitingRoleID)) {
+                        const doingAppData = {
+                            userID: member.id,
+                            ticketID: channel.id,
+                        };
+                        doingappdatas.push(doingAppData);
+                    }
+                });
+            });
+        }
         // refresh member-list
         var memberList = [];
         client.guilds.cache.forEach((guild) => {
