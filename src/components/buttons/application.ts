@@ -110,10 +110,8 @@ export const button: buttonType = {
 		await ticket.members.add(member);
 		await ticket.members.add(interaction.guild.ownerId);
 
-		// Sending Ping Message
+		// Sending Message
 		await ticket.send({ content: mainMessage });
-		const msg = await ticket.send({ content: `<@${member}>` });
-		msg.delete();
 
 		const doingAppData: doingAppObject = {
 			userID: member.id,

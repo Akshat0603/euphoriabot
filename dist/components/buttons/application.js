@@ -83,10 +83,8 @@ exports.button = {
         // add applier to thread
         await ticket.members.add(member);
         await ticket.members.add(interaction.guild.ownerId);
-        // Sending Ping Message
+        // Sending Message
         await ticket.send({ content: mainMessage });
-        const msg = await ticket.send({ content: `<@${member}>` });
-        msg.delete();
         const doingAppData = {
             userID: member.id,
             ticketID: ticket.id,
