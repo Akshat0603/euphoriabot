@@ -79,13 +79,12 @@ exports.button = {
         const ticket = await interaction.channel.threads.create({
             name: `🎫╏app-${settings.count > 999 ? settings.count : `0${settings.count}`}`,
             type: discord_js_1.ChannelType.PrivateThread,
-            reason: `Application Number ${settings.count}`,
-            startMessage: mainMessage,
         });
         // add applier to thread
         await ticket.members.add(member);
         await ticket.members.add(interaction.guild.ownerId);
         // Sending Ping Message
+        await ticket.send({ content: mainMessage });
         const msg = await ticket.send({ content: `<@${member}>` });
         msg.delete();
         const doingAppData = {

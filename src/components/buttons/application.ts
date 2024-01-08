@@ -104,8 +104,6 @@ export const button: buttonType = {
 		const ticket = await interaction.channel.threads.create({
 			name: `🎫╏app-${settings.count > 999 ? settings.count : `0${settings.count}`}`,
 			type: ChannelType.PrivateThread,
-			reason: `Application Number ${settings.count}`,
-			startMessage: mainMessage,
 		});
 
 		// add applier to thread
@@ -113,6 +111,7 @@ export const button: buttonType = {
 		await ticket.members.add(interaction.guild.ownerId);
 
 		// Sending Ping Message
+		await ticket.send({ content: mainMessage });
 		const msg = await ticket.send({ content: `<@${member}>` });
 		msg.delete();
 
