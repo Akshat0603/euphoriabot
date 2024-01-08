@@ -32,32 +32,37 @@ export const event: eventType = {
 		if (!applyChannel || applyChannel.type !== ChannelType.GuildText) {
 			console.error(`[EVENTS] An error occured while executing event 'ready'! Code #1`);
 		} else {
-			applyChannel.threads.cache.forEach((channel) => {
-				channel.members.cache.forEach((member) => {
-					if (member.guildMember?.roles.cache.has(client.waitingRoleID)) {
+			for await (const channel of applyChannel.threads.cache) {
+				await channel[1].members.fetch();
+				for await (const tmember of channel[1].members.cache) {
+					const member = await applyChannel.guild.members.cache.get(tmember[1].id);
+					if (member && member.roles.cache.has(client.waitingRoleID)) {
 						const doingAppData: doingAppObject = {
 							userID: member.id,
-							ticketID: channel.id,
+							ticketID: channel[1].id,
 						};
 						doingappdatas.push(doingAppData);
 					}
-				});
-			});
+				}
+			}
 		}
 
 		// refresh member-list
 		var memberList: string[] = [];
-		client.guilds.cache.forEach((guild) => {
+		for await (const gguild of client.guilds.cache) {
+			const guild = gguild[1];
 			if (guild.id === client.guildID) {
-				guild.roles.cache.forEach((role) => {
+				for await (const rrole of guild.roles.cache) {
+					const role = rrole[1];
 					if (role.id === client.memberRoleID) {
 						role.members.forEach((member) => {
 							memberList.push(member.id);
 						});
 					}
-				});
+				}
 			}
-		});
+		}
+		client.guilds.cache.forEach((guild) => {});
 
 		writeFileSync("./storage/doing-app.json", JSON.stringify(doingappdatas));
 		console.log(
