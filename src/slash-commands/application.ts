@@ -424,15 +424,15 @@ async function removeSubcommand(client: myClient, interaction: ChatInputCommandI
 	// message
 	var content: string = `<@${member.id}> was removed from the server.`;
 
-	const reason1 = interaction.options.data[0].options![1].value;
+	const reason1 = interaction.options.getString("reason-1");
 	if (typeof reason1 === "string") {
 		content = content + `\n- ${reason1}`;
 	}
-	const reason2 = interaction.options.data[0].options![2].value;
+	const reason2 = interaction.options.getString("reason-2");
 	if (typeof reason2 === "string") {
 		content = content + `\n- ${reason2}`;
 	}
-	const reason3 = interaction.options.data[0].options![3].value;
+	const reason3 = interaction.options.getString("reason-3");
 	if (typeof reason3 === "string") {
 		content = content + `\n- ${reason3}`;
 	}
