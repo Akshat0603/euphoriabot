@@ -211,7 +211,7 @@ async function rejectSubcommand(client, interaction) {
     await reply.edit({ embeds: [mainEmbed] });
 }
 async function allowSubcommand(interaction) {
-    const reply = await interaction.deferReply({ ephemeral: true });
+    const reply = await interaction.deferReply();
     // Impossible Error check: code #5
     if (interaction.options.data[0].options[0].type !== discord_js_1.ApplicationCommandOptionType.User) {
         reply.edit({

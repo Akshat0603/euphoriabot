@@ -301,7 +301,7 @@ async function rejectSubcommand(client: myClient, interaction: ChatInputCommandI
 }
 
 async function allowSubcommand(interaction: ChatInputCommandInteraction) {
-	const reply = await interaction.deferReply({ ephemeral: true });
+	const reply = await interaction.deferReply();
 
 	// Impossible Error check: code #5
 	if (interaction.options.data[0].options![0].type !== ApplicationCommandOptionType.User) {
