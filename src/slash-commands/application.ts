@@ -437,7 +437,7 @@ async function removeSubcommand(client: myClient, interaction: ChatInputCommandI
 		content = content + `\n- ${reason3}`;
 	}
 
-	await pChannel.send({ content });
+	const msg = await pChannel.send({ content });
 
 	// Update member-lists
 	var removedMembers: string[] = JSON.parse(
@@ -449,6 +449,8 @@ async function removeSubcommand(client: myClient, interaction: ChatInputCommandI
 	var members: string[] = JSON.parse(readFileSync("./storage/member-list.json").toString());
 	members.splice(members.indexOf(member.id), 1);
 	writeFileSync("./storage/member-list.json", JSON.stringify(members));
+
+	reply.edit({ content: `<#${msg.id}>` });
 }
 
 export const slashCommand: slashCommandType = {

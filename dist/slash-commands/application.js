@@ -319,7 +319,7 @@ async function removeSubcommand(client, interaction) {
     if (typeof reason3 === "string") {
         content = content + `\n- ${reason3}`;
     }
-    await pChannel.send({ content });
+    const msg = await pChannel.send({ content });
     // Update member-lists
     var removedMembers = JSON.parse((0, fs_1.readFileSync)("./storage/removed-members.json").toString());
     removedMembers.push(member.id);
@@ -327,6 +327,7 @@ async function removeSubcommand(client, interaction) {
     var members = JSON.parse((0, fs_1.readFileSync)("./storage/member-list.json").toString());
     members.splice(members.indexOf(member.id), 1);
     (0, fs_1.writeFileSync)("./storage/member-list.json", JSON.stringify(members));
+    reply.edit({ content: `<#${msg.id}>` });
 }
 exports.slashCommand = {
     // COMMAND DATA
