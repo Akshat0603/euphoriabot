@@ -4,7 +4,6 @@ import {
 	ChatInputCommandInteraction,
 	EmbedBuilder,
 	PermissionFlagsBits,
-	TextChannel,
 } from "discord.js";
 import myClient from "../client";
 import { slashCommandType } from "../types/slash-commands";
@@ -450,7 +449,7 @@ async function removeSubcommand(client: myClient, interaction: ChatInputCommandI
 	members.splice(members.indexOf(member.id), 1);
 	writeFileSync("./storage/member-list.json", JSON.stringify(members));
 
-	reply.edit({ content: `<#${msg.id}>` });
+	reply.edit({ content: msg.url });
 }
 
 export const slashCommand: slashCommandType = {
