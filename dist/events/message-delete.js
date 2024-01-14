@@ -7,9 +7,10 @@ exports.event = {
     execute: async (client, message) => {
         // LOGGING THE DELETED MESSAGE
         // Checking if possible / bot message
-        if (message.partial || message.author?.bot)
-            return;
-        if (message.content.length > 4000)
+        if (message.partial ||
+            message.author?.bot ||
+            message.content.length > 4000 ||
+            !message.content)
             return;
         // Finding the channel and logging it
         const channel = await client.channels.cache.get(client.channelLogMessageDeleteID);

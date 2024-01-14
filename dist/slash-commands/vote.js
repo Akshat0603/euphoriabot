@@ -1,10 +1,13 @@
 "use strict";
 /* import {
+    ActionRowBuilder,
     ApplicationCommandOptionType,
+    ButtonBuilder,
     ChatInputCommandInteraction,
+    EmbedBuilder,
     PermissionFlagsBits,
 } from "discord.js";
-import { slashCommandType } from "../Types/SlashCommands";
+import { slashCommandType } from "../types/slash-commands";
 import myClient from "../client";
 
 // -> vote create <yes-no / multiple-choice>
@@ -12,6 +15,21 @@ import myClient from "../client";
 // vote end <messageID>
 // vote get [messageID]
 // vote set <number>
+
+async function createSubcommand(client: myClient, interaction: ChatInputCommandInteraction) {
+    var mainEmbed = new EmbedBuilder()
+        .setColor("#FF0000")
+        .setTitle("Create a new vote")
+        .setDescription(
+            "The vote message preview will be displayed above this message. Use the buttons below to set certain things about the vote. When the color of this embed changes to green, the vote is ready to be posted."
+        );
+
+    var numberButton = new ButtonBuilder({});
+
+    var actionRow1 = new ActionRowBuilder();
+
+    const reply = await interaction.reply({});
+}
 
 export const slashCommand: slashCommandType = {
     // COMMAND DATA
@@ -24,35 +42,15 @@ export const slashCommand: slashCommandType = {
                 name: "create",
                 description: "Create a new vote",
                 type: ApplicationCommandOptionType.Subcommand,
-                options: [
-                    {
-                        name: "vote-type",
-                        description: "What kind of vote is this? Yes-No OR Multiple-Choice?",
-                        type: ApplicationCommandOptionType.String,
-                        required: true,
-                        choices: [
-                            {
-                                name: "Yes-No",
-                                value: "yn",
-                            },
-                            {
-                                name: "Multiple-Choice",
-                                value: "mc",
-                            },
-                        ],
-                    },
-                    {
-                        name: 'ping',
-                        description: 'Whether to ping Euphorians or not. (Ghost ping) Default: False',
-                        type: ApplicationCommandOptionType.Boolean
-                    }
-                ],
             },
         ],
     },
 
     // COMMAND EXECUTION
-    execute: async (client: myClient, interaction: ChatInputCommandInteraction) => {},
+    execute: async (client: myClient, interaction: ChatInputCommandInteraction) => {
+        const subCommand = interaction.options.getSubcommand(true);
+        if (subCommand === "create") createSubcommand(client, interaction);
+    },
 };
  */
 //# sourceMappingURL=vote.js.map
