@@ -48,21 +48,29 @@ export const event: eventType = {
 		}
 
 		// refresh member-list
+		const mChannel = client.channels.cache.get(client.channelMemberListID);
+		if (!mChannel || mChannel.type !== ChannelType.GuildText) throw new Error();
+		const messages = await mChannel.messages.fetch();
+		const message = messages.get(client.messageMemberListID);
+		var content = "";
 		var memberList: string[] = [];
-		for await (const gguild of client.guilds.cache) {
-			const guild = gguild[1];
-			if (guild.id === client.guildID) {
-				for await (const rrole of guild.roles.cache) {
-					const role = rrole[1];
-					if (role.id === client.memberRoleID) {
-						role.members.forEach((member) => {
-							memberList.push(member.id);
-						});
-					}
-				}
-			}
+		const role = mChannel.guild.roles.cache.get(client.memberRoleID)!;
+		var members = role.members;
+		members = members.sort((a, b) =>
+			(a.nickname || a.displayName).localeCompare(b.nickname || b.displayName)
+		);
+		for (const member of members) {
+			memberList.push(member[1].id);
+			content =
+				content +
+				`\n- ${(member[1].nickname ? member[1].nickname : member[1].displayName).replace(
+					"_",
+					"\\_"
+				)}`;
 		}
-		client.guilds.cache.forEach((guild) => {});
+
+		await message!.edit({ content });
+		await mChannel.setTopic(`${members.size} members!`);
 
 		writeFileSync("./storage/doing-app.json", JSON.stringify(doingappdatas));
 		console.log(
@@ -72,7 +80,7 @@ export const event: eventType = {
 		console.log(`[REGISTRY] Refreshed member-list.json with ${memberList.length} members.`);
 
 		// Connect to both servers
-		await client.SMP.connect();
-		await client.CMP.connect();
+		//await client.SMP.connect();
+		//await client.CMP.connect();
 	},
 };

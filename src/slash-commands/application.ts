@@ -188,11 +188,25 @@ async function acceptSubcommand(client: myClient, interaction: ChatInputCommandI
 		return;
 	}
 
+	var content = "";
+	var members = interaction.guild!.roles.cache.get(client.memberRoleID)!.members;
+	members = members.sort((a, b) =>
+		(a.nickname || a.displayName).localeCompare(b.nickname || b.displayName)
+	);
+	for (const member of members) {
+		memberList.push(member[1].id);
+		content =
+			content +
+			`\n- ${(member[1].nickname ? member[1].nickname : member[1].displayName).replace(
+				"_",
+				"\\_"
+			)}`;
+	}
+
 	const messages = await mChannel.messages.fetch();
 	const message = messages.get(client.messageMemberListID);
-	message?.edit({
-		content: message.content + `\n- <@${member.id}>`,
-	});
+	await message?.edit({ content });
+	await mChannel.setTopic(`${members.size} members!`);
 }
 
 async function rejectSubcommand(client: myClient, interaction: ChatInputCommandInteraction) {
@@ -404,6 +418,8 @@ async function removeSubcommand(client: myClient, interaction: ChatInputCommandI
 	await member.roles.remove(client.memberRoleID);
 	await message.edit({ content: message.content.replace(`\n- <@${member.id}>`, "") });
 	console.log(`[EVENTS] Removed member ${member.user.username} from member-list message.`);
+	const rmembers = interaction.guild!.roles.cache.get(client.memberRoleID)!.members;
+	await channel.setTopic(`${rmembers.size} members!`);
 
 	// Remove from whitelist
 	const username = member.nickname ? member.nickname : member.displayName;

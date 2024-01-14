@@ -32,6 +32,8 @@ export const event: eventType = {
 		// Remove from message
 		await message.edit({ content: message.content.replace(`\n- <@${member.id}>`, "") });
 		console.log(`[EVENTS] Removed member ${member.user.username} from member-list message.`);
+		const rmembers = member.guild!.roles.cache.get(client.memberRoleID)!.members;
+		await channel.setTopic(`${rmembers.size} members!`);
 
 		// Remove from whitelist
 		const username = member.nickname ? member.nickname : member.displayName;
