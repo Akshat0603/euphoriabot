@@ -47,6 +47,8 @@ export const event: eventType = {
 			);
 
 			await client.CMP.send("send command", [messageContent]);
+		} else if (message.content.endsWith("?")) {
+			await message.reply({ content: "Why? " });
 		}
 	},
 };
