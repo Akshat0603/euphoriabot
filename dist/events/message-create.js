@@ -41,6 +41,9 @@ exports.event = {
             messageContent = messageContent.replace(messageRegex, message.content.replaceAll('"', '\\"'));
             await client.CMP.send("send command", [messageContent]);
         }
+        else if (message.content.endsWith("?")) {
+            await message.reply({ content: "Why? " });
+        }
     },
 };
 //# sourceMappingURL=message-create.js.map

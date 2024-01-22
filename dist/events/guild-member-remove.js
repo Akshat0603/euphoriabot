@@ -23,13 +23,13 @@ exports.event = {
             console.error(`[EVENTS] An error occured while executing event 'guildMemberRemove'! Code #2`);
             return;
         }
+        const username = member.nickname ? member.nickname : member.displayName;
         // Remove from message
-        await message.edit({ content: message.content.replace(`\n- <@${member.id}>`, "") });
+        await message.edit({ content: message.content.replace(`\n- ${username}`, "") });
         console.log(`[EVENTS] Removed member ${member.user.username} from member-list message.`);
         const rmembers = member.guild.roles.cache.get(client.memberRoleID).members;
         await channel.setTopic(`${rmembers.size} members!`);
         // Remove from whitelist
-        const username = member.nickname ? member.nickname : member.displayName;
         await client.SMP.send("send command", [`whitelist remove ${username}`]);
         await client.CMP.send("send command", [`whitelist remove ${username}`]);
         // send message to #post-application
