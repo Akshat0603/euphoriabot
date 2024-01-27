@@ -4,14 +4,6 @@ exports.event = void 0;
 const format = `tellraw @a ["",{"text":"[Discord] ","bold":true,"color":"blue"},{"text":"{username}: ","color":"gray"},{"text":"{message}","color":"white"}]`;
 const usernameRegex = /{username}/;
 const messageRegex = /{message}/;
-const funReplyArray = [
-    "Why?",
-    "No.",
-    "What do you want?",
-    "Fuck you.",
-    "euphoria.exe stokpped working.",
-    "Roger that!",
-];
 exports.event = {
     name: "messageCreate",
     execute: async (client, message) => {
@@ -49,10 +41,9 @@ exports.event = {
             messageContent = messageContent.replace(messageRegex, message.content.replaceAll('"', '\\"'));
             await client.CMP.send("send command", [messageContent]);
         }
-        else if (message.content.endsWith("?") || message.mentions.has(client.user)) {
-            await message.reply({
-                content: funReplyArray[Math.round(Math.random() * (funReplyArray.length - 1))],
-            });
+        // fun responses
+        else if (message.content.toLowerCase() === "lol") {
+            await message.reply({ content: message.content });
         }
     },
 };
