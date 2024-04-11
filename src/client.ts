@@ -21,23 +21,24 @@ class myClient extends Client {
 
 	public categoryPastApplications: string = "1192462543214620833";
 
-	public forumSuggestionID: string = "1176818908909551646";
+	public forumSuggestionID: string = "1227833730090139699";
 
-	public channelEuphoriaID: string = "1176817932693688390";
+	public channelEuphoriaID: string = "1227830209835962399";
 	public channelSMPchatID: string = "1190355602908663981";
 	public channelCMPchatID: string = "1190355741631053834";
 	public channelLogMessageDeleteID: string = "1187721538779238471";
 	public channelLogMessageUpdateID: string = "1187721577253584956";
-	public channelMemberListID: string = "1177882289116561510";
+	public channelMemberListID: string = "1227830269071982603";
 	public channelApplyID: string = "1176815969025396807";
 	public channelApplicationResultID: string = "1176839407391752222";
 	public channelPostApplicationID: string = "1179371851680596048";
 
-	public memberRoleID: string = "1176812990574637086";
+	public S1memberRoleID: string = "1176812990574637086";
+	public memberRoleID: string = "1227825714867208192";
 	public waitingRoleID: string = "1176838751192887386";
 	public removedRoleID: string = "1179056413964771369";
 
-	public messageMemberListID: string = "1192011933914759198";
+	public messageMemberListID: string = "1227837027681308723";
 	public messageModsID: string = "1179369602652848160";
 
 	public embedFooter: EmbedFooterOptions = {
