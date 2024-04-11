@@ -15,20 +15,21 @@ class myClient extends discord_js_1.Client {
     // SIMPLE DATA IDENTIFICATION
     guildID = "1176560748642709595";
     categoryPastApplications = "1192462543214620833";
-    forumSuggestionID = "1176818908909551646";
-    channelEuphoriaID = "1176817932693688390";
+    forumSuggestionID = "1227833730090139699";
+    channelEuphoriaID = "1227830209835962399";
     channelSMPchatID = "1190355602908663981";
     channelCMPchatID = "1190355741631053834";
     channelLogMessageDeleteID = "1187721538779238471";
     channelLogMessageUpdateID = "1187721577253584956";
-    channelMemberListID = "1177882289116561510";
+    channelMemberListID = "1227830269071982603";
     channelApplyID = "1176815969025396807";
     channelApplicationResultID = "1176839407391752222";
     channelPostApplicationID = "1179371851680596048";
-    memberRoleID = "1176812990574637086";
+    S1memberRoleID = "1176812990574637086";
+    memberRoleID = "1227825714867208192";
     waitingRoleID = "1176838751192887386";
     removedRoleID = "1179056413964771369";
-    messageMemberListID = "1192011933914759198";
+    messageMemberListID = "1227837027681308723";
     messageModsID = "1179369602652848160";
     embedFooter = {
         text: "Looking for the timestamp? GET LOST!",
