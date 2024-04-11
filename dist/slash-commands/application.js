@@ -306,8 +306,8 @@ async function removeSubcommand(client, interaction) {
     await channel.setTopic(`${rmembers.size} members!`);
     // Remove from whitelist
     const username = member.nickname ? member.nickname : member.displayName;
-    await client.SMP.send("send command", [`whitelist remove ${username}`]);
-    await client.CMP.send("send command", [`whitelist remove ${username}`]);
+    //await client.SMP.send("send command", [`whitelist remove ${username}`]);
+    //await client.CMP.send("send command", [`whitelist remove ${username}`]);
     // send message to #post-application
     const pChannel = client.channels.cache.get(client.channelPostApplicationID);
     // Impossible error check: Code #3
