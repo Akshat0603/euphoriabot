@@ -51,7 +51,7 @@ exports.event = {
             const messageMember = message.member;
             if (messageMember.roles.cache.has(client.memberRoleID) || !messageMember.roles.cache.has(client.S1memberRoleID))
                 return;
-            //await messageMember.setNickname(name);
+            await messageMember.setNickname(name);
             await messageMember.roles.add(client.memberRoleID);
             // adding them to member list channel
             var memberList = JSON.parse((0, fs_1.readFileSync)("./storage/member-list.json").toString());

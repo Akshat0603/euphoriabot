@@ -60,7 +60,7 @@ export const event: eventType = {
 
 			if (messageMember.roles.cache.has(client.memberRoleID) || !messageMember.roles.cache.has(client.S1memberRoleID)) return;
 
-			//await messageMember.setNickname(name);
+			await messageMember.setNickname(name);
 			await messageMember.roles.add(client.memberRoleID);
 
 			// adding them to member list channel
