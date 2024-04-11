@@ -90,8 +90,8 @@ async function acceptSubcommand(client, interaction) {
     await member.roles.add(client.memberRoleID);
     await member.roles.remove(client.waitingRoleID);
     await member.setNickname(username);
-    client.SMP.send("send command", [`whitelist add ${username}`]);
-    client.CMP.send("send command", [`whitelist add ${username}`]);
+    //client.SMP.send("send command", [`whitelist add ${username}`]);
+    //client.CMP.send("send command", [`whitelist add ${username}`]);
     doingApp.splice(doingApp.indexOf(doingAppData), 1);
     (0, fs_1.writeFileSync)("./storage/doing-app.json", JSON.stringify(doingApp));
     var memberList = JSON.parse((0, fs_1.readFileSync)("./storage/member-list.json").toString());
