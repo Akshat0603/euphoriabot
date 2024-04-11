@@ -424,8 +424,8 @@ async function removeSubcommand(client: myClient, interaction: ChatInputCommandI
 	// Remove from whitelist
 	const username = member.nickname ? member.nickname : member.displayName;
 
-	await client.SMP.send("send command", [`whitelist remove ${username}`]);
-	await client.CMP.send("send command", [`whitelist remove ${username}`]);
+	//await client.SMP.send("send command", [`whitelist remove ${username}`]);
+	//await client.CMP.send("send command", [`whitelist remove ${username}`]);
 
 	// send message to #post-application
 	const pChannel = client.channels.cache.get(client.channelPostApplicationID);
