@@ -90,7 +90,7 @@ async function acceptSubcommand(client, interaction) {
     await member.roles.add(client.memberRoleID);
     await member.roles.remove(client.waitingRoleID);
     await member.setNickname(username);
-    //client.SMP.send("send command", [`whitelist add ${username}`]);
+    client.SMP.send("send command", [`whitelist add ${username}`]);
     //client.CMP.send("send command", [`whitelist add ${username}`]);
     doingApp.splice(doingApp.indexOf(doingAppData), 1);
     (0, fs_1.writeFileSync)("./storage/doing-app.json", JSON.stringify(doingApp));
@@ -306,7 +306,7 @@ async function removeSubcommand(client, interaction) {
     await channel.setTopic(`${rmembers.size} members!`);
     // Remove from whitelist
     const username = member.nickname ? member.nickname : member.displayName;
-    //await client.SMP.send("send command", [`whitelist remove ${username}`]);
+    await client.SMP.send("send command", [`whitelist remove ${username}`]);
     //await client.CMP.send("send command", [`whitelist remove ${username}`]);
     // send message to #post-application
     const pChannel = client.channels.cache.get(client.channelPostApplicationID);

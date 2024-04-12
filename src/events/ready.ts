@@ -80,7 +80,7 @@ export const event: eventType = {
 		console.log(`[REGISTRY] Refreshed member-list.json with ${memberList.length} members.`);
 
 		// Connect to both servers
-		//await client.SMP.connect();
+		await client.SMP.connect();
 		//await client.CMP.connect();
 	},
 };

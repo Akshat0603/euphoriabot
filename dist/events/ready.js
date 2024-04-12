@@ -68,7 +68,7 @@ exports.event = {
         (0, fs_1.writeFileSync)("./storage/member-list.json", JSON.stringify(memberList));
         console.log(`[REGISTRY] Refreshed member-list.json with ${memberList.length} members.`);
         // Connect to both servers
-        //await client.SMP.connect();
+        await client.SMP.connect();
         //await client.CMP.connect();
     },
 };

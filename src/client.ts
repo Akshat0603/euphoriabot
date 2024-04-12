@@ -57,8 +57,8 @@ class myClient extends Client {
 		"https://panel.euphoriasmp.com/",
 		process.env.PTEROAPI!
 	);
-	public SMP: Shard = this.panelClient.addSocketServer("d07e9ba3");
-	public CMP: Shard = this.panelClient.addSocketServer("cf23cd0c");
+	public SMP: Shard = this.panelClient.addSocketServer("28764fee");
+	public CMP: Shard = this.panelClient.addSocketServer("missing!");
 
 	// INITIALIZE THE BOT
 	public async init(dir: string) {

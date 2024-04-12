@@ -41,7 +41,7 @@ export const event: eventType = {
 		// Remove from whitelist
 
 		await client.SMP.send("send command", [`whitelist remove ${username}`]);
-		await client.CMP.send("send command", [`whitelist remove ${username}`]);
+		//await client.CMP.send("send command", [`whitelist remove ${username}`]);
 
 		// send message to #post-application
 		const pChannel = client.channels.cache.get(client.channelPostApplicationID);
