@@ -41,7 +41,7 @@ class myClient extends discord_js_1.Client {
     CMPchatWebhook = new discord_js_1.WebhookClient({
         url: "https://discord.com/api/webhooks/1190670729327411201/tKg5nLhWLQ_FIGson-IKfgTFSxBe8UpJDDINbUi40AOk7n9yMkuz2rx58UoNBaFXBWUo",
     });
-    panelClient = new pterojs_1.PteroClient("https://panel.euphoriasmp.com/", process.env.PTEROAPI);
+    panelClient = new pterojs_1.PteroClient("https://panel.phoenixmc.tech/", process.env.PTEROAPI);
     SMP = this.panelClient.addSocketServer("28764fee");
     CMP = this.panelClient.addSocketServer("missing!");
     // INITIALIZE THE BOT

@@ -54,7 +54,7 @@ class myClient extends Client {
 	});
 
 	public panelClient: PteroClient = new PteroClient(
-		"https://panel.euphoriasmp.com/",
+		"https://panel.phoenixmc.tech/",
 		process.env.PTEROAPI!
 	);
 	public SMP: Shard = this.panelClient.addSocketServer("28764fee");
