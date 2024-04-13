@@ -89,11 +89,25 @@ export const event: serverEventsType = {
 				chatMessage = checkUrlEmbedProof(chatMessage);
 				chatMessage = clearDiscordMarkdown(chatMessage);
 
+				var ping: boolean = false;
+				if (chatMessage.includes("@everyone")){
+					chatMessage = chatMessage.replaceAll("@everyone", "");
+					ping = true;
+				}
+				if (chatMessage.includes("@here")){
+					chatMessage = chatMessage.replaceAll("@here", "");
+					ping = true;
+				}
+
 				await client.CMPchatWebhook.send({
 					username: username,
 					avatarURL: `https://minotar.net/avatar/${username}.png`,
 					content: chatMessage,
 				});
+
+				if (ping) {
+					client.CMP.send("send command", [`kick ${username} DON'T PING @EVERYONE OR @HERE`])
+				}
 
 				return;
 			}

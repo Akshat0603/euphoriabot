@@ -78,11 +78,23 @@ exports.event = {
                 chatMessage = args.join(" ");
                 chatMessage = (0, url_embed_proofer_1.checkUrlEmbedProof)(chatMessage);
                 chatMessage = (0, discord_markdown_1.clearDiscordMarkdown)(chatMessage);
+                var ping = false;
+                if (chatMessage.includes("@everyone")) {
+                    chatMessage = chatMessage.replaceAll("@everyone", "");
+                    ping = true;
+                }
+                if (chatMessage.includes("@here")) {
+                    chatMessage = chatMessage.replaceAll("@here", "");
+                    ping = true;
+                }
                 await client.CMPchatWebhook.send({
                     username: username,
                     avatarURL: `https://minotar.net/avatar/${username}.png`,
                     content: chatMessage,
                 });
+                if (ping) {
+                    client.CMP.send("send command", [`kick ${username} DON'T PING @EVERYONE OR @HERE`]);
+                }
                 return;
             }
             // Player join/leave
