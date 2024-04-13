@@ -99,11 +99,13 @@ export const event: serverEventsType = {
 					ping = true;
 				}
 
-				await client.CMPchatWebhook.send({
-					username: username,
-					avatarURL: `https://minotar.net/avatar/${username}.png`,
-					content: chatMessage,
-				});
+				if (chatMessage !== ""){
+					await client.CMPchatWebhook.send({
+						username: username,
+						avatarURL: `https://minotar.net/avatar/${username}.png`,
+						content: chatMessage,
+					});
+				}
 
 				if (ping) {
 					client.CMP.send("send command", [`kick ${username} DON'T PING @EVERYONE OR @HERE`])
