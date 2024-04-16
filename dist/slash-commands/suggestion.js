@@ -20,6 +20,10 @@ const choices = [
         name: "On Hold",
         value: "On Hold",
     },
+    {
+        name: "Duplicate",
+        value: "Duplicate",
+    },
 ];
 exports.slashCommand = {
     // COMMAND DATA
@@ -68,7 +72,7 @@ exports.slashCommand = {
             // Impossible error check: Code #7
             if (interaction.options.data[1].type !== discord_js_1.ApplicationCommandOptionType.Boolean ||
                 typeof interaction.options.data[1].value !== "boolean") {
-                response.edit({
+                await response.edit({
                     content: "## <:no:1181140154623213569> An Error Occured! Code #7",
                 });
                 return;
@@ -79,7 +83,7 @@ exports.slashCommand = {
         const channel = client.channels.cache.get(interaction.channel.parentId);
         // Impossible error check: Code #8
         if (channel.type !== discord_js_1.ChannelType.GuildForum) {
-            response.edit({ content: "## <:no:1181140154623213569> An Error Occured! Code #8" });
+            await response.edit({ content: "## <:no:1181140154623213569> An Error Occured! Code #8" });
             return;
         }
         // Tag check and modification from this point forth
@@ -109,7 +113,7 @@ exports.slashCommand = {
         tags.push(newStatusID);
         // Tag modification complete. Applying changes and responding to user
         interaction.channel.edit({ appliedTags: tags });
-        response.edit({
+        await response.edit({
             embeds: [
                 new discord_js_1.EmbedBuilder()
                     .setAuthor({

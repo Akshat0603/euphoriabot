@@ -28,6 +28,10 @@ const choices: readonly ApplicationCommandOptionChoiceData<string>[] = [
 		name: "On Hold",
 		value: "On Hold",
 	},
+	{
+		name: "Duplicate",
+		value: "Duplicate",
+	},
 ];
 
 export const slashCommand: slashCommandType = {
@@ -86,7 +90,7 @@ export const slashCommand: slashCommandType = {
 				interaction.options.data[1].type !== ApplicationCommandOptionType.Boolean ||
 				typeof interaction.options.data[1].value !== "boolean"
 			) {
-				response.edit({
+				await response.edit({
 					content: "## <:no:1181140154623213569> An Error Occured! Code #7",
 				});
 				return;
@@ -100,7 +104,7 @@ export const slashCommand: slashCommandType = {
 
 		// Impossible error check: Code #8
 		if (channel!.type !== ChannelType.GuildForum) {
-			response.edit({ content: "## <:no:1181140154623213569> An Error Occured! Code #8" });
+			await response.edit({content: "## <:no:1181140154623213569> An Error Occured! Code #8"});
 			return;
 		}
 
@@ -136,12 +140,12 @@ export const slashCommand: slashCommandType = {
 
 		// Tag modification complete. Applying changes and responding to user
 		interaction.channel.edit({ appliedTags: tags });
-		response.edit({
+		await response.edit({
 			embeds: [
 				new EmbedBuilder()
 					.setAuthor({
 						name: interaction.user.username,
-						iconURL: interaction.user.avatarURL({ extension: "jpg" })!,
+						iconURL: interaction.user.avatarURL({extension: "jpg"})!,
 					})
 					.setColor("#b700ff")
 					.setTitle(`The status of this channel has been changed to \`${newStatus}\`!`)
