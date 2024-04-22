@@ -36,7 +36,7 @@ class myClient extends Client {
 	public S1memberRoleID: string = "1176812990574637086";
 	public memberRoleID: string = "1227825714867208192";
 	public waitingRoleID: string = "1176838751192887386";
-	public removedRoleID: string = "1179056413964771369";
+	public dmarkerRoleID: string = "1231879415961620540";
 
 	public messageMemberListID: string = "1227837027681308723";
 	public messageModsID: string = "1179369602652848160";

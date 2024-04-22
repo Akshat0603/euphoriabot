@@ -59,12 +59,12 @@ exports.event = {
                 restarting = true;
                 const channel = client.channels.cache.get(client.channelSMPchatID);
                 if (channel?.type === discord_js_1.ChannelType.GuildText) {
-                    channel.permissionOverwrites.edit(client.memberRoleID, { SendMessages: false });
+                    await channel.permissionOverwrites.edit(client.memberRoleID, { SendMessages: false });
                 }
                 return;
             }
             // Return if server is restarting
-            if (restarting === true)
+            if (restarting)
                 return;
             if (chatMessage.toLowerCase() === "stopping server") {
                 restarting = true;
@@ -144,7 +144,9 @@ exports.event = {
             if (args[0].startsWith("[") && !args[0].endsWith("]"))
                 return;
             // No player was found
-            if (chatMessage === "No player was found")
+            if (chatMessage === "No player was found" ||
+                chatMessage.startsWith("/dmarker") ||
+                chatMessage.startsWith("Valid subcommands:"))
                 return;
             // anything else
             await client.SMPchatWebhook.send({

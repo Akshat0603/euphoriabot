@@ -28,7 +28,7 @@ class myClient extends discord_js_1.Client {
     S1memberRoleID = "1176812990574637086";
     memberRoleID = "1227825714867208192";
     waitingRoleID = "1176838751192887386";
-    removedRoleID = "1179056413964771369";
+    dmarkerRoleID = "1231879415961620540";
     messageMemberListID = "1227837027681308723";
     messageModsID = "1179369602652848160";
     embedFooter = {

@@ -43,17 +43,34 @@ exports.slashCommand = {
         const command = interaction.options.data[1].value;
         // impossible error check: code #1
         if (typeof server !== "string" || typeof command !== "string") {
-            interaction.reply({ content: "An error occured! Code #1", ephemeral: true });
+            await interaction.reply({ content: "An error occured! Code #1", ephemeral: true });
             console.error(`[SLASH COMMANDS] An error occured while executing command 'send-command'! Code #1`);
+            return;
+        }
+        // permissions check
+        const member = interaction.guild.members.cache.get(interaction.user.id);
+        var ok = false;
+        if (interaction.memberPermissions?.has("Administrator")) {
+            ok = true;
+        }
+        else if (member?.roles.cache.has(client.dmarkerRoleID) && command.split(" ")[0] === "dmarker") {
+            ok = true;
+        }
+        if (!ok) {
+            await interaction.reply({
+                ephemeral: true,
+                content: `You don't have permission to use this command!`,
+            });
             return;
         }
         // Main execution
         if (server === "smp" || server === "both")
-            await client.SMP.send("send command", [command]);
+            client.SMP.send("send command", [command]);
         if (server === "cmp" || server === "both")
-            await client.CMP.send("send command", [command]);
+            client.CMP.send("send command", [command]);
         // Done
-        interaction.reply({
+        await interaction.reply({
+            ephemeral: true,
             content: `Executed command \`${command}\` on ${server === "both" ? server : server.toUpperCase()} server${server === "both" ? "s" : ""}.`,
         });
     },
