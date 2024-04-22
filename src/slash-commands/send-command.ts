@@ -78,6 +78,7 @@ export const slashCommand: slashCommandType = {
 		if (server === "smp" || server === "both") SMPresponse = await client.SMP.request("sendCommand", command);
 		//if (server === "cmp" || server === "both") client.CMP.send("send command", [command]);
 
+		console.log(SMPresponse);
 		// Done
 		await interaction.reply({
 			ephemeral: true,
