@@ -172,7 +172,7 @@ export const event: serverEventsType = {
 			if (
 				chatMessage === "No player was found" ||
 				chatMessage.startsWith("/dmarker") ||
-				chatMessage.startsWith("Valid subcommands:")
+				chatMessage.startsWith(" Valid subcommands:")
 			) return;
 
 			// anything else

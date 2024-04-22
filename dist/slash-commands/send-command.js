@@ -63,14 +63,15 @@ exports.slashCommand = {
             });
             return;
         }
+        var SMPresponse = "";
         // Main execution
         if (server === "smp" || server === "both")
-            client.SMP.send("send command", [command]);
+            SMPresponse = await client.SMP.request("sendCommand", command);
         //if (server === "cmp" || server === "both") client.CMP.send("send command", [command]);
         // Done
         await interaction.reply({
             ephemeral: true,
-            content: `Executed command \`${command}\` on ${server === "both" ? server : server.toUpperCase()} server${server === "both" ? "s" : ""}.`,
+            content: `Executed command \`${command}\` on ${server === "both" ? server : server.toUpperCase()} server${server === "both" ? "s" : ""}. ${SMPresponse ? `SMP Response: ${SMPresponse}.` : ""}`,
         });
     },
 };

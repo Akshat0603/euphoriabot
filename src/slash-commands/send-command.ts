@@ -72,8 +72,10 @@ export const slashCommand: slashCommandType = {
 			return;
 		}
 
+		var SMPresponse: string | void = "";
+
 		// Main execution
-		if (server === "smp" || server === "both") client.SMP.send("send command", [command]);
+		if (server === "smp" || server === "both") SMPresponse = await client.SMP.request("sendCommand", command);
 		//if (server === "cmp" || server === "both") client.CMP.send("send command", [command]);
 
 		// Done
@@ -81,7 +83,7 @@ export const slashCommand: slashCommandType = {
 			ephemeral: true,
 			content: `Executed command \`${command}\` on ${
 				server === "both" ? server : server.toUpperCase()
-			} server${server === "both" ? "s" : ""}.`,
+			} server${server === "both" ? "s" : ""}. ${SMPresponse ? `SMP Response: ${SMPresponse}.` : ""}`,
 		});
 	},
 };

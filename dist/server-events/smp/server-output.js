@@ -146,7 +146,7 @@ exports.event = {
             // No player was found
             if (chatMessage === "No player was found" ||
                 chatMessage.startsWith("/dmarker") ||
-                chatMessage.startsWith("Valid subcommands:"))
+                chatMessage.startsWith(" Valid subcommands:"))
                 return;
             // anything else
             await client.SMPchatWebhook.send({
