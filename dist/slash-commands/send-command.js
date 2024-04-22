@@ -66,8 +66,7 @@ exports.slashCommand = {
         // Main execution
         if (server === "smp" || server === "both")
             client.SMP.send("send command", [command]);
-        if (server === "cmp" || server === "both")
-            client.CMP.send("send command", [command]);
+        //if (server === "cmp" || server === "both") client.CMP.send("send command", [command]);
         // Done
         await interaction.reply({
             ephemeral: true,
