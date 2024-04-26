@@ -168,11 +168,12 @@ export const event: serverEventsType = {
 			// Don't display OP commands
 			if (args[0].startsWith("[") && !args[0].endsWith("]")) return;
 
-			// No player was found
+			// Extras
 			if (
 				chatMessage === "No player was found" ||
 				chatMessage.startsWith("/dmarker") ||
-				chatMessage.startsWith(" Valid subcommands:")
+				chatMessage.startsWith(" Valid subcommands:") ||
+				chatMessage.startsWith("Kicked ")
 			) return;
 
 			// anything else
