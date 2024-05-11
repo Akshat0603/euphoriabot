@@ -27,10 +27,11 @@ export const event: eventType = {
 			messageContent = messageContent.replace(usernameRegex, username);
 			messageContent = messageContent.replace(
 				messageRegex,
-				message.content.replaceAll('"', "")
+				message.content.replaceAll('"', "'")
 			);
 
-			await client.SMP.send("send command", [messageContent]);
+			client.SMP.send("send command", [messageContent]);
+
 		} else if (message.channelId === client.channelCMPchatID) {
 			let messageContent = format;
 			let username: string;
@@ -47,7 +48,7 @@ export const event: eventType = {
 				message.content.replaceAll('"', '\\"')
 			);
 
-			await client.CMP.send("send command", [messageContent]);
+			client.CMP.send("send command", [messageContent]);
 		}
 
 		else if (message.channelId === client.channelMemberListID) {

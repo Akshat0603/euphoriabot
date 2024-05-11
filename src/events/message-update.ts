@@ -19,22 +19,26 @@ export const event: eventType = {
 		if (oldMessage.content.length + newMessage.content.length > 4000) return;
 
 		// Finding the right channel and logging it
-		const channel = await client.channels.cache.get(client.channelLogMessageUpdateID);
+		const channel = client.channels.cache.get(client.channelLogMessageUpdateID);
 		// Impossible error check
 		if (channel && channel.type === ChannelType.GuildText) {
-			const messageEmbed = new EmbedBuilder()
-				.setAuthor({
-					name: oldMessage.author.username,
-					iconURL: oldMessage.author.displayAvatarURL({ extension: "jpg" }),
-				})
-				.setColor("Yellow")
-				.setTitle(`The following message was edited in ${oldMessage.channel}`)
-				.setFields([
-					{ name: "OLD Message Content:", value: oldMessage.content },
-					{ name: "NEW Message Content:", value: newMessage.content },
-				])
-				.setFooter(client.embedFooter);
-			channel.send({ embeds: [messageEmbed] });
+			try {
+				const messageEmbed = new EmbedBuilder()
+					.setAuthor({
+						name: oldMessage.author.username,
+						iconURL: oldMessage.author.displayAvatarURL({ extension: "jpg" }),
+					})
+					.setColor("Yellow")
+					.setTitle(`The following message was edited in ${oldMessage.channel}`)
+					.setFields([
+						{ name: "OLD Message Content:", value: oldMessage.content },
+						{ name: "NEW Message Content:", value: newMessage.content },
+					])
+					.setFooter(client.embedFooter);
+				await channel.send({ embeds: [messageEmbed] });
+			} catch {
+				return
+			}
 		} else {
 			console.error("[EVENTS] AN ERROR OCCURED WHILE LOGGING AN EDITED MESSAGE!");
 		}
