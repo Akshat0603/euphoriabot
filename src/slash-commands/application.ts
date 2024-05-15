@@ -421,11 +421,19 @@ async function removeSubcommand(client: myClient, interaction: ChatInputCommandI
 	const rmembers = interaction.guild!.roles.cache.get(client.memberRoleID)!.members;
 	await channel.setTopic(`${rmembers.size} members!`);
 
+	// check for ban
+	const ban = interaction.options.getBoolean("ban");
+
 	// Remove from whitelist
 	const username = member.nickname ? member.nickname : member.displayName;
 
-	await client.SMP.send("send command", [`whitelist remove ${username}`]);
-	//await client.CMP.send("send command", [`whitelist remove ${username}`]);
+	client.SMP.send("send command", [`whitelist remove ${username}`]);
+	//client.CMP.send("send command", [`whitelist remove ${username}`]);
+
+	if (ban === true) {
+		client.SMP.send("send command", [`ban ${username}`]);
+		//client.CMP.send("send command", [`ban ${username}`]);
+	}
 
 	// send message to #post-application
 	const pChannel = client.channels.cache.get(client.channelPostApplicationID);
@@ -437,7 +445,7 @@ async function removeSubcommand(client: myClient, interaction: ChatInputCommandI
 	}
 
 	// message
-	var content: string = `<@${member.id}> was removed from the server.`;
+	var content: string = `<@${member.id}> was ${ban === true ? "banned" : "removed"} from the server.`;
 
 	const reason1 = interaction.options.getString("reason-1");
 	if (typeof reason1 === "string") {
@@ -532,6 +540,12 @@ export const slashCommand: slashCommandType = {
 						name: "user",
 						description: "Who is being removed from the server?",
 						type: ApplicationCommandOptionType.User,
+						required: true,
+					},
+					{
+						name: "ban",
+						description: "Do we want to ban them or just remove them?",
+						type: ApplicationCommandOptionType.Boolean,
 						required: true,
 					},
 					{

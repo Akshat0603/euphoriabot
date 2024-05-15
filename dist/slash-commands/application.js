@@ -304,10 +304,16 @@ async function removeSubcommand(client, interaction) {
     console.log(`[EVENTS] Removed member ${member.user.username} from member-list message.`);
     const rmembers = interaction.guild.roles.cache.get(client.memberRoleID).members;
     await channel.setTopic(`${rmembers.size} members!`);
+    // check for ban
+    const ban = interaction.options.getBoolean("ban");
     // Remove from whitelist
     const username = member.nickname ? member.nickname : member.displayName;
-    await client.SMP.send("send command", [`whitelist remove ${username}`]);
-    //await client.CMP.send("send command", [`whitelist remove ${username}`]);
+    client.SMP.send("send command", [`whitelist remove ${username}`]);
+    //client.CMP.send("send command", [`whitelist remove ${username}`]);
+    if (ban === true) {
+        client.SMP.send("send command", [`ban ${username}`]);
+        //client.CMP.send("send command", [`ban ${username}`]);
+    }
     // send message to #post-application
     const pChannel = client.channels.cache.get(client.channelPostApplicationID);
     // Impossible error check: Code #3
@@ -316,7 +322,7 @@ async function removeSubcommand(client, interaction) {
         return;
     }
     // message
-    var content = `<@${member.id}> was removed from the server.`;
+    var content = `<@${member.id}> was ${ban === true ? "banned" : "removed"} from the server.`;
     const reason1 = interaction.options.getString("reason-1");
     if (typeof reason1 === "string") {
         content = content + `\n- ${reason1}`;
@@ -403,6 +409,12 @@ exports.slashCommand = {
                         name: "user",
                         description: "Who is being removed from the server?",
                         type: discord_js_1.ApplicationCommandOptionType.User,
+                        required: true,
+                    },
+                    {
+                        name: "ban",
+                        description: "Do we want to ban them or just remove them?",
+                        type: discord_js_1.ApplicationCommandOptionType.Boolean,
                         required: true,
                     },
                     {
