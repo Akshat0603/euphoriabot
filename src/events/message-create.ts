@@ -18,6 +18,11 @@ export const event: eventType = {
 			let messageContent = format;
 			let username: string;
 
+			if(message.content.includes('\n')) {
+				await message.delete();
+				return;
+			}
+
 			if (typeof message.member?.nickname === "string") {
 				username = message.member.nickname;
 			} else if (message.author.displayName) {

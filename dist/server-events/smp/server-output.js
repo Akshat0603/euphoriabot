@@ -87,15 +87,16 @@ exports.event = {
                     chatMessage = chatMessage.replaceAll("@here", "");
                     ping = true;
                 }
+                if (ping) {
+                    client.SMP.send("send command", [`kick ${username} DON'T PING @EVERYONE OR @HERE`]);
+                    return;
+                }
                 if (chatMessage !== "") {
                     await client.SMPchatWebhook.send({
                         username: username,
                         avatarURL: `https://minotar.net/avatar/${username}.png`,
                         content: chatMessage,
                     });
-                }
-                if (ping) {
-                    client.SMP.send("send command", [`kick ${username} DON'T PING @EVERYONE OR @HERE`]);
                 }
                 return;
             }

@@ -16,6 +16,10 @@ exports.event = {
         if (message.channelId === client.channelSMPchatID) {
             let messageContent = format;
             let username;
+            if (message.content.includes('\n')) {
+                await message.delete();
+                return;
+            }
             if (typeof message.member?.nickname === "string") {
                 username = message.member.nickname;
             }
